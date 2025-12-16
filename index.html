@@ -3,878 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#022c22">
-    <title>Nur Parvozi | Spiritual Focus & Hifz</title>
-    <meta name="description" content="Qur'on tadabburi, hifz va ruhiy fokus uchun eng zamonaviy PWA.">
+    <meta name="theme-color" content="#042f2e">
+    <title>Nur Parvozi 2.0 | Smart Spiritual Focus</title>
+    
+    <!-- PWA Manifest (Embedded) -->
+    <link rel="manifest" href='data:application/json;base64,ewogICJuYW1lIjogIk51ciBQYXJ2b3ppIDIuMCIsCiAgInNob3J0X25hbWUiOiJOdXIgUGFydm96aSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDQyZjJlIiwKICAidGhlbWVfY29xvciI6ICIjMTA5ODc2IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvMzY1NS8zNjU1NTg2LnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ=='>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600;800&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        /* --- CORE VARIABLES --- */
+        /* --- 2025 ULTRA UI VARIABLES --- */
         :root {
-            --primary: #10B981; /* Emerald */
-            --primary-dark: #064E3B;
-            --secondary: #F59E0B; /* Gold */
-            --bg-deep: #022c22;
-            --bg-glass: rgba(6, 78, 59, 0.6);
-            --text-light: #ECFDF5;
-            --text-gold: #FEF3C7;
-            --danger: #EF4444;
-            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
-            --shadow-neon: 0 0 20px rgba(16, 185, 129, 0.3);
-            --font-main: 'Inter', sans-serif;
+            --primary: #2DD4BF; /* Teal Neon */
+            --primary-glow: rgba(45, 212, 191, 0.5);
+            --gold: #FCD34D;
+            --gold-glow: rgba(253, 211, 77, 0.4);
+            --danger: #FB7185;
+            --bg-deep: #020617;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --glass-active: rgba(45, 212, 191, 0.15);
+            --font-main: 'Outfit', sans-serif;
             --font-arabic: 'Amiri', serif;
-            --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --ease-out: cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        [data-theme="light"] {
-            --bg-deep: #F0FDF4;
-            --bg-glass: rgba(255, 255, 255, 0.8);
-            --text-light: #064E3B;
-            --shadow-neon: 0 0 15px rgba(16, 185, 129, 0.2);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
         body {
+            margin: 0; padding: 0;
             font-family: var(--font-main);
-            background-color: var(--bg-deep);
-            color: var(--text-light);
-            overflow-x: hidden;
+            background: var(--bg-deep);
+            color: #E2E8F0;
+            overflow: hidden; /* App-like feel */
             height: 100vh;
             display: flex;
             flex-direction: column;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
-            transition: background 0.5s ease;
+            transition: background 1s ease;
         }
 
-        /* --- UI COMPONENTS --- */
-        .glass-panel {
-            background: var(--bg-glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+        /* --- DYNAMIC BACKGROUNDS --- */
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
+            filter: blur(60px);
+            transition: all 1s ease;
+        }
+        
+        /* Mood States */
+        body[data-mood="anxious"] .bg-mesh { background: radial-gradient(at 50% 0%, rgba(56, 189, 248, 0.2) 0px, transparent 70%); }
+        body[data-mood="sinful"] .bg-mesh { background: radial-gradient(at 50% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 70%); }
+        body[data-mood="happy"] .bg-mesh { background: radial-gradient(at 100% 0%, rgba(250, 204, 21, 0.2) 0px, transparent 70%); }
+
+        /* --- COMPONENTS --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: var(--glass-border);
             border-radius: 24px;
             padding: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .btn-nur {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 16px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: var(--shadow-neon);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s var(--ease-out);
+        }
+
+        .btn-smart {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border: var(--glass-border);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            transition: transform 0.2s var(--ease-elastic);
+            gap: 8px;
+            transition: all 0.3s var(--ease-out);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-nur:active {
-            transform: scale(0.95);
+        .btn-smart.primary {
+            background: var(--primary);
+            color: #022c22;
+            border: none;
+            box-shadow: 0 0 15px var(--primary-glow);
         }
 
-        .btn-nur::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(255,255,255,0.2), transparent);
+        .btn-smart:active { transform: scale(0.96); }
+
+        /* --- AUDIO WAVE VISUALIZER --- */
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            height: 20px;
             opacity: 0;
             transition: opacity 0.3s;
         }
-        .btn-nur:hover::after { opacity: 1; }
+        .audio-wave.playing { opacity: 1; }
+        .bar { width: 3px; background: var(--gold); border-radius: 2px; animation: wave 1s ease-in-out infinite; }
+        .bar:nth-child(2) { animation-delay: 0.1s; height: 10px; }
+        .bar:nth-child(3) { animation-delay: 0.2s; height: 14px; }
+        .bar:nth-child(4) { animation-delay: 0.3s; height: 8px; }
+        @keyframes wave { 0%, 100% { height: 4px; } 50% { height: 16px; } }
 
         /* --- LAYOUT --- */
-        #app {
+        #app-container {
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 90px; /* Space for nav */
+            padding: 20px;
+            padding-bottom: 100px;
             scroll-behavior: smooth;
         }
 
         header {
-            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(2, 44, 34, 0.8);
-            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
         }
 
-        .logo-area h1 {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section {
-            display: none;
-            padding: 20px;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- NAVIGATION --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(6, 78, 59, 0.85);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
+        .profile-chip {
             display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            z-index: 200;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .nav-item {
-            color: rgba(255,255,255,0.5);
-            text-align: center;
-            font-size: 0.8rem;
+        /* --- MOOD SELECTOR --- */
+        .mood-ring {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .mood-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.6;
+            transition: all 0.3s;
             cursor: pointer;
+        }
+
+        .mood-item.active { opacity: 1; transform: translateY(-5px); }
+        .mood-icon {
+            width: 50px; height: 50px;
+            background: var(--glass-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 1px solid transparent;
             transition: all 0.3s;
         }
-
-        .nav-item i {
-            font-size: 1.4rem;
-            margin-bottom: 4px;
-            display: block;
+        .mood-item.active .mood-icon {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px var(--gold-glow);
+            background: rgba(253, 211, 77, 0.1);
         }
 
-        .nav-item.active {
-            color: var(--secondary);
-            transform: translateY(-5px);
-        }
-
-        .nav-item.active i {
-            text-shadow: 0 0 10px var(--secondary);
-        }
-
-        /* --- DASHBOARD --- */
-        .mood-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .mood-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .mood-card.selected {
-            border-color: var(--secondary);
-            background: rgba(245, 158, 11, 0.1);
-        }
-
-        .mood-emoji { font-size: 1.8rem; display: block; margin-bottom: 5px; }
-
-        .daily-wisdom {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0,0,0,0));
-            border-left: 4px solid var(--secondary);
-            margin-top: 20px;
-            position: relative;
-        }
-        
-        .arabic-text {
-            font-family: var(--font-arabic);
-            font-size: 1.6rem;
-            line-height: 1.8;
-            text-align: center;
-            margin-bottom: 10px;
-            color: var(--text-gold);
-        }
-
-        /* --- FOCUS / FLIGHT MODE --- */
-        .focus-circle-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 40px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .focus-svg {
-            transform: rotate(-90deg);
-            width: 100%;
-            height: 100%;
-        }
-
-        .focus-circle-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 8; }
-        .focus-circle-progress {
-            fill: none;
-            stroke: var(--primary);
-            stroke-width: 8;
-            stroke-dasharray: 880;
-            stroke-dashoffset: 880;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 1s linear;
-            filter: drop-shadow(0 0 5px var(--primary));
-        }
-
-        .focus-center {
-            position: absolute;
-            text-align: center;
-            width: 70%;
-        }
-
-        .timer-display { font-size: 3rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-        
-        .flight-animation {
-            position: absolute;
-            top: -50px; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.3;
-        }
-        
-        .plane-icon {
-            font-size: 2rem;
-            color: var(--secondary);
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: bottom 1s linear;
-            text-shadow: 0 0 15px var(--secondary);
-        }
-
-        /* --- HIFZ SECTION --- */
-        .hifz-stats {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-box {
-            flex: 1;
-            background: rgba(0,0,0,0.2);
-            padding: 15px;
-            border-radius: 16px;
-            text-align: center;
-        }
-        .stat-val { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
-        
-        .surah-list {
+        /* --- SMART CARD --- */
+        .smart-card {
+            margin-top: 10px;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-        
-        .surah-item {
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 15px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            border-left: 3px solid #555;
+            text-align: center;
+        }
+
+        .quran-text {
+            font-family: var(--font-arabic);
+            font-size: 1.8rem;
+            line-height: 2.2;
+            color: var(--gold);
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* --- FOCUS MODE --- */
+        .focus-hud {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
         }
         
-        .surah-item.weak { border-left-color: var(--danger); }
-        .surah-item.review { border-left-color: var(--secondary); }
-        .surah-item.strong { border-left-color: var(--primary); }
+        .timer-big {
+            font-size: 4.5rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+        }
 
         /* --- DISTRACTION SHIELD --- */
-        #distraction-shield {
+        #shield-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.98);
+            z-index: 999;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 30px;
+            animation: fadeIn 0.3s;
         }
-        
-        .shield-content h2 { font-size: 2rem; color: var(--secondary); margin-bottom: 20px; }
-        .pulse-breathing {
-            width: 100px; height: 100px;
-            background: var(--primary);
-            border-radius: 50%;
-            margin: 30px auto;
-            animation: breathe 4s infinite ease-in-out;
+
+        .shield-icon {
+            font-size: 3rem;
+            color: var(--danger);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* --- NAV --- */
+        .floating-nav {
+            position: fixed;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 10px 25px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #000;
+            gap: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            z-index: 100;
         }
         
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.3); opacity: 0.4; }
+        .nav-link {
+            font-size: 1.2rem;
+            color: #64748B;
+            transition: 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .nav-link.active { color: var(--primary); transform: translateY(-3px); }
+        .nav-link.active::after {
+            content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px; background: var(--primary); border-radius: 50%;
         }
 
-        /* --- CANVAS GENERATOR --- */
-        #share-canvas { display: none; }
+        /* Utility */
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* RTL Handling */
-        [dir="rtl"] { font-family: 'Noto Sans Arabic', sans-serif; }
-        [dir="rtl"] .daily-wisdom { border-left: none; border-right: 4px solid var(--secondary); }
-
-        .creator-tag {
-            text-align: center;
-            font-size: 0.7rem;
-            opacity: 0.4;
-            margin-top: 30px;
-        }
     </style>
 </head>
-<body data-theme="dark">
+<body data-mood="neutral">
+    
+    <div class="bg-mesh"></div>
 
-    <div id="app">
+    <!-- MAIN APP AREA -->
+    <div id="app-container">
+        
         <!-- HEADER -->
         <header>
-            <div class="logo-area" onclick="app.toggleLang()">
-                <h1>Nur Parvozi ✈️</h1>
+            <div>
+                <h1 style="font-size: 1.2rem; margin: 0; color: #fff;">Nur Parvozi <span style="color:var(--primary)">2.0</span></h1>
+                <span id="time-greeting" style="font-size: 0.8rem; color: #94A3B8;">Yuklanmoqda...</span>
             </div>
-            <div class="user-stats">
-                <span id="streak-display">🔥 0</span>
-                <i class="fas fa-cog" style="margin-left: 15px; cursor:pointer" onclick="app.navTo('settings')"></i>
+            <div class="profile-chip" onclick="app.toggleSound()">
+                <div class="audio-wave" id="global-audio-wave">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+                <i class="fas fa-volume-up" id="sound-icon" style="font-size: 0.9rem;"></i>
             </div>
         </header>
 
-        <!-- HOME TAB -->
-        <section id="home" class="section active">
-            <div class="glass-panel" style="margin-bottom: 20px;">
-                <h3 id="greeting">Assalomu alaykum</h3>
-                <p style="opacity: 0.7; font-size: 0.9rem;">Qalbingiz holati qanday?</p>
-                <div class="mood-grid">
-                    <div class="mood-card" onclick="app.setMood('happy')">
-                        <span class="mood-emoji">😊</span>
-                        <span data-i18n="mood_happy">Shukr</span>
-                    </div>
-                    <div class="mood-card" onclick="app.setMood('anxious')">
-                        <span class="mood-emoji">😰</span>
-                        <span data-i18n="mood_anxious">Xavotir</span>
-                    </div>
-                    <div class="mood-card" onclick="app.setMood('lazy')">
-                        <span class="mood-emoji">🥱</span>
-                        <span data-i18n="mood_lazy">G'aflat</span>
-                    </div>
-                    <div class="mood-card" onclick="app.setMood('sinful')">
-                        <span class="mood-emoji">💔</span>
-                        <span data-i18n="mood_sinful">Tavba</span>
-                    </div>
+        <!-- TABS CONTENT -->
+        
+        <!-- HOME: MOOD & WISDOM -->
+        <div id="tab-home" class="fade-in">
+            <h2 style="font-size: 1.1rem; margin-bottom: 15px; font-weight: 400;">Qalbingiz holati qanday?</h2>
+            
+            <div class="mood-ring">
+                <div class="mood-item active" onclick="app.setMood('neutral')">
+                    <div class="mood-icon">😐</div>
+                    <span style="font-size:0.7rem">Oddiy</span>
+                </div>
+                <div class="mood-item" onclick="app.setMood('anxious')">
+                    <div class="mood-icon">😰</div>
+                    <span style="font-size:0.7rem">Siqilish</span>
+                </div>
+                <div class="mood-item" onclick="app.setMood('sinful')">
+                    <div class="mood-icon">💔</div>
+                    <span style="font-size:0.7rem">Pusaymon</span>
+                </div>
+                <div class="mood-item" onclick="app.setMood('happy')">
+                    <div class="mood-icon">😊</div>
+                    <span style="font-size:0.7rem">Shukr</span>
                 </div>
             </div>
 
-            <div class="glass-panel daily-wisdom">
-                <div id="wisdom-content">
-                    <div class="arabic-text" id="quote-arabic"></div>
-                    <p id="quote-trans" style="font-style: italic; margin-bottom: 10px;"></p>
-                    <p id="quote-source" style="text-align: right; font-weight: bold; color: var(--secondary);"></p>
-                </div>
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <button class="btn-nur" style="padding: 8px 15px; font-size: 0.8rem;" onclick="app.speakQuote()"><i class="fas fa-volume-up"></i></button>
-                    <button class="btn-nur" style="padding: 8px 15px; font-size: 0.8rem;" onclick="app.shareCard()"><i class="fas fa-share-alt"></i></button>
-                </div>
+            <!-- SMART CARD (Dynamic Content) -->
+            <div class="glass-card smart-card" id="smart-card-content">
+                <div style="margin-bottom: 10px; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; font-size: 0.7rem;">Bugungi Tavsiya</div>
+                <div class="quran-text" id="quran-display">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+                <p id="translation-display" style="font-style: italic; opacity: 0.8; margin-bottom: 20px;">Mehribon va rahmli Alloh nomi bilan.</p>
+                
+                <button class="btn-smart primary" onclick="app.playAyah()">
+                    <i class="fas fa-play"></i> Tinglash (Haqiqiy)
+                </button>
+                <div style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5;">Qori: Mishary Al-Afasy</div>
             </div>
 
             <div style="margin-top: 20px;">
-                <h3 data-i18n="quick_actions">Tezkor Amallar</h3>
-                <div style="display: flex; gap: 10px; margin-top: 10px; overflow-x: auto;">
-                    <div class="glass-panel" style="min-width: 140px; text-align: center;" onclick="app.navTo('focus')">
-                        <i class="fas fa-plane-departure" style="font-size: 1.5rem; color: var(--primary); margin-bottom: 5px;"></i>
-                        <div data-i18n="nav_focus">Nur Parvozi</div>
+                <h3 style="font-size: 1rem; margin-bottom: 10px;">Tezkor Fokus</h3>
+                <div class="glass-card" style="padding: 15px; display: flex; align-items: center; justify-content: space-between;" onclick="app.nav('focus')">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 40px; height: 40px; background: rgba(45, 212, 191, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-plane-departure" style="color: var(--primary);"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Parvozni Boshlash</div>
+                            <div style="font-size: 0.8rem; opacity: 0.6;">25 daqiqa • Zikr Mode</div>
+                        </div>
                     </div>
-                    <div class="glass-panel" style="min-width: 140px; text-align: center;" onclick="app.navTo('hifz')">
-                        <i class="fas fa-book-quran" style="font-size: 1.5rem; color: var(--secondary); margin-bottom: 5px;"></i>
-                        <div data-i18n="nav_hifz">Hifz</div>
+                    <i class="fas fa-chevron-right" style="opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOCUS: PARVOZ MODE -->
+        <div id="tab-focus" class="hidden fade-in">
+            <div class="focus-hud">
+                <div style="font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gold);">Nur Parvozi</div>
+                <div class="timer-big" id="focus-timer">25:00</div>
+                <p id="focus-status" style="opacity: 0.7;">Qalbingizni dunyodan uzing</p>
+
+                <!-- 3D CSS Plane Animation Container -->
+                <div style="height: 150px; position: relative; perspective: 1000px; margin: 20px 0;">
+                    <div id="plane-3d" style="width: 60px; height: 60px; background: var(--primary); margin: 0 auto; transform: rotateX(60deg) rotateZ(45deg); box-shadow: 0 0 30px var(--primary); transition: transform 0.5s;">
+                        <i class="fas fa-paper-plane" style="font-size: 30px; color: #000; position: absolute; top: 15px; left: 15px; transform: rotate(-45deg);"></i>
                     </div>
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255,255,255,0.05) 20px); transform: rotateX(60deg); animation: runway 2s linear infinite infinite; opacity: 0;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <button class="btn-smart" onclick="focusSystem.toggle()">
+                        <i class="fas fa-play" id="focus-icon"></i> <span id="focus-btn-text">Boshlash</span>
+                    </button>
+                    <button class="btn-smart" style="background: rgba(255,255,255,0.05);" onclick="app.nav('home')">Chiqish</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HIFZ: SMART COACH -->
+        <div id="tab-hifz" class="hidden fade-in">
+            <h2 style="font-size: 1.1rem; margin-bottom: 15px;">Smart Hifz Planner</h2>
+            <div class="glass-card" style="margin-bottom: 15px; border-left: 3px solid var(--primary);">
+                <div style="font-weight: 600;">Bugungi Vazifa</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                    <span>Yasin surasi (1-10 oyatlar)</span>
+                    <span style="background: var(--primary); color: #000; padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold;">Yangi</span>
                 </div>
             </div>
             
-            <div class="creator-tag">Made by © Muhammad Daler</div>
-        </section>
-
-        <!-- HIFZ TAB -->
-        <section id="hifz" class="section">
-            <h2 data-i18n="hifz_title" style="margin-bottom: 15px;">Mening Qur'onim</h2>
-            <div class="hifz-stats">
-                <div class="stat-box">
-                    <div class="stat-val" id="hifz-count">0</div>
-                    <div style="font-size: 0.8rem;">Surahs</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-val" id="hifz-review" style="color: var(--secondary)">0</div>
-                    <div style="font-size: 0.8rem;">Review Due</div>
+            <div style="margin-top: 20px;">
+                <h3 style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 10px;">Takrorlash (Ebbinghaus tizimi)</h3>
+                <div id="hifz-list">
+                    <!-- JS renders this -->
                 </div>
             </div>
-            <button class="btn-nur" style="width: 100%; margin-bottom: 20px;" onclick="app.addHifz()">+ Add New Surah</button>
-            <div class="surah-list" id="surah-container">
-                <!-- JS Populates this -->
-            </div>
-        </section>
+            <button class="btn-smart" style="width: 100%; margin-top: 20px;" onclick="hifzSystem.add()">+ Yangi Sura Qo'shish</button>
+        </div>
 
-        <!-- FOCUS TAB -->
-        <section id="focus" class="section">
-            <h2 style="text-align: center; margin-bottom: 10px;" data-i18n="focus_journey">Jannat Tomon Parvoz</h2>
-            <p style="text-align: center; opacity: 0.7; font-size: 0.9rem;" id="focus-subtitle">Niyyatni yangilang va parvozni boshlang.</p>
-            
-            <div class="focus-circle-container">
-                <div class="flight-animation"></div>
-                <svg class="focus-svg">
-                    <circle class="focus-circle-bg" cx="140" cy="140" r="135"></circle>
-                    <circle class="focus-circle-progress" id="progress-ring" cx="140" cy="140" r="135"></circle>
-                </svg>
-                <div class="focus-center">
-                    <div class="timer-display" id="timer">25:00</div>
-                    <div style="font-size: 0.8rem; margin-top: 5px; color: var(--secondary);">Zikr Mode</div>
-                </div>
-                <i class="fas fa-plane plane-icon" id="plane-indicator"></i>
-            </div>
-
-            <div style="display: flex; justify-content: center; gap: 20px;">
-                <button class="btn-nur" id="start-btn" onclick="focusMode.toggle()"><i class="fas fa-play"></i> Boshlash</button>
-            </div>
-        </section>
-
-        <!-- SETTINGS TAB -->
-        <section id="settings" class="section">
-            <h2 data-i18n="settings">Sozlamalar</h2>
-            <div class="glass-panel" style="margin-top: 20px;">
-                <div class="surah-item" onclick="app.changeLang('uz')">🇺🇿 O'zbekcha</div>
-                <div class="surah-item" onclick="app.changeLang('ru')">🇷🇺 Русский</div>
-                <div class="surah-item" onclick="app.changeLang('en')">🇬🇧 English</div>
-                <div class="surah-item" onclick="app.changeLang('ar')">🇸🇦 العربية</div>
-                <br>
-                <div class="surah-item" onclick="app.resetData()" style="border-left-color: red;">⚠️ Reset Data</div>
-            </div>
-        </section>
     </div>
 
-    <!-- BOTTOM NAV -->
-    <nav class="bottom-nav">
-        <div class="nav-item active" data-target="home" onclick="app.navTo('home')">
-            <i class="fas fa-home"></i>
-            <span data-i18n="nav_home">Asosiy</span>
-        </div>
-        <div class="nav-item" data-target="hifz" onclick="app.navTo('hifz')">
-            <i class="fas fa-book-open"></i>
-            <span data-i18n="nav_hifz">Hifz</span>
-        </div>
-        <div class="nav-item" data-target="focus" onclick="app.navTo('focus')">
-            <i class="fas fa-mosque"></i>
-            <span data-i18n="nav_focus">Parvoz</span>
-        </div>
+    <!-- FLOATING NAV -->
+    <nav class="floating-nav">
+        <div class="nav-link active" onclick="app.nav('home')" id="nav-home"><i class="fas fa-home"></i></div>
+        <div class="nav-link" onclick="app.nav('focus')" id="nav-focus"><i class="fas fa-plane"></i></div>
+        <div class="nav-link" onclick="app.nav('hifz')" id="nav-hifz"><i class="fas fa-book-open"></i></div>
     </nav>
 
-    <!-- DISTRACTION SHIELD OVERLAY -->
-    <div id="distraction-shield">
-        <div class="shield-content">
-            <h2>SubhanAllah!</h2>
-            <p>Siz "Nur Parvozi"dan chalg'idingiz.</p>
-            <p>Qaytish uchun 3 marta chuqur nafas oling.</p>
-            <div class="pulse-breathing" id="breath-counter">3</div>
-            <button class="btn-nur" style="margin-top: 20px; background: transparent; border: 1px solid var(--secondary);" onclick="shield.dismiss()">Qaytish</button>
-        </div>
+    <!-- DISTRACTION SHIELD -->
+    <div id="shield-overlay">
+        <i class="fas fa-shield-halved shield-icon"></i>
+        <h2 style="color: #fff;">To'xtang!</h2>
+        <p style="opacity: 0.8; max-width: 80%;">Shayton chalg'itishiga yo'l qo'ymang. Parvozni davom ettiring.</p>
+        <div style="margin: 30px 0; font-size: 2rem; font-weight: bold; color: var(--primary);" id="shield-counter">3</div>
+        <p style="font-size: 0.8rem; margin-bottom: 20px;">Chuqur nafas oling...</p>
+        <button class="btn-smart" onclick="shieldSystem.dismiss()">Qaytish</button>
     </div>
 
-    <canvas id="share-canvas" width="1080" height="1080"></canvas>
+    <!-- AUDIO ELEMENT (HIDDEN) -->
+    <audio id="quran-player" preload="none"></audio>
 
     <script>
-        /* --- DATA & CONTENT --- */
+        /* --- 1. INTELLIGENT DATA STORE --- */
         const DB = {
-            uz: {
-                nav_home: "Asosiy", nav_hifz: "Hifz", nav_focus: "Parvoz",
-                mood_happy: "Shukr", mood_anxious: "Xavotir", mood_lazy: "G'aflat", mood_sinful: "Tavba",
-                hifz_title: "Hifz Murabbiyi",
-                quotes: {
-                    happy: { ar: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ", tr: "Qasamki, agar shukr qilsangiz, albatta, sizga ziyoda qilurman.", src: "Ibrohim, 7" },
-                    anxious: { ar: "أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ", tr: "Ogoh bo'lingkim, Allohni zikr etish bilan qalblar orom olur.", src: "Ra'd, 28" },
-                    lazy: { ar: "وَسَارِعُوٓا۟ إِلَىٰ مَغْفِرَةٍ مِّن رَّبِّكُمْ", tr: "Robbingizdan bo'lgan mag'firatga shoshiling!", src: "Oli Imron, 133" },
-                    sinful: { ar: "إِنَّ ٱللَّهَ يُحِبُّ ٱلتَّوَّٰبِينَ", tr: "Albatta, Alloh tavba qiluvchilarni sevadi.", src: "Baqara, 222" }
-                }
-            },
-            en: {
-                nav_home: "Home", nav_hifz: "Hifz", nav_focus: "Flight",
-                mood_happy: "Grateful", mood_anxious: "Anxious", mood_lazy: "Lazy", mood_sinful: "Regret",
-                hifz_title: "Hifz Coach",
-                quotes: {
-                    happy: { ar: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ", tr: "If you are grateful, I will surely increase you [in favor].", src: "Ibrahim, 7" },
-                    anxious: { ar: "أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ", tr: "Unquestionably, by the remembrance of Allah do hearts find rest.", src: "Ra'd, 28" }
-                }
-            },
-            ru: {
-                nav_home: "Главная", nav_hifz: "Хифз", nav_focus: "Полет",
-                mood_happy: "Благодарность", mood_anxious: "Тревога", mood_lazy: "Лень", mood_sinful: "Покаяние",
-                hifz_title: "Хифз Тренер",
-                quotes: {
-                    happy: { ar: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ", tr: "Если вы будете благодарны, то Я одарю вас еще большими благами.", src: "Ибрахим, 7" },
-                    anxious: { ar: "أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ", tr: "Разве не поминанием Аллаха утешаются сердца?", src: "Ар-Раад, 28" }
-                }
-            },
-            ar: {
-                nav_home: "الرئيسية", nav_hifz: "الحفظ", nav_focus: "تحليق",
-                mood_happy: "شكر", mood_anxious: "قلق", mood_lazy: "غفلة", mood_sinful: "توبة",
-                hifz_title: "مدرب الحفظ",
-                quotes: {
-                    happy: { ar: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ", tr: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ", src: "إبراهيم ٧" },
-                    anxious: { ar: "أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ", tr: "أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ", src: "الرعد ٢٨" }
+            moods: {
+                neutral: { 
+                    surah: 1, ayah: 1, 
+                    audio: "https://everyayah.com/data/Alafasy_128kbps/001001.mp3", // Bismillah
+                    text: "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+                    trans: "Mehribon va rahmli Alloh nomi bilan."
+                },
+                anxious: { 
+                    surah: 94, ayah: 6, 
+                    audio: "https://everyayah.com/data/Alafasy_128kbps/094006.mp3", // Inna ma'al usri yusra
+                    text: "إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",
+                    trans: "Albatta, qiyinchilik bilan birga yengillik bordir."
+                },
+                sinful: { 
+                    surah: 39, ayah: 53, 
+                    audio: "https://everyayah.com/data/Alafasy_128kbps/039053.mp3", // La taqnatu
+                    text: "قُلْ يَٰعِبَادِىَ ٱلَّذِينَ أَسْرَفُوا۟ عَلَىٰٓ أَنفُسِهِمْ لَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ",
+                    trans: "Ey o'z jonlariga zulm qilgan bandalarim, Allohning rahmatidan noumid bo'lmanglar."
+                },
+                happy: { 
+                    surah: 14, ayah: 7, 
+                    audio: "https://everyayah.com/data/Alafasy_128kbps/014007.mp3", // Lain shakartum
+                    text: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ",
+                    trans: "Qasamki, agar shukr qilsangiz, albatta, sizga ziyoda qilurman."
                 }
             }
         };
 
-        /* --- STATE & STORAGE --- */
-        class AppState {
-            constructor() {
-                this.lang = localStorage.getItem('np_lang') || 'uz';
-                this.mood = 'happy';
-                this.streak = parseInt(localStorage.getItem('np_streak') || 0);
-                this.hifzData = JSON.parse(localStorage.getItem('np_hifz') || '[]');
-                this.theme = 'dark';
-            }
-            
-            save() {
-                localStorage.setItem('np_lang', this.lang);
-                localStorage.setItem('np_streak', this.streak);
-                localStorage.setItem('np_hifz', JSON.stringify(this.hifzData));
-            }
-        }
-
-        const state = new AppState();
-
-        /* --- MAIN APP LOGIC --- */
+        /* --- 2. CORE APP LOGIC --- */
         const app = {
+            currentMood: 'neutral',
+            audioPlaying: false,
+
             init: () => {
-                app.applyLang();
-                app.renderHifz();
-                app.updateQuote();
-                document.getElementById('streak-display').innerText = `🔥 ${state.streak}`;
+                app.greet();
+                app.setMood('neutral'); // Default load
+                hifzSystem.render();
                 
-                // Fallback for missing keys in other langs
-                if(!DB[state.lang].quotes.lazy) DB[state.lang].quotes.lazy = DB['uz'].quotes.lazy;
-                if(!DB[state.lang].quotes.sinful) DB[state.lang].quotes.sinful = DB['uz'].quotes.sinful;
+                // Prevent screen sleep (experimental)
+                if (navigator.wakeLock) {
+                    navigator.wakeLock.request('screen').catch(console.error);
+                }
             },
 
-            navTo: (pageId) => {
-                document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-                document.getElementById(pageId).classList.add('active');
+            greet: () => {
+                const hour = new Date().getHours();
+                let txt = "Assalomu alaykum";
+                if(hour < 5) txt = "Tahajjud vaqti - Duo qiling";
+                else if(hour < 10) txt = "Bomdod vaqti - Baraka";
+                else if(hour > 20) txt = "Tungi zikr vaqti";
                 
-                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-                document.querySelector(`.nav-item[data-target="${pageId}"]`).classList.add('active');
+                document.getElementById('time-greeting').innerText = txt;
             },
 
             setMood: (mood) => {
-                state.mood = mood;
-                document.querySelectorAll('.mood-card').forEach(el => el.classList.remove('selected'));
-                event.currentTarget.classList.add('selected');
+                app.currentMood = mood;
+                document.body.setAttribute('data-mood', mood);
                 
-                // Change theme hue based on mood
-                const root = document.documentElement;
-                if(mood === 'anxious') root.style.setProperty('--primary', '#3B82F6'); // Blue
-                else if(mood === 'sinful') root.style.setProperty('--primary', '#8B5CF6'); // Purple
-                else if(mood === 'lazy') root.style.setProperty('--primary', '#EF4444'); // Red
-                else root.style.setProperty('--primary', '#10B981'); // Emerald
+                // Update UI selection
+                document.querySelectorAll('.mood-item').forEach(el => el.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+
+                // Update Smart Card Content
+                const data = DB.moods[mood];
+                document.getElementById('quran-display').innerText = data.text;
+                document.getElementById('translation-display').innerText = data.trans;
                 
-                app.updateQuote();
-            },
-
-            updateQuote: () => {
-                const q = DB[state.lang].quotes[state.mood] || DB[state.lang].quotes.happy;
-                document.getElementById('quote-arabic').innerText = q.ar;
-                document.getElementById('quote-trans').innerText = q.tr;
-                document.getElementById('quote-source').innerText = q.src;
-            },
-
-            changeLang: (lang) => {
-                state.lang = lang;
-                state.save();
-                location.reload();
-            },
-
-            applyLang: () => {
-                const t = DB[state.lang];
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if(t[key]) el.innerText = t[key];
-                });
+                // Set Audio Source (don't play yet)
+                const player = document.getElementById('quran-player');
+                player.src = data.audio;
                 
-                if(state.lang === 'ar') document.body.setAttribute('dir', 'rtl');
-                else document.body.setAttribute('dir', 'ltr');
+                // Animation effect
+                const card = document.getElementById('smart-card-content');
+                card.style.transform = "scale(0.98)";
+                setTimeout(() => card.style.transform = "scale(1)", 200);
             },
 
-            speakQuote: () => {
-                const q = DB[state.lang].quotes[state.mood];
-                const utterance = new SpeechSynthesisUtterance(q.ar);
-                utterance.lang = 'ar-SA';
-                speechSynthesis.speak(utterance);
+            playAyah: () => {
+                const player = document.getElementById('quran-player');
+                const wave = document.getElementById('global-audio-wave');
+                
+                if(player.paused) {
+                    player.play();
+                    wave.classList.add('playing');
+                } else {
+                    player.pause();
+                    wave.classList.remove('playing');
+                }
+                
+                player.onended = () => wave.classList.remove('playing');
+            },
+
+            nav: (tab) => {
+                document.querySelectorAll('.fade-in').forEach(el => el.classList.add('hidden'));
+                document.getElementById(`tab-${tab}`).classList.remove('hidden');
+                
+                document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+                document.getElementById(`nav-${tab}`).classList.add('active');
             },
             
-            resetData: () => {
-                if(confirm('Are you sure? All progress will be lost.')) {
-                    localStorage.clear();
-                    location.reload();
-                }
-            },
-
-            // --- CANVAS SHARE ---
-            shareCard: () => {
-                const canvas = document.getElementById('share-canvas');
-                const ctx = canvas.getContext('2d');
-                const q = DB[state.lang].quotes[state.mood];
-
-                // Draw BG
-                const grad = ctx.createLinearGradient(0,0, 1080, 1080);
-                grad.addColorStop(0, '#064E3B');
-                grad.addColorStop(1, '#022c22');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0,0, 1080, 1080);
-
-                // Draw Text
-                ctx.fillStyle = '#F59E0B';
-                ctx.font = 'bold 80px Amiri';
-                ctx.textAlign = 'center';
-                wrapText(ctx, q.ar, 540, 400, 900, 100);
-
-                ctx.fillStyle = '#fff';
-                ctx.font = 'italic 50px Inter';
-                wrapText(ctx, q.tr, 540, 700, 900, 70);
-
-                ctx.fillStyle = 'rgba(255,255,255,0.5)';
-                ctx.font = '40px Inter';
-                ctx.fillText(`Nur Parvozi App • ${q.src}`, 540, 950);
-
-                // Download
-                const link = document.createElement('a');
-                link.download = 'nur-parvozi-hikmat.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            },
-
-            // --- HIFZ LOGIC (Simplified Spaced Repetition) ---
-            addHifz: () => {
-                const name = prompt("Surah Name (e.g. Yasin):");
-                if(!name) return;
-                state.hifzData.push({ 
-                    id: Date.now(), 
-                    name, 
-                    level: 0, // 0=New, 5=Mastered
-                    nextReview: Date.now() 
-                });
-                state.save();
-                app.renderHifz();
-            },
-
-            renderHifz: () => {
-                const container = document.getElementById('surah-container');
-                container.innerHTML = '';
-                let reviewCount = 0;
-                
-                state.hifzData.forEach(item => {
-                    const isDue = Date.now() >= item.nextReview;
-                    if(isDue) reviewCount++;
-                    
-                    const div = document.createElement('div');
-                    div.className = `surah-item ${isDue ? 'review' : (item.level > 3 ? 'strong' : 'weak')}`;
-                    div.innerHTML = `
-                        <div>
-                            <strong>${item.name}</strong><br>
-                            <small>${isDue ? 'Review Now!' : 'Next: ' + new Date(item.nextReview).toLocaleDateString()}</small>
-                        </div>
-                        <button class="btn-nur" style="padding: 5px 10px; font-size: 0.7rem;" onclick="app.reviewSurah(${item.id})">✅</button>
-                    `;
-                    container.appendChild(div);
-                });
-                
-                document.getElementById('hifz-count').innerText = state.hifzData.length;
-                document.getElementById('hifz-review').innerText = reviewCount;
-            },
-
-            reviewSurah: (id) => {
-                const idx = state.hifzData.findIndex(x => x.id === id);
-                const item = state.hifzData[idx];
-                
-                // Simple Algorithm: Level increases, interval doubles
-                item.level++;
-                const daysToAdd = Math.pow(2, item.level); // 1, 2, 4, 8, 16 days
-                item.nextReview = Date.now() + (daysToAdd * 24 * 60 * 60 * 1000);
-                
-                state.streak++;
-                state.save();
-                app.renderHifz();
-                app.init(); // update streak UI
-                alert(`MashaAllah! Next review in ${daysToAdd} days.`);
+            toggleSound: () => {
+                alert("Ovoz balandligini qurilma tugmalari orqali boshqaring. Hozircha faqat Qur'on ovozi faol.");
             }
         };
 
-        // Helper for Canvas
-        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-            let words = text.split(' ');
-            let line = '';
-            for(let n = 0; n < words.length; n++) {
-                let testLine = line + words[n] + ' ';
-                let metrics = ctx.measureText(testLine);
-                let testWidth = metrics.width;
-                if (testWidth > maxWidth && n > 0) {
-                    ctx.fillText(line, x, y);
-                    line = words[n] + ' ';
-                    y += lineHeight;
-                } else {
-                    line = testLine;
-                }
-            }
-            ctx.fillText(line, x, y);
-        }
-
-        /* --- FOCUS MODE LOGIC --- */
-        const focusMode = {
+        /* --- 3. FOCUS SYSTEM (NUR PARVOZI) --- */
+        const focusSystem = {
             timer: null,
-            timeLeft: 1500, // 25 min
+            timeLeft: 1500,
             isActive: false,
 
             toggle: () => {
-                if(focusMode.isActive) focusMode.stop();
-                else focusMode.start();
+                if(focusSystem.isActive) focusSystem.stop();
+                else focusSystem.start();
             },
 
             start: () => {
-                focusMode.isActive = true;
-                document.getElementById('start-btn').innerHTML = '<i class="fas fa-pause"></i> Pause';
-                shield.activate(); // Activate distraction shield logic
+                focusSystem.isActive = true;
+                document.getElementById('focus-icon').className = "fas fa-pause";
+                document.getElementById('focus-btn-text').innerText = "To'xtatish";
+                document.getElementById('plane-3d').style.transform = "rotateX(0deg) rotateZ(0deg) scale(1.2)";
                 
-                focusMode.timer = setInterval(() => {
-                    focusMode.timeLeft--;
-                    focusMode.updateUI();
-                    
-                    if(focusMode.timeLeft <= 0) {
-                        focusMode.stop();
-                        alert("Alhamdulillah! Session Complete.");
-                        state.streak += 5;
-                        state.save();
-                        app.init();
+                // Activate Distraction Shield Watcher
+                shieldSystem.watch();
+
+                focusSystem.timer = setInterval(() => {
+                    focusSystem.timeLeft--;
+                    const m = Math.floor(focusSystem.timeLeft / 60);
+                    const s = focusSystem.timeLeft % 60;
+                    document.getElementById('focus-timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+
+                    if(focusSystem.timeLeft <= 0) {
+                        focusSystem.stop();
+                        alert("Alhamdulillah! Parvoz yakunlandi.");
+                        // Play success sound logic here
                     }
                 }, 1000);
             },
 
             stop: () => {
-                focusMode.isActive = false;
-                clearInterval(focusMode.timer);
-                document.getElementById('start-btn').innerHTML = '<i class="fas fa-play"></i> Resume';
-                shield.deactivate();
-            },
-
-            updateUI: () => {
-                const mins = Math.floor(focusMode.timeLeft / 60);
-                const secs = focusMode.timeLeft % 60;
-                document.getElementById('timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-                
-                // Animate Ring
-                const total = 1500;
-                const offset = 880 - (880 * ((total - focusMode.timeLeft) / total));
-                document.getElementById('progress-ring').style.strokeDashoffset = offset;
-                
-                // Move Plane
-                const percent = (total - focusMode.timeLeft) / total * 100;
-                document.getElementById('plane-indicator').style.bottom = `${20 + (percent * 2)}px`; // Simple vertical movement for demo
+                focusSystem.isActive = false;
+                clearInterval(focusSystem.timer);
+                document.getElementById('focus-icon').className = "fas fa-play";
+                document.getElementById('focus-btn-text').innerText = "Davom ettirish";
+                document.getElementById('plane-3d').style.transform = "rotateX(60deg) rotateZ(45deg)";
+                shieldSystem.unwatch();
             }
         };
 
-        /* --- DISTRACTION SHIELD --- */
-        const shield = {
-            active: false,
+        /* --- 4. DISTRACTION SHIELD (Smart Interventions) --- */
+        const shieldSystem = {
+            watchId: null,
             
-            activate: () => {
-                shield.active = true;
-                document.addEventListener('visibilitychange', shield.check);
+            watch: () => {
+                document.addEventListener("visibilitychange", shieldSystem.check);
             },
             
-            deactivate: () => {
-                shield.active = false;
-                document.removeEventListener('visibilitychange', shield.check);
+            unwatch: () => {
+                document.removeEventListener("visibilitychange", shieldSystem.check);
             },
             
             check: () => {
-                if(document.hidden && shield.active && focusMode.isActive) {
-                    // User left the app while focused!
+                if(document.hidden && focusSystem.isActive) {
+                    // User left app! Show shield immediately upon return
                     setTimeout(() => {
-                        // Check if they are still gone after 1s (to avoid accidental swipes)
-                        if(document.hidden) {
-                            shield.showOverlay();
-                        }
-                    }, 500);
+                        if(!document.hidden) shieldSystem.trigger();
+                    }, 100);
                 }
             },
             
-            showOverlay: () => {
-                const el = document.getElementById('distraction-shield');
-                el.style.display = 'flex';
-                // Play subtle beep or vibrate
-                if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            trigger: () => {
+                const overlay = document.getElementById('shield-overlay');
+                overlay.style.display = 'flex';
+                // Count down breathing
+                let count = 3;
+                const counter = document.getElementById('shield-counter');
+                const btn = overlay.querySelector('button');
+                btn.style.display = 'none'; // Lock exit
+                
+                const int = setInterval(() => {
+                    count--;
+                    counter.innerText = count;
+                    if(count <= 0) {
+                        clearInterval(int);
+                        counter.innerText = "Bismillah";
+                        btn.style.display = 'block'; // Unlock
+                    }
+                }, 1500);
             },
             
             dismiss: () => {
-                // Breathing exercise logic
-                let count = 3;
-                const counterEl = document.getElementById('breath-counter');
-                const btn = event.target;
-                btn.disabled = true;
-                btn.innerText = "Nafas oling...";
-                
-                const interval = setInterval(() => {
-                    count--;
-                    counterEl.innerText = count;
-                    if(count <= 0) {
-                        clearInterval(interval);
-                        document.getElementById('distraction-shield').style.display = 'none';
-                        btn.disabled = false;
-                        btn.innerText = "Qaytish";
-                        counterEl.innerText = "3";
-                    }
-                }, 1500);
+                document.getElementById('shield-overlay').style.display = 'none';
             }
         };
 
-        // Init App
-        window.addEventListener('DOMContentLoaded', app.init);
+        /* --- 5. HIFZ SYSTEM (LocalStorage) --- */
+        const hifzSystem = {
+            data: JSON.parse(localStorage.getItem('np_hifz') || '[]'),
+            
+            add: () => {
+                const name = prompt("Sura nomini kiriting (Masalan: Mulk):");
+                if(name) {
+                    hifzSystem.data.push({ name, nextReview: Date.now(), level: 1 });
+                    hifzSystem.save();
+                    hifzSystem.render();
+                }
+            },
+            
+            save: () => {
+                localStorage.setItem('np_hifz', JSON.stringify(hifzSystem.data));
+            },
+            
+            render: () => {
+                const container = document.getElementById('hifz-list');
+                container.innerHTML = '';
+                if(hifzSystem.data.length === 0) {
+                    container.innerHTML = '<div style="text-align:center; opacity:0.5; padding:20px;">Hozircha bo\'sh</div>';
+                    return;
+                }
+                
+                hifzSystem.data.forEach((item, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'glass-card';
+                    div.style.marginBottom = '10px';
+                    div.style.padding = '15px';
+                    div.innerHTML = `
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong>${item.name}</strong>
+                            <i class="fas fa-check-circle" style="color:var(--primary); cursor:pointer;" onclick="hifzSystem.review(${idx})"></i>
+                        </div>
+                        <div style="font-size:0.8rem; opacity:0.6; margin-top:5px;">Daraja: ${item.level}</div>
+                    `;
+                    container.appendChild(div);
+                });
+            },
+            
+            review: (idx) => {
+                // Ebbinghaus logic: Increase interval
+                hifzSystem.data[idx].level++;
+                hifzSystem.save();
+                hifzSystem.render();
+                alert("MashaAllah! Keyingi takrorlash vaqti uzaytirildi.");
+            }
+        };
+
+        // Start
+        window.onload = app.init;
 
     </script>
+    <div style="text-align: center; font-size: 0.6rem; opacity: 0.3; margin-top: 20px;">
+        Made by © Muhammad Daler | Nur Parvozi 2.0
+    </div>
 </body>
 </html>
+
 
