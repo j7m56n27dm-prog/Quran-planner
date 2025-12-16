@@ -1,557 +1,705 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Play, Pause, RotateCcw, CheckCircle2, LayoutGrid, 
-  BarChart2, User, Clock, Calendar, ChevronRight, 
-  BookOpen, Wind, Brain, Volume2, X, Plus, Trophy,
-  Zap, Bell, Moon
-} from 'lucide-react';
-
-/** --- MA'LUMOTLAR BAZASI --- */
-const HIKMATLAR = [
-  "Agar Qur'on sening qalbingda bo'lsa, qayerda bo'lishingdan qat'iy nazar, Alloh sen bilan.",
-  "Ilm o'rganish igna bilan quduq qazish kabidir.",
-  "Vaqtingni bekorga sarflama, o'tgan vaqt qaytib kelmaydi.",
-  "Qur'on o'quvchi xor bo'lmas.",
-  "Bugungi vazifani ertaga qoldirma.",
-  "Muvaffaqiyat siri — davomiylikdadir.",
-  "Niyatingni to'g'rila, Alloh yo'lingni ochadi.",
-];
-
-const MASLAHATLAR = [
-  "Telefonni 'Bezovta qilinmasin' rejimiga qo'ying.",
-  "Mushafga qarab o'qish xotirani kuchaytiradi.",
-  "Ovoz chiqarib o'qish diqqatni jamlashga yordam beradi.",
-  "Har 25 daqiqada suv ichishni unutmang.",
-  "Eng qiyin darsdan boshlang."
-];
-
-/** --- YORDAMCHI FUNKSIYALAR --- */
-const formatTime = (seconds) => {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-};
-
-const playBeep = () => {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Qur'on OS Ultimate</title>
     
-    const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
-    
-    osc.start();
-    osc.stop(ctx.currentTime + 0.5);
-  } catch (e) {
-    console.error("Audio xatosi:", e);
-  }
-};
+    <!-- PWA Settings for iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3063/3063212.png">
 
-/** --- KOMPONENTLAR --- */
+    <!-- FONTS: Inter & Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
 
-// 1. KIRISH EKRANI (NIYAT)
-const IntroScreen = ({ onStart }) => (
-  <div className="fixed inset-0 z-[60] bg-[#050505] flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-700">
-    <div className="mb-10 relative">
-      <div className="absolute inset-0 bg-amber-500 blur-[50px] opacity-20 animate-pulse"></div>
-      <BookOpen size={80} className="text-amber-400 relative z-10" />
-    </div>
-    <h1 className="text-3xl font-bold text-white mb-6 leading-relaxed font-serif">
-      Bismillah
-    </h1>
-    <p className="text-gray-300 text-lg mb-12 italic">
-      "Allohning roziligi uchun Qur'onni takrorlashga va o'rganishga tayyorman"
-    </p>
-    <button 
-      onClick={onStart}
-      className="px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full text-black font-bold text-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_30px_rgba(245,158,11,0.4)]"
-    >
-      Boshlash
-    </button>
-    <div className="absolute bottom-8 text-white/20 text-xs">
-      Made by ©️Muhammad Daler
-    </div>
-  </div>
-);
+    <!-- LIBRARIES (CDN) -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React Core -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Framer Motion (Professional Animations) -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-// 2. NAFAS MASHQI
-const BreathingExercise = ({ onFinish }) => {
-  const [text, setText] = useState("Nafas oling...");
-  const [scale, setScale] = useState(1);
-  
-  useEffect(() => {
-    let step = 0;
-    const interval = setInterval(() => {
-      step++;
-      if (step === 1) {
-        setText("Nafas oling (4s)");
-        setScale(1.5);
-      } else if (step === 5) {
-        setText("Ushlab turing (7s)");
-        setScale(1.5); // O'zgarmaydi
-      } else if (step === 12) {
-        setText("Chiqaring (8s)");
-        setScale(1);
-      } else if (step === 20) {
-        clearInterval(interval);
-        onFinish();
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#fffbf0',
+                            100: '#fef5d6',
+                            200: '#fce9aa',
+                            300: '#fad671',
+                            400: '#f7bf3b',
+                            500: '#f59e0b', // Base Gold
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        dark: {
+                            bg: '#050505',
+                            card: '#121212',
+                            border: '#1E1E1E'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center">
-      <h2 className="text-2xl text-white mb-12 font-medium">Diqqatni jamlash</h2>
-      
-      <div className="relative flex items-center justify-center w-64 h-64">
-        <div 
-          className="absolute bg-emerald-500/30 rounded-full transition-all duration-[4000ms] ease-in-out"
-          style={{ width: `${scale * 100}%`, height: `${scale * 100}%` }}
-        ></div>
-        <div className="relative z-10 bg-emerald-500 w-32 h-32 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.5)]">
-          <Wind size={40} className="text-black" />
-        </div>
-      </div>
+    <style>
+        /* Global Reset & Base Styles */
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow: hidden; /* Prevent scrolling on body */
+            -webkit-tap-highlight-color: transparent;
+        }
 
-      <p className="mt-12 text-3xl font-bold text-emerald-400 animate-pulse">{text}</p>
-      
-      <button onClick={onFinish} className="mt-16 text-white/40 text-sm border-b border-transparent hover:border-white/40 pb-1">
-        O'tkazib yuborish
-      </button>
-    </div>
-  );
-};
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
 
-// --- ASOSIY ILOVA ---
-const App = () => {
-  // STATE: Navigatsiya
-  const [introDone, setIntroDone] = useState(false);
-  const [activeTab, setActiveTab] = useState('focus'); // focus, planner, stats, profile
-  const [isBreathing, setIsBreathing] = useState(false);
+        .gold-glow {
+            box-shadow: 0 0 30px -5px rgba(245, 158, 11, 0.3);
+        }
 
-  // STATE: Taymer
-  const [timerActive, setTimerActive] = useState(false);
-  const [mode, setMode] = useState('focus'); // focus, break
-  const [focusTime, setFocusTime] = useState(25);
-  const [breakTime, setBreakTime] = useState(5);
-  const [secondsLeft, setSecondsLeft] = useState(25 * 60);
-  const timerRef = useRef(null);
+        /* Hide Scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
 
-  // STATE: Vazifalar
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState("");
+    <script type="text/babel">
+        // --- 1. SYSTEM ARCHITECTURE & UTILITIES ---
 
-  // STATE: Statistika
-  const [stats, setStats] = useState({ totalMinutes: 0, completedTasks: 0 });
-  
-  // INIT
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('md_tasks');
-    const savedStats = localStorage.getItem('md_stats');
-    if (savedTasks) setTasks(JSON.parse(savedTasks));
-    if (savedStats) setStats(JSON.parse(savedStats));
-  }, []);
+        const { useState, useEffect, useRef, useMemo, createContext, useContext, useReducer } = React;
+        const { motion, AnimatePresence } = window.Motion;
+        const { 
+            BookOpen, Clock, BarChart3, Settings, Play, Pause, 
+            RotateCcw, CheckCircle2, X, Plus, Trophy, Flame, 
+            Wind, Brain, Volume2, Calendar, ChevronRight, Sparkles,
+            Maximize2, Award
+        } = lucide.icons;
 
-  // SAVE
-  useEffect(() => {
-    localStorage.setItem('md_tasks', JSON.stringify(tasks));
-    localStorage.setItem('md_stats', JSON.stringify(stats));
-  }, [tasks, stats]);
+        // --- ICON WRAPPER ---
+        const Icon = ({ name, size = 24, className = "", ...props }) => {
+            const IconComp = lucide.icons[name];
+            return IconComp ? <IconComp size={size} className={className} {...props} /> : null;
+        };
 
-  // TIMER LOGIC
-  useEffect(() => {
-    if (timerActive && secondsLeft > 0) {
-      timerRef.current = setInterval(() => {
-        setSecondsLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (secondsLeft === 0 && timerActive) {
-      handleTimerFinish();
-    }
-    return () => clearInterval(timerRef.current);
-  }, [timerActive, secondsLeft]);
+        // --- AUDIO ENGINE (Professional Oscillator Synthesis) ---
+        class NeuralAudioEngine {
+            constructor() {
+                this.ctx = null;
+                this.nodes = [];
+                this.isInitialized = false;
+            }
 
-  const handleTimerFinish = () => {
-    setTimerActive(false);
-    playBeep();
-    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            init() {
+                if (!this.isInitialized) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                    this.isInitialized = true;
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
 
-    if (mode === 'focus') {
-      alert(`MashaAlloh! ${focusTime} daqiqa ilm oldingiz.\n\nHikmat: "${HIKMATLAR[Math.floor(Math.random() * HIKMATLAR.length)]}"`);
-      setStats(prev => ({ ...prev, totalMinutes: prev.totalMinutes + focusTime }));
-      setMode('break');
-      setSecondsLeft(breakTime * 60);
-    } else {
-      alert("Dam olish tugadi. Davom etamizmi?");
-      setMode('focus');
-      setSecondsLeft(focusTime * 60);
-    }
-  };
+            // Binaural Beats / Brown Noise Generator
+            playAmbience(type) {
+                this.init();
+                this.stop(); // Stop previous
 
-  const toggleTimer = () => {
-    if (!timerActive && mode === 'focus' && secondsLeft === focusTime * 60 && !isBreathing) {
-      // Birinchi marta boshlaganda nafas mashqini taklif qilish (optional logic here)
-      // Hozircha to'g'ridan-to'g'ri boshlaymiz, lekin "Nafas" tugmasi alohida
-    }
-    setTimerActive(!timerActive);
-  };
+                const bufferSize = 2 * this.ctx.sampleRate;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const output = buffer.getChannelData(0);
 
-  const resetTimer = () => {
-    setTimerActive(false);
-    setSecondsLeft(mode === 'focus' ? focusTime * 60 : breakTime * 60);
-  };
+                // Math for Brown Noise (Deep focus)
+                let lastOut = 0;
+                for (let i = 0; i < bufferSize; i++) {
+                    if (type === 'focus') {
+                        const white = Math.random() * 2 - 1;
+                        output[i] = (lastOut + (0.02 * white)) / 1.02;
+                        lastOut = output[i];
+                        output[i] *= 3.5; 
+                    } else if (type === 'rain') {
+                        // Pink Noise approximation
+                        const white = Math.random() * 2 - 1;
+                        let b0, b1, b2, b3, b4, b5, b6;
+                        b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+                        b0 = 0.99886 * b0 + white * 0.0555179;
+                        b1 = 0.99332 * b1 + white * 0.0750759;
+                        b2 = 0.96900 * b2 + white * 0.1538520;
+                        b3 = 0.86650 * b3 + white * 0.3104856;
+                        b4 = 0.55000 * b4 + white * 0.5329522;
+                        b5 = -0.7616 * b5 - white * 0.0168980;
+                        output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                        output[i] *= 0.11; 
+                    }
+                }
 
-  const startBreathing = () => {
-    setIsBreathing(true);
-  };
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+                noise.loop = true;
+                
+                // Fade In
+                const gainNode = this.ctx.createGain();
+                gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.08, this.ctx.currentTime + 2);
 
-  const finishBreathing = () => {
-    setIsBreathing(false);
-    setTimerActive(true); // Avtomatik start
-  };
+                noise.connect(gainNode);
+                gainNode.connect(this.ctx.destination);
+                noise.start();
+                
+                this.nodes.push({ source: noise, gain: gainNode });
+            }
 
-  // TASKS LOGIC
-  const addTask = () => {
-    if (!newTask.trim()) return;
-    setTasks([...tasks, { id: Date.now(), title: newTask, completed: false }]);
-    setNewTask("");
-  };
+            playAlert(type) {
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
 
-  const toggleTask = (id) => {
-    const updated = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
-    setTasks(updated);
-    // Agar bajarilyapti deb belgilansa statga qo'shish
-    const isCompletedNow = updated.find(t => t.id === id).completed;
-    if (isCompletedNow) {
-       setStats(prev => ({ ...prev, completedTasks: prev.completedTasks + 1 }));
-       if (navigator.vibrate) navigator.vibrate(50);
-    }
-  };
+                const now = this.ctx.currentTime;
 
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(t => t.id !== id));
-  };
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                } else if (type === 'click') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.02, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                }
+            }
 
-  // --- RENDER BO'LIMLARI ---
+            stop() {
+                this.nodes.forEach(node => {
+                    try {
+                        // Fade out
+                        node.gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.5);
+                        setTimeout(() => {
+                            node.source.stop(); 
+                            node.source.disconnect();
+                        }, 500);
+                    } catch(e){}
+                });
+                this.nodes = [];
+            }
+        }
 
-  if (!introDone) return <IntroScreen onStart={() => setIntroDone(true)} />;
+        const audioSys = new NeuralAudioEngine();
+        const vibrate = (pattern) => { if(navigator.vibrate) navigator.vibrate(pattern); };
 
-  return (
-    <div className="min-h-screen bg-[#09090b] text-white font-sans overflow-hidden selection:bg-amber-500/30 flex flex-col">
-      
-      {isBreathing && <BreathingExercise onFinish={finishBreathing} />}
+        // --- 2. DATA CONSTANTS ---
+        const QUOTES = [
+            "Allohning roziligi — eng oliy maqsaddir.",
+            "Qur'on o'qing, zero u qiyomatda shafoatchi bo'ladi.",
+            "Ilm oling, chunki u qalbning hayotidir.",
+            "Vaqt qilichdir, agar sen uni kesmasang, u seni kesadi.",
+            "Sabr qiling, albatta Alloh sabrlilar bilan birgadir."
+        ];
 
-      {/* BACKGROUND */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className={`absolute top-0 left-0 w-full h-[60%] bg-gradient-to-b ${mode === 'focus' ? 'from-amber-900/20' : 'from-emerald-900/20'} to-transparent transition-colors duration-1000`}></div>
-      </div>
+        // --- 3. COMPONENTS ---
 
-      {/* HEADER */}
-      <header className="flex justify-between items-center p-6 pt-8 z-10 sticky top-0 bg-[#09090b]/80 backdrop-blur-md">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-black font-bold font-serif">Q</div>
-          <span className="font-bold text-lg tracking-tight">Qur'on Focus</span>
-        </div>
-        <div className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/5">
-          <Zap size={14} className="text-amber-400 fill-amber-400" />
-          <span className="text-xs font-bold">{Math.floor(stats.totalMinutes / 60)}h {stats.totalMinutes % 60}m</span>
-        </div>
-      </header>
-
-      {/* MAIN CONTENT AREA */}
-      <main className="flex-1 overflow-y-auto pb-32 z-10 px-6">
-        
-        {/* === 1. FOCUS TAB === */}
-        {activeTab === 'focus' && (
-          <div className="flex flex-col items-center pt-4 animate-in slide-in-from-bottom-4 duration-500">
-            {/* Mode Switcher */}
-            <div className="flex bg-[#1a1a1a] p-1 rounded-full mb-8 border border-white/10 w-full max-w-xs">
-              <button 
-                onClick={() => { setMode('focus'); setTimerActive(false); setSecondsLeft(focusTime*60); }}
-                className={`flex-1 py-2 rounded-full text-sm font-bold transition-all ${mode === 'focus' ? 'bg-amber-500 text-black' : 'text-gray-400'}`}
-              >
-                Tilovat
-              </button>
-              <button 
-                onClick={() => { setMode('break'); setTimerActive(false); setSecondsLeft(breakTime*60); }}
-                className={`flex-1 py-2 rounded-full text-sm font-bold transition-all ${mode === 'break' ? 'bg-emerald-500 text-black' : 'text-gray-400'}`}
-              >
-                Dam olish
-              </button>
-            </div>
-
-            {/* Maslahat Chip */}
-            <div className="mb-6 px-4 py-2 bg-blue-500/10 rounded-xl border border-blue-500/20">
-               <p className="text-xs text-blue-200 flex items-center gap-2">
-                 <Brain size={12} />
-                 {timerActive ? "Chuqur diqqat rejimi..." : MASLAHATLAR[Math.floor(Math.random() * MASLAHATLAR.length)]}
-               </p>
-            </div>
-
-            {/* Timer Circle */}
-            <div className="relative mb-10">
-              {/* Glow */}
-              <div className={`absolute inset-0 rounded-full blur-[60px] opacity-30 transition-all duration-1000 ${timerActive ? (mode === 'focus' ? 'bg-amber-500' : 'bg-emerald-500') : 'bg-transparent'}`}></div>
-              
-              <div className="relative w-72 h-72 rounded-full border-8 border-[#1a1a1a] bg-[#09090b] flex flex-col items-center justify-center shadow-2xl">
-                <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
-                   <circle cx="144" cy="144" r="130" fill="transparent" stroke="#1a1a1a" strokeWidth="4" />
-                   <circle 
-                      cx="144" cy="144" r="130" fill="transparent" 
-                      stroke={mode === 'focus' ? '#f59e0b' : '#10b981'} strokeWidth="4" 
-                      strokeDasharray={2 * Math.PI * 130}
-                      strokeDashoffset={2 * Math.PI * 130 * (1 - secondsLeft / (mode === 'focus' ? focusTime * 60 : breakTime * 60))}
-                      strokeLinecap="round"
-                      className="transition-all duration-1000 ease-linear"
-                   />
-                </svg>
-                <span className="text-7xl font-bold font-mono tracking-tighter tabular-nums">
-                  {formatTime(secondsLeft)}
-                </span>
-                <span className="text-white/40 text-xs mt-2 font-medium uppercase tracking-widest">
-                  {timerActive ? (mode === 'focus' ? "O'qimoqdasiz" : "Dam olish") : "Tayyormisiz?"}
-                </span>
-              </div>
-            </div>
-
-            {/* Controls */}
-            <div className="flex items-center gap-6 mb-8">
-              <button onClick={resetTimer} className="p-4 rounded-full bg-[#1a1a1a] text-gray-400 border border-white/10 hover:text-white transition active:scale-95">
-                <RotateCcw size={24} />
-              </button>
-
-              {!timerActive && mode === 'focus' && secondsLeft === focusTime * 60 ? (
-                <button 
-                  onClick={startBreathing}
-                  className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold text-lg shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2"
-                >
-                  <Wind size={20} />
-                  Nafas & Boshlash
-                </button>
-              ) : (
-                <button 
-                  onClick={toggleTimer}
-                  className={`w-20 h-20 rounded-full flex items-center justify-center text-black text-2xl transition-all active:scale-90 shadow-2xl ${timerActive ? 'bg-[#1a1a1a] border border-amber-500 text-amber-500' : 'bg-amber-400 hover:bg-amber-300'}`}
-                >
-                  {timerActive ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="black" className="ml-1" />}
-                </button>
-              )}
-            </div>
-
-            {/* Sliders (faqat pauzada) */}
-            {!timerActive && (
-              <div className="w-full max-w-xs bg-[#1a1a1a] p-5 rounded-2xl border border-white/5 animate-in fade-in">
-                <div className="mb-4">
-                  <div className="flex justify-between text-xs text-gray-400 mb-2">
-                    <span>Tilovat vaqti</span>
-                    <span className="text-white">{focusTime} daqiqa</span>
-                  </div>
-                  <input 
-                    type="range" min="5" max="60" step="5"
-                    value={focusTime} 
-                    onChange={(e) => { 
-                      const val = Number(e.target.value); 
-                      setFocusTime(val); 
-                      if(mode === 'focus') setSecondsLeft(val * 60); 
-                    }}
-                    className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
-                  />
-                </div>
-                <div>
-                  <div className="flex justify-between text-xs text-gray-400 mb-2">
-                    <span>Dam olish</span>
-                    <span className="text-white">{breakTime} daqiqa</span>
-                  </div>
-                  <input 
-                    type="range" min="1" max="15"
-                    value={breakTime} 
-                    onChange={(e) => { 
-                      const val = Number(e.target.value); 
-                      setBreakTime(val); 
-                      if(mode === 'break') setSecondsLeft(val * 60); 
-                    }}
-                    className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* === 2. PLANNER TAB === */}
-        {activeTab === 'planner' && (
-          <div className="pt-4 space-y-6 animate-in slide-in-from-right-4 duration-300">
-             {/* Hikmat Card */}
-             <div className="bg-gradient-to-br from-[#1a1a1a] to-black border border-white/10 rounded-3xl p-6 relative overflow-hidden group">
-                <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition"><BookOpen size={80} /></div>
-                <h3 className="text-amber-500 text-xs font-bold uppercase tracking-wider mb-2">Bugungi Hikmat</h3>
-                <p className="text-lg font-medium text-gray-200 italic leading-relaxed">"{HIKMATLAR[0]}"</p>
-             </div>
-
-             {/* Input */}
-             <div className="flex gap-2">
-               <input 
-                 type="text" 
-                 value={newTask}
-                 onChange={(e) => setNewTask(e.target.value)}
-                 placeholder="Yangi vazifa (masalan: Yosin surasi)"
-                 className="flex-1 bg-[#1a1a1a] border border-white/10 rounded-2xl px-5 text-sm focus:outline-none focus:border-amber-500 transition h-14"
-                 onKeyPress={(e) => e.key === 'Enter' && addTask()}
-               />
-               <button onClick={addTask} className="h-14 w-14 bg-amber-500 rounded-2xl flex items-center justify-center text-black hover:bg-amber-400 active:scale-95 transition">
-                 <Plus size={28} />
-               </button>
-             </div>
-
-             {/* List */}
-             <div className="space-y-3 pb-8">
-               {tasks.length === 0 ? (
-                 <div className="text-center py-10 opacity-40 text-sm">Vazifalar yo'q. Bugun nima o'qiymiz?</div>
-               ) : (
-                 tasks.map(task => (
-                   <div 
-                     key={task.id}
-                     className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${task.completed ? 'bg-emerald-900/10 border-emerald-500/20 opacity-60' : 'bg-[#1a1a1a] border-white/5 hover:border-white/10'}`}
-                   >
-                     <div className="flex items-center gap-4 cursor-pointer flex-1" onClick={() => toggleTask(task.id)}>
-                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${task.completed ? 'bg-emerald-500 border-emerald-500' : 'border-gray-600'}`}>
-                         {task.completed && <CheckCircle2 size={14} className="text-white" />}
-                       </div>
-                       <span className={`text-base font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-200'}`}>{task.title}</span>
-                     </div>
-                     <button onClick={() => deleteTask(task.id)} className="p-2 text-gray-600 hover:text-red-400"><X size={18} /></button>
-                   </div>
-                 ))
-               )}
-             </div>
-          </div>
-        )}
-
-        {/* === 3. STATS TAB === */}
-        {activeTab === 'stats' && (
-          <div className="pt-4 space-y-6 animate-in slide-in-from-right-4 duration-300">
-            <h2 className="text-2xl font-bold">Natijalar</h2>
+        // --- 3.1 NAFAS MASHQI (BREATHING OVERLAY) ---
+        const BreathingOverlay = ({ onComplete }) => {
+            const [text, setText] = useState("Tayyorlaning");
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-[#1a1a1a] p-6 rounded-3xl border border-white/10 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-500 mb-3"><Clock size={24} /></div>
-                <h3 className="text-3xl font-bold text-white">{Math.floor(stats.totalMinutes / 60)}<span className="text-sm text-gray-500 font-normal"> soat</span></h3>
-                <p className="text-gray-500 text-xs mt-1">Jami sarflangan vaqt</p>
-              </div>
-              <div className="bg-[#1a1a1a] p-6 rounded-3xl border border-white/10 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center text-emerald-500 mb-3"><CheckCircle2 size={24} /></div>
-                <h3 className="text-3xl font-bold text-white">{stats.completedTasks}</h3>
-                <p className="text-gray-500 text-xs mt-1">Bajarilgan vazifalar</p>
-              </div>
-            </div>
+            useEffect(() => {
+                const sequence = async () => {
+                    setText("Chuqur nafas oling (4s)");
+                    await new Promise(r => setTimeout(r, 4000));
+                    setText("Nafasni ushlab turing (4s)");
+                    await new Promise(r => setTimeout(r, 4000));
+                    setText("Sekin chiqaring (4s)");
+                    await new Promise(r => setTimeout(r, 4000));
+                    onComplete();
+                };
+                sequence();
+            }, []);
 
-            {/* Oddiy Chart Simulyatsiyasi */}
-            <div className="bg-[#1a1a1a] p-6 rounded-3xl border border-white/10">
-              <h3 className="text-sm font-medium text-gray-400 mb-6">Haftalik faollik</h3>
-              <div className="flex items-end justify-between h-32 gap-2">
-                {[30, 45, 20, 60, 50, 80, 40].map((h, i) => (
-                  <div key={i} className="flex flex-col items-center gap-2 flex-1">
-                    <div 
-                      className={`w-full rounded-t-lg transition-all hover:opacity-80 ${i === 5 ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'bg-gray-700'}`} 
-                      style={{ height: `${h}%` }}
-                    ></div>
-                    <span className="text-[10px] text-gray-500">{['D', 'S', 'C', 'P', 'J', 'S', 'Y'][i]}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+            return (
+                <motion.div 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center pointer-events-none"
+                >
+                    <motion.div 
+                        animate={{ 
+                            scale: [1, 1.5, 1.5, 1],
+                            opacity: [0.3, 0.8, 0.8, 0.3]
+                        }}
+                        transition={{ duration: 12, times: [0, 0.33, 0.66, 1], ease: "easeInOut" }}
+                        className="w-64 h-64 bg-cyan-500/20 rounded-full blur-[50px] absolute"
+                    />
+                    <div className="relative z-10 text-center">
+                        <Icon name="Wind" size={48} className="text-cyan-400 mx-auto mb-6 animate-pulse" />
+                        <h2 className="text-2xl font-light text-white tracking-widest uppercase">{text}</h2>
+                    </div>
+                </motion.div>
+            );
+        };
 
-        {/* === 4. PROFILE/SETTINGS TAB === */}
-        {activeTab === 'profile' && (
-          <div className="pt-4 space-y-6 animate-in slide-in-from-right-4 duration-300">
-            <div className="text-center py-8">
-              <div className="w-24 h-24 bg-gradient-to-tr from-amber-400 to-orange-600 rounded-full mx-auto p-1 mb-4">
-                <div className="w-full h-full bg-[#09090b] rounded-full flex items-center justify-center">
-                  <User size={40} className="text-gray-400" />
+        // --- 3.2 ONBOARDING (NIYAT) ---
+        const Onboarding = ({ onFinish }) => (
+            <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-8 text-center"
+            >
+                <motion.div 
+                    animate={{ y: [0, -10, 0] }} 
+                    transition={{ repeat: Infinity, duration: 3 }}
+                    className="mb-8"
+                >
+                    <div className="w-24 h-24 bg-gradient-to-tr from-gold-400 to-gold-600 rounded-3xl flex items-center justify-center shadow-lg shadow-gold-500/30">
+                        <Icon name="BookOpen" size={48} className="text-black" />
+                    </div>
+                </motion.div>
+                <h1 className="text-3xl font-serif font-bold text-white mb-4">Bismillah</h1>
+                <p className="text-gray-400 mb-12 max-w-xs leading-relaxed">
+                    "Allohning roziligi uchun ilmni va vaqtimni barakali qilishni niyat qildim."
+                </p>
+                <button 
+                    onClick={() => { audioSys.playAlert('click'); onFinish(); }}
+                    className="w-full max-w-xs py-4 bg-gold-500 hover:bg-gold-400 text-black font-bold rounded-2xl transition-all active:scale-95"
+                >
+                    Boshlash
+                </button>
+            </motion.div>
+        );
+
+        // --- 3.3 MAIN APP CONTAINER ---
+        const App = () => {
+            // STATE
+            const [loading, setLoading] = useState(true);
+            const [activeTab, setActiveTab] = useState('focus'); // planner, focus, stats
+            const [tasks, setTasks] = useState([]);
+            const [userStats, setUserStats] = useState({ xp: 0, streak: 0, totalMinutes: 0 });
+            
+            // TIMER STATE
+            const [timerState, setTimerState] = useState('idle'); // idle, breathing, running, paused
+            const [duration, setDuration] = useState(25);
+            const [timeLeft, setTimeLeft] = useState(25 * 60);
+            const [ambient, setAmbient] = useState(null); // null, focus, rain
+
+            // INIT & PERSISTENCE
+            useEffect(() => {
+                // Load Data
+                const localTasks = JSON.parse(localStorage.getItem('qos_tasks') || '[]');
+                const localStats = JSON.parse(localStorage.getItem('qos_stats') || '{"xp":0, "streak":0, "totalMinutes":0}');
+                setTasks(localTasks);
+                setUserStats(localStats);
+                setTimeout(() => setLoading(false), 2000); // Intro delay
+            }, []);
+
+            useEffect(() => {
+                // Save Data
+                localStorage.setItem('qos_tasks', JSON.stringify(tasks));
+                localStorage.setItem('qos_stats', JSON.stringify(userStats));
+            }, [tasks, userStats]);
+
+            // TIMER LOGIC
+            useEffect(() => {
+                let interval = null;
+                if (timerState === 'running' && timeLeft > 0) {
+                    interval = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+                } else if (timeLeft === 0 && timerState === 'running') {
+                    completeSession();
+                }
+                return () => clearInterval(interval);
+            }, [timerState, timeLeft]);
+
+            const completeSession = () => {
+                setTimerState('idle');
+                audioSys.stop();
+                setAmbient(null);
+                audioSys.playAlert('success');
+                vibrate([200, 100, 200, 100, 500]);
+                
+                // Update Stats
+                const xpGained = duration * 10;
+                setUserStats(prev => ({
+                    ...prev,
+                    xp: prev.xp + xpGained,
+                    totalMinutes: prev.totalMinutes + duration,
+                    streak: prev.streak + 1 // Simplified streak logic
+                }));
+
+                alert(`MashaAlloh! Sessiya tugadi.\n+${xpGained} XP`);
+                setTimeLeft(duration * 60);
+            };
+
+            const toggleTimer = () => {
+                audioSys.playAlert('click');
+                if (timerState === 'idle' || timerState === 'paused') {
+                    if (timerState === 'idle') {
+                        setTimerState('breathing'); // Start Breathing first
+                    } else {
+                        setTimerState('running');
+                        if (ambient) audioSys.playAmbience(ambient);
+                    }
+                } else {
+                    setTimerState('paused');
+                    audioSys.stop();
+                }
+            };
+
+            const resetTimer = () => {
+                setTimerState('idle');
+                audioSys.stop();
+                setAmbient(null);
+                setTimeLeft(duration * 60);
+                audioSys.playAlert('click');
+            };
+
+            // TASK LOGIC
+            const addTask = () => {
+                const t = prompt("Vazifa nomi:");
+                if (t) {
+                    setTasks([...tasks, { id: Date.now(), title: t, completed: false, type: 'hifz' }]);
+                    audioSys.playAlert('click');
+                }
+            };
+
+            const toggleTask = (id) => {
+                setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+                audioSys.playAlert('click');
+                vibrate(50);
+            };
+
+            const deleteTask = (id) => {
+                if(confirm("O'chirasizmi?")) setTasks(tasks.filter(t => t.id !== id));
+            };
+
+            if (loading) return <Onboarding onFinish={() => setLoading(false)} />;
+
+            return (
+                <div className="h-screen w-full bg-dark-bg text-white flex flex-col relative overflow-hidden font-sans">
+                    
+                    {/* GLOBAL BACKGROUND EFFECTS */}
+                    <div className="fixed inset-0 pointer-events-none">
+                        <motion.div 
+                            animate={{ 
+                                scale: timerState === 'running' ? 1.2 : 1,
+                                opacity: timerState === 'running' ? 0.4 : 0.15 
+                            }}
+                            transition={{ duration: 2 }}
+                            className="absolute top-[-20%] left-[-20%] w-[80%] h-[50%] bg-gold-900/30 rounded-full blur-[120px]" 
+                        />
+                        <motion.div 
+                            animate={{ 
+                                scale: timerState === 'running' ? 1.2 : 1,
+                                opacity: timerState === 'running' ? 0.4 : 0.15 
+                            }}
+                            transition={{ duration: 2, delay: 0.5 }}
+                            className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/30 rounded-full blur-[120px]" 
+                        />
+                    </div>
+
+                    {/* BREATHING MODAL */}
+                    <AnimatePresence>
+                        {timerState === 'breathing' && (
+                            <BreathingOverlay onComplete={() => {
+                                setTimerState('running');
+                                if (ambient) audioSys.playAmbience(ambient);
+                            }} />
+                        )}
+                    </AnimatePresence>
+
+                    {/* TOP BAR */}
+                    <div className="px-6 pt-12 pb-4 flex justify-between items-center z-20">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-800 to-black border border-white/10 flex items-center justify-center relative">
+                                <span className="font-bold text-gold-500">{Math.floor(userStats.xp / 1000) + 1}</span>
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-black"></div>
+                            </div>
+                            <div>
+                                <h1 className="text-sm text-gray-400 font-medium">Daraja</h1>
+                                <p className="text-sm font-bold text-white">{userStats.xp} XP</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-1.5 glass-panel rounded-full">
+                            <Icon name="Flame" size={16} className="text-orange-500 fill-orange-500" />
+                            <span className="text-xs font-bold">{userStats.streak} Kun</span>
+                        </div>
+                    </div>
+
+                    {/* MAIN CONTENT AREA */}
+                    <main className="flex-1 px-6 pb-32 overflow-y-auto no-scrollbar z-10 relative">
+                        
+                        {/* --- TAB: FOCUS --- */}
+                        {activeTab === 'focus' && (
+                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center h-full pt-4">
+                                
+                                {/* Smart Advice */}
+                                <div className="mb-8 px-5 py-2 glass-panel rounded-full flex items-center gap-2">
+                                    <Icon name="Brain" size={14} className="text-blue-400" />
+                                    <span className="text-xs text-gray-300">
+                                        {timerState === 'running' ? "Faqat Allohga yuzlaning..." : QUOTES[Math.floor(Math.random() * QUOTES.length)]}
+                                    </span>
+                                </div>
+
+                                {/* TIMER RING */}
+                                <div className="relative mb-12">
+                                    {/* Ambient Glow */}
+                                    <motion.div 
+                                        animate={{ opacity: timerState === 'running' ? 0.6 : 0 }}
+                                        className="absolute inset-0 bg-gold-500/20 blur-[60px] rounded-full"
+                                    />
+                                    
+                                    <div className="w-72 h-72 rounded-full glass-panel flex flex-col items-center justify-center relative shadow-2xl">
+                                        {/* Progress SVG */}
+                                        <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
+                                            <circle cx="144" cy="144" r="130" fill="transparent" stroke="rgba(255,255,255,0.05)" strokeWidth="4" />
+                                            <motion.circle 
+                                                cx="144" cy="144" r="130" fill="transparent" 
+                                                stroke={timerState === 'running' ? '#f59e0b' : '#555'} 
+                                                strokeWidth="8"
+                                                strokeDasharray={2 * Math.PI * 130}
+                                                strokeDashoffset={2 * Math.PI * 130 * (1 - timeLeft / (duration * 60))}
+                                                strokeLinecap="round"
+                                                initial={{ strokeDashoffset: 2 * Math.PI * 130 }}
+                                                animate={{ strokeDashoffset: 2 * Math.PI * 130 * (1 - timeLeft / (duration * 60)) }}
+                                            />
+                                        </svg>
+
+                                        <div className="text-center z-10">
+                                            <span className="text-7xl font-sans font-bold tracking-tighter tabular-nums block mb-2">
+                                                {Math.floor(timeLeft / 60).toString().padStart(2,'0')}:{Math.floor(timeLeft % 60).toString().padStart(2,'0')}
+                                            </span>
+                                            <span className={`text-xs font-bold tracking-[0.3em] uppercase ${timerState === 'running' ? 'text-gold-500 animate-pulse' : 'text-gray-600'}`}>
+                                                {timerState === 'running' ? 'Focusing' : 'Ready'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* CONTROLS */}
+                                <div className="w-full flex flex-col items-center gap-6">
+                                    {timerState === 'idle' ? (
+                                        <div className="w-full max-w-xs animate-in fade-in slide-in-from-bottom-4">
+                                            <div className="flex justify-between text-xs text-gray-500 mb-2 font-medium">
+                                                <span>Davomiylik</span>
+                                                <span className="text-white">{duration} daqiqa</span>
+                                            </div>
+                                            <input 
+                                                type="range" min="5" max="90" step="5" 
+                                                value={duration}
+                                                onChange={(e) => {
+                                                    const val = Number(e.target.value);
+                                                    setDuration(val);
+                                                    setTimeLeft(val * 60);
+                                                }}
+                                                className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-gold-500 mb-8"
+                                            />
+                                            
+                                            <button 
+                                                onClick={toggleTimer}
+                                                className="w-full py-4 bg-gradient-to-r from-gold-500 to-gold-600 rounded-2xl text-black font-bold text-lg shadow-lg shadow-gold-500/20 active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+                                            >
+                                                <Icon name="Play" size={24} fill="black" /> Boshlash
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-6 animate-in fade-in zoom-in">
+                                            <button onClick={toggleTimer} className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center shadow-lg active:scale-90 transition">
+                                                <Icon name={timerState === 'running' ? "Pause" : "Play"} size={32} fill="black" />
+                                            </button>
+                                            <button onClick={resetTimer} className="w-20 h-20 rounded-full glass-panel text-red-500 flex items-center justify-center active:scale-90 transition">
+                                                <Icon name="RotateCcw" size={28} />
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* Ambient Toggles */}
+                                    <div className="flex gap-3 mt-4">
+                                        <button 
+                                            onClick={() => {
+                                                const newMode = ambient === 'focus' ? null : 'focus';
+                                                setAmbient(newMode);
+                                                if (timerState === 'running') {
+                                                    newMode ? audioSys.playAmbience(newMode) : audioSys.stop();
+                                                }
+                                            }}
+                                            className={`px-4 py-2 rounded-xl border text-xs font-bold transition-all flex items-center gap-2 ${ambient === 'focus' ? 'bg-gold-500/20 border-gold-500 text-gold-400' : 'border-white/10 text-gray-500'}`}
+                                        >
+                                            <Icon name="Volume2" size={14} /> Focus Hz
+                                        </button>
+                                        <button 
+                                            onClick={() => {
+                                                const newMode = ambient === 'rain' ? null : 'rain';
+                                                setAmbient(newMode);
+                                                if (timerState === 'running') {
+                                                    newMode ? audioSys.playAmbience(newMode) : audioSys.stop();
+                                                }
+                                            }}
+                                            className={`px-4 py-2 rounded-xl border text-xs font-bold transition-all flex items-center gap-2 ${ambient === 'rain' ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'border-white/10 text-gray-500'}`}
+                                        >
+                                            <Icon name="Wind" size={14} /> Rain
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* --- TAB: PLANNER --- */}
+                        {activeTab === 'planner' && (
+                            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                                <div className="flex justify-between items-end mb-8">
+                                    <div>
+                                        <h2 className="text-3xl font-bold font-serif text-white">Reja</h2>
+                                        <p className="text-gray-500 text-sm">Ilm yo'lidagi maqsadlar</p>
+                                    </div>
+                                    <button onClick={addTask} className="w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center text-black shadow-lg active:scale-90 transition">
+                                        <Icon name="Plus" size={24} />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-4">
+                                    {tasks.length === 0 && (
+                                        <div className="text-center py-12 opacity-30">
+                                            <Icon name="BookOpen" size={48} className="mx-auto mb-4" />
+                                            <p>Hozircha vazifalar yo'q</p>
+                                        </div>
+                                    )}
+                                    {tasks.map(task => (
+                                        <motion.div 
+                                            layout
+                                            key={task.id}
+                                            onClick={() => toggleTask(task.id)}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className={`p-5 rounded-2xl glass-panel border transition-all active:scale-[0.98] relative overflow-hidden ${task.completed ? 'opacity-60 border-green-500/30' : 'border-white/5'}`}
+                                        >
+                                            {task.completed && <div className="absolute inset-0 bg-green-500/10" />}
+                                            <div className="flex items-center justify-between relative z-10">
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${task.completed ? 'bg-green-500 border-green-500' : 'border-gray-500'}`}>
+                                                        {task.completed && <Icon name="CheckCircle2" size={14} className="text-black" />}
+                                                    </div>
+                                                    <div>
+                                                        <h3 className={`font-medium text-lg ${task.completed ? 'line-through text-gray-500' : 'text-white'}`}>{task.title}</h3>
+                                                        <span className="text-[10px] text-gray-500 uppercase tracking-wider">{task.type}</span>
+                                                    </div>
+                                                </div>
+                                                <button onClick={(e) => {e.stopPropagation(); deleteTask(task.id)}} className="text-gray-600 hover:text-red-400 p-2"><Icon name="X" size={18} /></button>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* --- TAB: STATS --- */}
+                        {activeTab === 'stats' && (
+                            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                                <h2 className="text-3xl font-bold font-serif mb-8">Natijalar</h2>
+                                
+                                <div className="grid grid-cols-2 gap-4 mb-6">
+                                    <div className="glass-panel p-5 rounded-3xl relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 p-4 text-gold-500 opacity-20 group-hover:scale-110 transition"><Icon name="Clock" size={60} /></div>
+                                        <p className="text-xs text-gold-500 font-bold uppercase tracking-wider">Jami Vaqt</p>
+                                        <h3 className="text-3xl font-bold mt-2 text-white">{Math.floor(userStats.totalMinutes / 60)}<span className="text-base font-normal text-gray-500">h</span> {userStats.totalMinutes % 60}<span className="text-base font-normal text-gray-500">m</span></h3>
+                                    </div>
+                                    <div className="glass-panel p-5 rounded-3xl relative overflow-hidden bg-gradient-to-br from-gold-900/10 to-transparent border-gold-500/20">
+                                        <div className="absolute top-0 right-0 p-4 text-white opacity-10"><Icon name="Trophy" size={60} /></div>
+                                        <p className="text-xs text-white font-bold uppercase tracking-wider">XP Score</p>
+                                        <h3 className="text-3xl font-bold mt-2 text-white">{userStats.xp}</h3>
+                                    </div>
+                                </div>
+
+                                <div className="glass-panel p-6 rounded-3xl mb-8">
+                                    <h3 className="text-sm font-bold text-gray-400 mb-6 flex items-center gap-2"><Icon name="BarChart3" size={16} /> Hafta faolligi</h3>
+                                    <div className="flex items-end justify-between h-32 gap-2">
+                                        {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
+                                            <div key={i} className="flex-1 flex flex-col justify-end gap-2 group">
+                                                <div className="w-full bg-gray-800 rounded-t-lg relative overflow-hidden transition-all duration-700 hover:bg-gold-500" style={{height: `${h}%`}}></div>
+                                                <span className="text-[10px] text-center text-gray-600">{['D','S','C','P','J','S','Y'][i]}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="text-center opacity-30 text-xs pb-8">
+                                    Qur'on OS Pro v2.0 <br/> Made by ©️Muhammad Daler
+                                </div>
+                            </motion.div>
+                        )}
+
+                    </main>
+
+                    {/* DOCK NAVIGATION (FLOATING) */}
+                    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm h-20 glass-panel rounded-[3rem] flex items-center justify-between px-2 z-50 shadow-2xl">
+                        <button 
+                            onClick={() => { setActiveTab('planner'); audioSys.playAlert('click'); }} 
+                            className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'planner' ? 'text-white' : 'text-gray-600'}`}
+                        >
+                            <Icon name="Calendar" size={24} className={activeTab === 'planner' ? 'fill-white' : ''} />
+                        </button>
+                        
+                        <button onClick={() => { setActiveTab('focus'); audioSys.playAlert('click'); }} className="relative -top-8">
+                            <div className={`w-16 h-16 rounded-full flex items-center justify-center border-4 border-black transition-all shadow-lg shadow-gold-500/20 ${activeTab === 'focus' ? 'bg-gold-500 text-black scale-110' : 'bg-gray-800 text-gray-400'}`}>
+                                <Icon name="Clock" size={28} className={activeTab === 'focus' ? 'fill-black' : ''} />
+                            </div>
+                        </button>
+
+                        <button 
+                            onClick={() => { setActiveTab('stats'); audioSys.playAlert('click'); }} 
+                            className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'stats' ? 'text-white' : 'text-gray-600'}`}
+                        >
+                            <Icon name="Award" size={24} className={activeTab === 'stats' ? 'fill-white' : ''} />
+                        </button>
+                    </div>
+
                 </div>
-              </div>
-              <h2 className="text-xl font-bold">Foydalanuvchi</h2>
-              <p className="text-amber-500 text-sm font-medium">Premium A'zo</p>
-            </div>
+            );
+        };
 
-            <div className="bg-[#1a1a1a] rounded-3xl overflow-hidden border border-white/10">
-              <button onClick={() => alert('Bildirishnomalar yoqildi!')} className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition border-b border-white/5">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><Bell size={20} /></div>
-                  <span className="text-sm font-medium">Eslatmalar</span>
-                </div>
-                <ChevronRight size={16} className="text-gray-600" />
-              </button>
-              <button className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><Moon size={20} /></div>
-                  <span className="text-sm font-medium">Tungi rejim (Avto)</span>
-                </div>
-                <span className="text-xs text-gray-500">Doimiy</span>
-              </button>
-            </div>
-
-            <div className="text-center pt-8">
-              <p className="text-white/20 text-xs">Versiya 3.0 (2025)</p>
-              <p className="text-white/20 text-xs mt-1">Made by ©️Muhammad Daler</p>
-            </div>
-          </div>
-        )}
-
-      </main>
-
-      {/* --- BOTTOM NAVIGATION --- */}
-      <div className="fixed bottom-6 left-6 right-6 h-[72px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-[32px] flex items-center justify-between px-4 shadow-2xl z-50">
-        
-        <button 
-          onClick={() => setActiveTab('planner')} 
-          className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'planner' ? 'text-amber-400 -translate-y-1' : 'text-gray-500 hover:text-gray-300'}`}
-        >
-          <LayoutGrid size={22} className={activeTab === 'planner' ? 'fill-current' : ''} />
-          {activeTab === 'planner' && <span className="text-[10px] font-bold">Reja</span>}
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('focus')} 
-          className="relative -top-6 mx-2"
-        >
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center border-4 border-[#09090b] transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] ${activeTab === 'focus' ? 'bg-amber-400 text-black scale-110' : 'bg-[#1a1a1a] text-amber-500'}`}>
-            <Clock size={28} className={activeTab === 'focus' ? 'fill-current animate-pulse' : ''} />
-          </div>
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('stats')} 
-          className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'stats' ? 'text-amber-400 -translate-y-1' : 'text-gray-500 hover:text-gray-300'}`}
-        >
-          <BarChart2 size={22} className={activeTab === 'stats' ? 'fill-current' : ''} />
-          {activeTab === 'stats' && <span className="text-[10px] font-bold">Hisob</span>}
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('profile')} 
-          className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'profile' ? 'text-amber-400 -translate-y-1' : 'text-gray-500 hover:text-gray-300'}`}
-        >
-          <User size={22} className={activeTab === 'profile' ? 'fill-current' : ''} />
-          {activeTab === 'profile' && <span className="text-[10px] font-bold">Profil</span>}
-        </button>
-
-      </div>
-    </div>
-  );
-};
-
-export default App;
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
 
 
