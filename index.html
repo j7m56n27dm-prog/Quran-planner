@@ -1,1676 +1,1430 @@
 <!DOCTYPE html>
-<html lang="uz" dir="ltr">
+<html lang="uz" dir="auto">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <meta name="theme-color" content="#0f766e">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nur Parvozi">
-    <meta name="apple-mobile-web-app-status-bar-icon" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230f766e' width='180' height='180' rx='40'/><text x='50%' y='50%' font-size='100' font-weight='bold' fill='%2310b981' text-anchor='middle' dominant-baseline='middle' font-family='system-ui'>ن</text></svg>">
-    <meta name="description" content="🌟 Nur Parvozi - Supreme Qur'an Tadabbur PWA - Beyond Opal, OneSec, FocusFlight">
-    
-    <title>Nur Parvozi - Qur'an Tadabbur</title>
-    
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTnVyIFBhcnZvemkgLSDnvZbvn7HvnJ8g1oHvnLHvnJwg1oHvuJ/vnLHvnJ8gUFdBIiwic2hvcnRfbmFtZSI6Ik51ciBQYXJ2b3ppIiwic3RhcnRfdXJsIjoiLyIsInNjb3BlIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImJhY2tncm91bmRfY29sb3IiOiIjMDMwNzEyIiwidGhlbWVfY29sb3IiOiIjMGY3NjZlIn0=">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
-    
+    <meta name="theme-color" content="#0f1922">
+    <title>Nur Parvozi - Qur'an Tadabbur & Hifz</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTnVyIFBhcnZvemkiLCJzaG9ydF9uYW1lIjoiTnVyIFBhcnZvemkiLCJkZXNjcmlwdGlvbiI6IlF1cuKAmWFuIHRhZGFiYnVyLCBoaWZ6IGFuZCBzcGlyaXR1YWwgZm9jdXMgUFdBIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwZjE5MjIiLCJ0aGVtZV9jb2xvciI6IiNlZmQ5MzAiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWkhCaGNtNW5hVzVuYVd4bFkyOXRQMmNnY0hKdmVISmxkbTlsYVc1aGJtTmxQMmg0Ykd3dU5qQW5QMUJoZEdWUGNtVmZZMjl0Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifSx7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlpIQmhjbTVuYVc1bmFXeGxZMjl0UDJjZ2NISnZlSEpsZG05bGFXNWhibU5sUDJoNGJHd3VNakF1TXpRbk8zQlFkR1ZUY21WZll5OW1JRjkzZW1obGJua2daMjkzWm1KbGMydHBibWN1TVM4MzBrMGciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=" rel="manifest">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%230f1922' width='192' height='192'/%3E%3Ctext x='50%25' y='50%25' font-size='80' font-weight='bold' text-anchor='middle' dominant-baseline='central' fill='%23efd930'%3ENور%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Rakkas&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0f766e;
-            --accent: #10b981;
-            --gold: #f59e0b;
-            --neon: #06b6d4;
-            --danger: #ef4444;
-            --glass: rgba(255, 255, 255, 0.1);
-            --glow: 0 0 30px rgba(16, 185, 129, 0.5);
-            --glow-strong: 0 0 60px rgba(16, 185, 129, 0.8);
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
         }
-        
-        html {
-            -webkit-user-select: none;
-            user-select: none;
-            height: 100%;
-        }
-        
-        body {
+
+        html, body {
             width: 100%;
-            height: 100vh;
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #030712 0%, #0f3460 50%, #030712 100%);
-            color: #fff;
+            height: 100%;
             overflow: hidden;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f1922 0%, #1a2535 100%);
+            color: #e8f4f8;
         }
-        
-        body[dir="rtl"] {
-            direction: rtl;
-            text-align: right;
+
+        :root {
+            --primary: #efd930;
+            --accent: #1abc9c;
+            --dark-bg: #0f1922;
+            --light-bg: #1a2535;
+            --card-bg: rgba(26, 37, 53, 0.7);
+            --border-glow: rgba(239, 217, 48, 0.3);
+            --text-primary: #e8f4f8;
+            --text-secondary: #a8c5d1;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
         }
-        
-        #app {
-            width: 100%;
-            height: 100%;
+
+        /* ===== MOOD THEMES ===== */
+        [data-mood="anxious"] {
+            --primary: #3498db;
+            --accent: #1abc9c;
+            --card-bg: rgba(52, 73, 94, 0.6);
+        }
+
+        [data-mood="repentant"] {
+            --primary: #e74c3c;
+            --accent: #c0392b;
+            --card-bg: rgba(192, 57, 43, 0.5);
+        }
+
+        [data-mood="grateful"] {
+            --primary: #2ecc71;
+            --accent: #27ae60;
+            --card-bg: rgba(39, 174, 96, 0.5);
+        }
+
+        [data-mood="focused"] {
+            --primary: #f39c12;
+            --accent: #d68910;
+            --card-bg: rgba(243, 156, 18, 0.4);
+        }
+
+        [data-mood="peaceful"] {
+            --primary: #9b59b6;
+            --accent: #8e44ad;
+            --card-bg: rgba(142, 68, 173, 0.5);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(239, 217, 48, 0.3), inset 0 0 10px rgba(239, 217, 48, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(239, 217, 48, 0.6), inset 0 0 20px rgba(239, 217, 48, 0.2); }
+        }
+
+        @keyframes radianceExpand {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(-20px); opacity: 0; }
+        }
+
+        @keyframes rotate3D {
+            from { transform: rotateY(0deg) rotateX(0deg); }
+            to { transform: rotateY(360deg) rotateX(10deg); }
+        }
+
+        @keyframes tawafRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes parallaxShift {
+            0% { transform: translateZ(0px); }
+            100% { transform: translateZ(50px); }
+        }
+
+        /* ===== CORE LAYOUT ===== */
+        body {
+            display: flex;
+            flex-direction: column;
+            perspective: 1000px;
+        }
+
+        .container {
+            flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            perspective: 1000px;
         }
-        
+
         .screen {
             display: none;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            flex: 1;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 70px;
-            scroll-behavior: smooth;
+            animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 20px;
+            perspective: 1000px;
         }
-        
+
         .screen.active {
             display: flex;
+            flex-direction: column;
         }
-        
-        .screen::-webkit-scrollbar {
-            width: 6px;
+
+        /* ===== HEADER/NAV ===== */
+        header {
+            background: linear-gradient(135deg, rgba(15, 25, 34, 0.95) 0%, rgba(26, 37, 53, 0.9) 100%);
+            padding: 15px 20px;
+            border-bottom: 2px solid var(--border-glow);
+            box-shadow: 0 10px 40px rgba(239, 217, 48, 0.1);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
         }
-        
-        .screen::-webkit-scrollbar-track {
-            background: transparent;
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Rakkas', serif;
+            text-shadow: 0 0 20px rgba(239, 217, 48, 0.5);
         }
-        
-        .screen::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, 0.3);
-            border-radius: 3px;
+
+        .header-icon {
+            font-size: 24px;
+            animation: rotate3D 8s linear infinite;
         }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .btn-nav {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
-        
-        @keyframes glow-pulse {
-            0%, 100% { text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
-            50% { text-shadow: 0 0 40px rgba(16, 185, 129, 0.8); }
+
+        .btn-nav:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary);
+            transform: translateY(-2px);
         }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+        .btn-nav.active {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 30px var(--primary);
         }
-        
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { 
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-            }
-            50% { 
-                transform: scale(1.1);
-                box-shadow: 0 0 0 15px rgba(16, 185, 129, 0);
-            }
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        
-        @keyframes rotate-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Dashboard */
-        #dashboard {
-            background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #0a5f56 100%);
+
+        /* ===== CARDS & ELEMENTS ===== */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
             padding: 20px;
-            gap: 16px;
-            position: relative;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: glowPulse 4s ease-in-out infinite;
         }
-        
-        #dashboard::before {
-            content: '';
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(239, 217, 48, 0.2);
+            border-color: var(--primary);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .card-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(239, 217, 48, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(239, 217, 48, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+            margin: 5px;
+        }
+
+        /* ===== INPUT ===== */
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(239, 217, 48, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ===== PROGRESS & RINGS ===== */
+        .progress-ring {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            position: relative;
+            animation: tawafRing 20s linear infinite;
+        }
+
+        .progress-ring-circle {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.35s ease;
+            stroke: var(--primary);
+            fill: none;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 10px rgba(239, 217, 48, 0.5));
+        }
+
+        .progress-text {
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .streak-counter {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== TIMER DISPLAY ===== */
+        .timer-display {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 30px rgba(239, 217, 48, 0.5);
+            margin: 30px 0;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        .breathing-indicator {
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin: 20px auto;
+            opacity: 0.3;
+            animation: breathe 6s ease-in-out infinite;
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .dashboard-header h1 {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #10b981, #06b6d4, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: glow-pulse 3s ease-in-out infinite;
-        }
-        
-        .settings-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(16, 185, 129, 0.3);
-            color: #10b981;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            backdrop-filter: blur(10px);
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .settings-btn:active {
-            transform: scale(0.92);
-            background: rgba(16, 185, 129, 0.2);
-            box-shadow: var(--glow-strong);
-        }
-        
-        .streak-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 32px;
-            padding: 24px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.7s ease-out 0.1s both;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .streak-item {
-            text-align: center;
-        }
-        
-        .streak-number {
-            font-size: 36px;
-            font-weight: 800;
-            color: #10b981;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .streak-label {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-        
-        .daily-plan {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 32px;
-            padding: 24px;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.7s ease-out 0.2s both;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .daily-plan h2 {
-            font-size: 18px;
-            margin-bottom: 16px;
-            color: #10b981;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .daily-plan h2::before {
-            content: '📋';
-            font-size: 20px;
-        }
-        
-        .plan-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px;
-            background: rgba(16, 185, 129, 0.1);
-            border-radius: 16px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            font-weight: 500;
-            border-left: 3px solid rgba(16, 185, 129, 0.5);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.7s ease-out both;
-        }
-        
-        .plan-item:hover {
-            background: rgba(16, 185, 129, 0.15);
-            border-left-color: #10b981;
-            transform: translateX(4px);
-        }
-        
-        .motivation-ayah {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(16, 185, 129, 0.1));
-            border: 2px solid rgba(245, 158, 11, 0.4);
-            border-radius: 28px;
-            padding: 24px;
-            text-align: center;
-            margin: 16px 0;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.7s ease-out 0.3s both;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.15);
-        }
-        
-        .motivation-ayah::before {
-            content: '✨';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            opacity: 0.5;
-        }
-        
-        .motivation-ayah .arabic {
-            font-family: 'Scheherazade New', serif;
-            font-size: 26px;
-            color: #10b981;
-            margin-bottom: 12px;
-            line-height: 1.8;
-            font-weight: 600;
-        }
-        
-        .motivation-ayah .translation {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.85);
-            line-height: 1.6;
-            font-weight: 500;
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.7s ease-out 0.4s both;
-        }
-        
-        .btn {
-            flex: 1;
-            padding: 18px;
-            border-radius: 20px;
-            border: none;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.3s ease;
-        }
-        
-        .btn:active::before {
-            left: 100%;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #10b981, #06b6d4);
-            color: #fff;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-        
-        .btn-primary:active {
-            transform: scale(0.95);
-            box-shadow: 0 0 50px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #10b981;
-            border: 2px solid rgba(16, 185, 129, 0.4);
-            backdrop-filter: blur(10px);
-        }
-        
-        .btn-secondary:active {
-            background: rgba(16, 185, 129, 0.2);
-            box-shadow: var(--glow);
-        }
-        
-        /* Heart Check */
-        #heartCheck {
-            background: linear-gradient(135deg, #1e293b 0%, #0f766e 100%);
-            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
-            position: relative;
+            animation: slideIn 0.3s ease;
         }
-        
-        #heartCheck::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: rotate-slow 20s linear infinite;
-        }
-        
-        .heart-check-container {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .heart-check-container h1 {
-            font-size: 32px;
-            margin-bottom: 32px;
-            color: #10b981;
-            font-weight: 800;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .moods {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        
-        .mood-btn {
-            padding: 32px 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px solid rgba(16, 185, 129, 0.2);
-            border-radius: 24px;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            font-size: 48px;
-            backdrop-filter: blur(10px);
-            animation: fadeInUp 0.6s ease-out both;
-        }
-        
-        .mood-btn:nth-child(1) { animation-delay: 0.1s; }
-        .mood-btn:nth-child(2) { animation-delay: 0.2s; }
-        .mood-btn:nth-child(3) { animation-delay: 0.3s; }
-        .mood-btn:nth-child(4) { animation-delay: 0.4s; }
-        
-        .mood-btn:active {
-            transform: scale(0.95);
-        }
-        
-        .mood-btn.active {
-            background: rgba(16, 185, 129, 0.3);
-            border-color: #10b981;
-            box-shadow: var(--glow-strong);
-            animation: pulse 0.6s ease-out;
-        }
-        
-        /* Niyyah */
-        #niyyah {
-            background: linear-gradient(135deg, #0f3460 0%, #0f766e 100%);
-            padding: 20px;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        #niyyah::before {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            top: -50%;
-            right: -10%;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .niyyah-container {
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .niyyah-container h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
-            text-align: center;
-            color: #10b981;
-            font-weight: 800;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .niyyah-desc {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 13px;
-            margin-bottom: 24px;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
-        }
-        
-        .voice-input {
-            width: 140px;
-            height: 140px;
-            margin: 24px auto;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #10b981, #06b6d4);
-            border: 4px solid rgba(16, 185, 129, 0.5);
-            cursor: pointer;
+
+        .modal.active {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 56px;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            animation: fadeInUp 0.6s ease-out 0.2s both, breathe 2s ease-in-out infinite;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
         }
-        
-        .voice-input:active {
-            transform: scale(0.95);
-        }
-        
-        .voice-input.recording {
-            animation: pulse 0.5s ease-in-out infinite, fadeInUp 0s;
-            box-shadow: 0 0 60px rgba(16, 185, 129, 0.8);
-        }
-        
-        .text-input {
-            width: 100%;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(16, 185, 129, 0.3);
-            border-radius: 16px;
-            color: #fff;
-            font-size: 14px;
-            margin: 16px 0;
-            backdrop-filter: blur(10px);
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
-        }
-        
-        .text-input:focus {
-            outline: none;
-            border-color: #10b981;
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-        
-        .text-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        /* Focus Session */
-        #focusSession {
-            background: radial-gradient(circle at center, #0f766e 0%, #030712 100%);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #focusSession::before,
-        #focusSession::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: rotate-slow 20s linear infinite;
-        }
-        
-        #focusSession::before {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
-            top: -100px;
-            left: -100px;
-        }
-        
-        #focusSession::after {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%);
-            bottom: -50px;
-            right: -50px;
-            animation-direction: reverse;
-        }
-        
-        .session-info {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .session-info p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-            margin: 4px 0;
-        }
-        
-        .breathing-circle {
-            width: 220px;
-            height: 220px;
-            border: 3px solid rgba(16, 185, 129, 0.4);
-            border-radius: 50%;
-            margin: 30px 0;
-            animation: breatheCircle 8s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-            box-shadow: inset 0 0 30px rgba(16, 185, 129, 0.2), 0 0 30px rgba(16, 185, 129, 0.2);
-        }
-        
-        @keyframes breatheCircle {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-        
-        .session-timer {
-            font-size: 80px;
-            font-weight: 900;
-            color: #10b981;
-            text-shadow: 0 0 40px rgba(16, 185, 129, 0.8), 0 0 80px rgba(16, 185, 129, 0.4);
-            margin: 20px 0;
-            font-family: 'Courier New', 'Monaco', monospace;
-            letter-spacing: 12px;
-            position: relative;
-            z-index: 1;
-            animation: glow-pulse 2s ease-in-out infinite;
-        }
-        
-        .zikr-display {
-            font-family: 'Scheherazade New', serif;
-            font-size: 32px;
-            color: #f59e0b;
-            text-align: center;
-            margin: 24px 0;
-            padding: 24px;
-            background: rgba(245, 158, 11, 0.1);
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--light-bg) 0%, rgba(15, 25, 34, 0.95) 100%);
+            border: 2px solid var(--border-glow);
             border-radius: 20px;
-            border: 2px solid rgba(245, 158, 11, 0.3);
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.6s ease-out;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            line-height: 1.6;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(239, 217, 48, 0.3);
+            backdrop-filter: blur(10px);
         }
-        
-        .session-controls {
-            display: flex;
-            gap: 12px;
-            margin-top: 32px;
-            width: 100%;
-            max-width: 320px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .control-btn {
-            flex: 1;
-            padding: 16px;
-            border: none;
-            border-radius: 16px;
-            cursor: pointer;
+
+        .modal-header {
+            font-size: 24px;
             font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .pause-btn {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-            border: 2px solid rgba(245, 158, 11, 0.5);
-        }
-        
-        .pause-btn:active {
-            background: rgba(245, 158, 11, 0.3);
-            box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
-        }
-        
-        .end-btn {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 2px solid rgba(239, 68, 68, 0.5);
-        }
-        
-        .end-btn:active {
-            background: rgba(239, 68, 68, 0.3);
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
-        }
-        
-        /* Reflection */
-        #reflection {
-            background: linear-gradient(135deg, #1e293b 0%, #0d9488 100%);
-            padding: 20px;
-            gap: 20px;
-            position: relative;
-        }
-        
-        #reflection::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .reflection-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 28px;
-            padding: 28px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.6s ease-out;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .reflection-card h2 {
-            color: #10b981;
-            font-size: 20px;
-            margin-bottom: 16px;
-            font-weight: 800;
-        }
-        
-        .reflection-ayah {
-            font-family: 'Scheherazade New', serif;
-            font-size: 28px;
-            color: #10b981;
+            color: var(--primary);
             margin-bottom: 20px;
-            line-height: 1.8;
-            font-weight: 600;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
-        }
-        
-        .reflection-input {
-            width: 100%;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(16, 185, 129, 0.2);
-            border-radius: 16px;
-            color: #fff;
-            font-size: 14px;
-            margin: 16px 0;
-            min-height: 120px;
-            resize: none;
-            font-family: 'Poppins', sans-serif;
-            animation: fadeInUp 0.6s ease-out 0.2s both;
-            transition: all 0.3s ease;
-        }
-        
-        .reflection-input:focus {
-            outline: none;
-            border-color: #10b981;
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-        
-        /* Hifz Review */
-        #hifzReview {
-            background: linear-gradient(135deg, #0f3460 0%, #0f766e 100%);
-            padding: 20px;
-            gap: 12px;
-            position: relative;
-        }
-        
-        #hifzReview h2 {
-            color: #10b981;
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .ayah-item {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 12px;
-            animation: fadeInUp 0.6s ease-out both;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-        
-        .ayah-arabic {
-            font-family: 'Scheherazade New', serif;
-            font-size: 22px;
-            color: #10b981;
-            margin-bottom: 10px;
-            line-height: 1.8;
-            font-weight: 600;
-        }
-        
-        .ayah-translation {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-        
-        .review-buttons {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .review-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
-        
-        .review-easy {
-            background: rgba(16, 185, 129, 0.3);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.5);
-        }
-        
-        .review-easy:active {
-            background: rgba(16, 185, 129, 0.5);
-            box-shadow: var(--glow);
-        }
-        
-        .review-hard {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-        }
-        
-        .review-hard:active {
-            background: rgba(239, 68, 68, 0.4);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
-        }
-        
-        /* Settings */
-        #settings {
-            background: linear-gradient(135deg, #1e293b 0%, #0f766e 100%);
-            padding: 20px;
-            gap: 16px;
-            position: relative;
-        }
-        
-        #settings h2 {
-            color: #10b981;
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .settings-section {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 28px;
-            padding: 20px;
-            animation: fadeInUp 0.6s ease-out both;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-        
-        .settings-section h3 {
-            font-size: 16px;
-            color: #10b981;
-            margin-bottom: 14px;
-            font-weight: 700;
-        }
-        
-        .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
-            font-size: 14px;
-            font-weight: 500;
         }
-        
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-        
-        .toggle-switch {
-            width: 56px;
-            height: 32px;
-            background: rgba(16, 185, 129, 0.2);
-            border: 2px solid rgba(16, 185, 129, 0.4);
-            border-radius: 16px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .toggle-switch.active {
-            background: rgba(16, 185, 129, 0.5);
-            border-color: #10b981;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-        
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            background: #fff;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .toggle-switch.active::after {
-            left: 26px;
-        }
-        
-        /* Footer Nav */
-        .footer-nav {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: linear-gradient(180deg, rgba(15, 118, 110, 0.3) 0%, rgba(15, 118, 110, 0.5) 100%);
-            backdrop-filter: blur(20px);
-            border-top: 2px solid rgba(16, 185, 129, 0.2);
-            padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .nav-btn {
-            width: 56px;
-            height: 56px;
+
+        .close-btn {
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--primary);
             font-size: 24px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            border-radius: 16px;
+            transition: transform 0.3s ease;
         }
-        
-        .nav-btn:active {
-            background: rgba(16, 185, 129, 0.2);
+
+        .close-btn:hover {
+            transform: rotate(90deg);
         }
-        
-        .nav-btn.active {
-            color: #10b981;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
-            animation: glow-pulse 2s ease-in-out infinite;
+
+        /* ===== GRID ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
         }
-        
-        .nav-btn.active::before {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            width: 6px;
-            height: 6px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: float 2s ease-in-out infinite;
-        }
-        
-        /* Distraction Shield */
-        .distraction-shield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.97);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 99999;
-            gap: 24px;
-            color: #fff;
-            backdrop-filter: blur(5px);
-        }
-        
-        .distraction-shield.active {
-            display: flex;
-            animation: fadeInUp 0.3s ease-out;
-        }
-        
-        .shield-timer {
-            font-size: 72px;
-            font-weight: 900;
-            color: #ef4444;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 8px;
-            animation: glow-pulse 1s ease-in-out infinite;
-            text-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
-        }
-        
-        .shield-message {
-            font-size: 18px;
+
+        .grid-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
-            max-width: 300px;
-            line-height: 1.6;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        
-        .shield-zikr {
-            font-family: 'Scheherazade New', serif;
-            font-size: 24px;
-            color: #10b981;
-            margin-top: 20px;
-            font-weight: 600;
+
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(239, 217, 48, 0.2);
+            border-color: var(--primary);
         }
-        
-        /* Responsive */
-        @media (max-height: 700px) {
-            .session-timer {
-                font-size: 64px;
-                letter-spacing: 8px;
+
+        .grid-item.selected {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+
+        /* ===== RADIANCE BURST ===== */
+        .radiance-burst {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, var(--primary), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: radianceExpand 1.5s ease-out forwards;
+        }
+
+        /* ===== FLOATING ELEMENTS ===== */
+        .floating-duaa {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 15px;
+            max-width: 250px;
+            font-size: 12px;
+            animation: floatUp 4s ease-in forwards;
+            z-index: 500;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .header-title {
+                font-size: 18px;
             }
-            .breathing-circle {
-                width: 150px;
-                height: 150px;
+
+            .timer-display {
+                font-size: 36px;
             }
-            .zikr-display {
-                font-size: 24px;
-                padding: 16px;
+
+            .modal-content {
+                max-width: 95%;
+                padding: 20px;
             }
+
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(239, 217, 48, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* ===== RTL SUPPORT ===== */
+        [dir="rtl"] .card-title,
+        [dir="rtl"] .header-title {
+            flex-direction: row-reverse;
+        }
+
+        [dir="rtl"] .modal-header {
+            flex-direction: row-reverse;
+        }
+
+        [dir="rtl"] .nav-buttons {
+            flex-direction: row-reverse;
+        }
+
+        /* ===== 3D EFFECTS ===== */
+        .world-map-3d {
+            width: 100%;
+            height: 300px;
+            background: radial-gradient(circle at 30% 30%, rgba(52, 152, 219, 0.2), transparent);
+            border-radius: 16px;
+            border: 2px solid var(--primary);
+            margin: 20px 0;
+            perspective: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+            animation: parallaxShift 6s ease-in-out infinite;
+            box-shadow: inset 0 0 30px rgba(239, 217, 48, 0.1);
+        }
+
+        .location-pin {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            margin: 0 10px;
+            animation: breathe 2s ease-in-out infinite;
         }
     </style>
 </head>
-<body class="dark-mode">
-    <div id="app">
-        <!-- Dashboard -->
-        <div id="dashboard" class="screen active">
-            <div class="dashboard-header">
-                <h1>✨ Nur Parvozi</h1>
-                <button class="settings-btn" onclick="app.showScreen('settings')">⚙️</button>
+<body data-mood="peaceful">
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <span class="header-icon">🌟</span>
+                <span id="headerTitle">Nur Parvozi</span>
             </div>
-            
-            <div class="streak-card">
-                <div class="streak-item">
-                    <div class="streak-number" id="streakDays">0</div>
-                    <div class="streak-label">🔥 Kun</div>
+            <div class="nav-buttons">
+                <button class="btn-nav active" data-screen="dashboard">📊</button>
+                <button class="btn-nav" data-screen="heartcheck">❤️</button>
+                <button class="btn-nav" data-screen="session">🎯</button>
+                <button class="btn-nav" data-screen="hifz">📖</button>
+                <button class="btn-nav" data-screen="settings">⚙️</button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD SCREEN -->
+        <div class="screen active" id="dashboard">
+            <div class="card">
+                <div class="card-title">🔥 Bugungi Faoliyat</div>
+                <div class="progress-ring">
+                    <svg viewBox="0 0 100 100" style="width:100%; height:100%;">
+                        <circle cx="50" cy="50" r="45" class="progress-ring-circle" id="progressCircle" stroke-dashoffset="0"></circle>
+                    </svg>
+                    <div class="progress-text" id="progressText">0%</div>
                 </div>
-                <div class="streak-item">
-                    <div class="streak-number" id="streakTotal">0</div>
-                    <div class="streak-label">📊 Jami</div>
-                </div>
-                <div class="streak-item">
-                    <div class="streak-number" id="hifzCount">0</div>
-                    <div class="streak-label">📖 Hifz</div>
+                <div class="card-content">
+                    <div style="text-align:center; margin-bottom:10px;">
+                        <span class="badge" id="streakBadge">🔥 0 kun</span>
+                        <span class="badge" id="goalBadge">🎯 0/3</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="motivation-ayah" id="motivationAyah">
-                <div class="arabic">وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ</div>
-                <div class="translation">Balki siz biror narsani yomon ko'rib olishingiz mumkin, lekin u sizga yaxshi</div>
+
+            <div class="card">
+                <div class="card-title">📅 Bugungi Reja</div>
+                <div class="card-content" id="dailyPlan">
+                    <p>🕐 08:00 - Fajr Qur'an (5 min)</p>
+                    <p>🕑 14:00 - Tadabbur (15 min)</p>
+                    <p>🕒 20:00 - Hifz Review (10 min)</p>
+                </div>
             </div>
-            
-            <div class="daily-plan">
-                <h2>Bugungi Reja</h2>
-                <div id="planItems"></div>
+
+            <div class="card">
+                <div class="card-title">💡 Bugungi Motivatsiya Ayati</div>
+                <div class="card-content" id="motivationAyah" style="text-align:center; font-size:16px; line-height:1.8; color:var(--primary); font-weight:500;">
+                    قال الله تعالى
+                </div>
+                <div style="text-align:center; margin-top:10px; color:var(--text-secondary);">
+                    <span id="motivationTrans">Tafsir yoziladi...</span>
+                </div>
             </div>
-            
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="app.startSession()">🚀 Boshlash</button>
-                <button class="btn btn-secondary" onclick="app.showScreen('hifzReview')">📖 Tekshirish</button>
+
+            <button class="btn" style="width:100%; margin-top:20px;" onclick="app.showScreen('heartcheck')">
+                ❤️ Heart Check Boshlash
+            </button>
+        </div>
+
+        <!-- HEART CHECK SCREEN -->
+        <div class="screen" id="heartcheck">
+            <div class="card">
+                <div class="card-title">❤️ Xolatingni Tanlang</div>
+                <div class="card-subtitle">Qalbingiz holati nima? Baraka ayatlari va duolar sizni kuzayotgan</div>
+                <div class="grid">
+                    <div class="grid-item" data-mood="anxious" onclick="app.setMood('anxious')">
+                        😰 Tashvish
+                    </div>
+                    <div class="grid-item" data-mood="repentant" onclick="app.setMood('repentant')">
+                        🙏 Tavba
+                    </div>
+                    <div class="grid-item" data-mood="grateful" onclick="app.setMood('grateful')">
+                        🙌 Shukr
+                    </div>
+                    <div class="grid-item" data-mood="focused" onclick="app.setMood('focused')">
+                        🎯 Murtakaz
+                    </div>
+                    <div class="grid-item" data-mood="peaceful" onclick="app.setMood('peaceful')">
+                        🕊️ Tinch
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="moodContent" style="display:none;">
+                <div class="card-title" id="moodTitle">Tashvish Ayatlari</div>
+                <div class="card-content" id="moodAyahs">
+                    Ayatlar yoziladi...
+                </div>
+                <button class="btn" style="width:100%; margin-top:15px;" onclick="app.showScreen('session')">
+                    Seans Boshlash →
+                </button>
+            </div>
+
+            <div class="card" id="tavbaChain">
+                <div class="card-title">🔗 40 Kunlik Tavba Zanjiri</div>
+                <div class="card-content">
+                    <div style="text-align:center; font-size:32px; margin:15px 0;">
+                        <span id="tavbaDays">0</span>/40
+                    </div>
+                    <div style="width:100%; background:rgba(0,0,0,0.3); height:10px; border-radius:5px; overflow:hidden;">
+                        <div id="tavbaBar" style="width:0%; height:100%; background:linear-gradient(90deg, var(--primary), var(--accent)); transition:width 0.3s ease;"></div>
+                    </div>
+                    <p style="text-align:center; margin-top:10px; color:var(--text-secondary);">Ruhiy o'zgarishning sirri - konsistentlik</p>
+                </div>
             </div>
         </div>
-        
-        <!-- Heart Check -->
-        <div id="heartCheck" class="screen">
-            <div class="heart-check-container">
-                <h1>❤️ Yuragingiz Holati?</h1>
-                <div class="moods">
-                    <button class="mood-btn" data-mood="anxious" onclick="app.setMood('anxious')">😰</button>
-                    <button class="mood-btn" data-mood="joyful" onclick="app.setMood('joyful')">😊</button>
-                    <button class="mood-btn" data-mood="repentant" onclick="app.setMood('repentant')">😔</button>
-                    <button class="mood-btn" data-mood="focused" onclick="app.setMood('focused')">🎯</button>
+
+        <!-- SESSION SCREEN -->
+        <div class="screen" id="session">
+            <div class="card">
+                <div class="card-title">🎯 Nur Parvozi Seansı</div>
+                <div class="card-subtitle">Ka'badan Jannaning bog'lariga uchaylik</div>
+                
+                <div style="text-align:center; margin:30px 0;">
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                    <div class="breathing-indicator"></div>
                 </div>
-                <button class="btn btn-primary" style="width: 100%;" onclick="app.proceedFromHeartCheck()">Davom Et →</button>
+
+                <div class="world-map-3d" id="worldMap">
+                    <span id="journeyText">📍 Toshkentdan Ka'baga uchaylik...</span>
+                    <span class="location-pin"></span>
+                </div>
+
+                <div style="display:flex; gap:10px; margin:20px 0;">
+                    <button class="btn" style="flex:1;" id="btnStartSession">▶️ Boshlash</button>
+                    <button class="btn btn-secondary" style="flex:1;" id="btnPauseSession">⏸ Pauza</button>
+                    <button class="btn btn-secondary" style="flex:1;" id="btnStopSession">⏹ Tugatish</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🎙️ Zikr & Nafas</div>
+                <div style="text-align:center; margin:15px 0;">
+                    <button class="btn btn-small" onclick="app.playZikr('subhanallah')">سبحان الله</button>
+                    <button class="btn btn-small" onclick="app.playZikr('alhamdulillah')">الحمد لله</button>
+                    <button class="btn btn-small" onclick="app.playZikr('allahuakbar')">الله أكبر</button>
+                </div>
+                <div class="card-content" style="text-align:center; font-size:13px;">
+                    🫁 Nafas sinxronizatsiyasi: 4s ichga, 6s tashqariga
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💬 Dua & Fikr</div>
+                <textarea id="reflectionText" placeholder="Qalbingiz nima suyaydi? Shukrlar, duolar yozing..."></textarea>
+                <button class="btn" style="width:100%;" onclick="app.saveReflection()">💾 Saqlash</button>
             </div>
         </div>
-        
-        <!-- Niyyah -->
-        <div id="niyyah" class="screen">
-            <div class="niyyah-container">
-                <h1>🤲 Nimanisiz?</h1>
-                <p class="niyyah-desc">Suratli yoki matnli aytib oring</p>
-                <div class="voice-input" id="voiceInput" onclick="app.toggleVoiceInput()">🎤</div>
-                <textarea class="text-input" id="niyyahText" placeholder="Sizning niyatiz..." style="display: none;"></textarea>
-                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="app.submitNiyyah()">Fokusga Kirish 🎯</button>
+
+        <!-- HIFZ SCREEN -->
+        <div class="screen" id="hifz">
+            <div class="card">
+                <div class="card-title">📖 Adaptive Hifz Coach</div>
+                <div class="card-subtitle">Ilmiy spacing repetition - Ebbinghaus egri chizig'i</div>
+                
+                <div class="grid">
+                    <div class="grid-item">
+                        <div style="font-size:24px;">📚</div>
+                        <div style="font-size:11px; margin-top:8px; font-weight:600;">Jami</div>
+                        <div style="font-size:16px; color:var(--primary); font-weight:700;" id="totalHifz">0</div>
+                    </div>
+                    <div class="grid-item">
+                        <div style="font-size:24px;">✅</div>
+                        <div style="font-size:11px; margin-top:8px; font-weight:600;">Halol</div>
+                        <div style="font-size:16px; color:var(--primary); font-weight:700;" id="correctHifz">0</div>
+                    </div>
+                    <div class="grid-item">
+                        <div style="font-size:24px;">⚠️</div>
+                        <div style="font-size:11px; margin-top:8px; font-weight:600;">Xavotir</div>
+                        <div style="font-size:16px; color:var(--warning); font-weight:700;" id="weakHifz">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🎓 Bugungi Takrorlash</div>
+                <div id="reviewList">
+                    <p style="color:var(--text-secondary);">Ayatlar yuklanyotgan...</p>
+                </div>
+                <button class="btn" style="width:100%; margin-top:15px;" onclick="app.generateReview()">
+                    🔄 Yangi Review Boshlash
+                </button>
             </div>
         </div>
-        
-        <!-- Focus Session -->
-        <div id="focusSession" class="screen">
-            <div class="session-info">
-                <p id="sessionMood">🎯 Focused Mode</p>
-                <p>Ruh va Zikr</p>
+
+        <!-- SETTINGS SCREEN -->
+        <div class="screen" id="settings">
+            <div class="card">
+                <div class="card-title">🌐 Til</div>
+                <select id="langSelect" onchange="app.setLanguage(this.value)">
+                    <option value="uz">🇺🇿 Uzbek (O'zbekcha)</option>
+                    <option value="ru">🇷🇺 Русский</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="ar">🇸🇦 العربية</option>
+                </select>
             </div>
-            
-            <div class="breathing-circle"></div>
-            <div class="session-timer" id="sessionTimer">25:00</div>
-            <div class="zikr-display" id="zikrDisplay">سُبْحَانَ اللَّهِ</div>
-            
-            <div class="session-controls">
-                <button class="control-btn pause-btn" onclick="app.togglePause()" id="pauseBtn">⏸ Pauza</button>
-                <button class="control-btn end-btn" onclick="app.endSession()">🏁 Tugatish</button>
-            </div>
-        </div>
-        
-        <!-- Reflection -->
-        <div id="reflection" class="screen">
-            <div class="reflection-card">
-                <h2>✨ Fikrlaringiz</h2>
-                <div class="reflection-ayah" id="reflectionAyah">الحمد لله رب العالمين</div>
-                <textarea class="reflection-input" id="reflectionText" placeholder="Bugun sizda nima o'zgardi? Qanday his qildingiz?"></textarea>
-                <button class="btn btn-primary" style="width: 100%;" onclick="app.shareReflection()">Davom Et →</button>
-            </div>
-        </div>
-        
-        <!-- Hifz Review -->
-        <div id="hifzReview" class="screen">
-            <h2>📖 Memoriya Tekshirish</h2>
-            <div id="hifzItems"></div>
-        </div>
-        
-        <!-- Settings -->
-        <div id="settings" class="screen">
-            <h2>⚙️ Sozlamalar</h2>
-            
-            <div class="settings-section">
-                <h3>🌍 Til</h3>
-                <div class="setting-item">
-                    <span>🇺🇿 Uzbek</span>
-                    <button class="toggle-switch active" onclick="app.setLanguage('uz')"></button>
-                </div>
-                <div class="setting-item">
-                    <span>🇬🇧 English</span>
-                    <button class="toggle-switch" onclick="app.setLanguage('en')"></button>
-                </div>
-                <div class="setting-item">
-                    <span>🇷🇺 Русский</span>
-                    <button class="toggle-switch" onclick="app.setLanguage('ru')"></button>
-                </div>
-                <div class="setting-item">
-                    <span>🇸🇦 العربية</span>
-                    <button class="toggle-switch" onclick="app.setLanguage('ar')"></button>
+
+            <div class="card">
+                <div class="card-title">🎨 Tema</div>
+                <div class="grid">
+                    <div class="grid-item" onclick="app.setTheme('anxious')" style="background:rgba(52, 73, 94, 0.6); border-color:#3498db;">😰</div>
+                    <div class="grid-item" onclick="app.setTheme('repentant')" style="background:rgba(192, 57, 43, 0.5); border-color:#e74c3c;">🙏</div>
+                    <div class="grid-item" onclick="app.setTheme('grateful')" style="background:rgba(39, 174, 96, 0.5); border-color:#2ecc71;">🙌</div>
+                    <div class="grid-item" onclick="app.setTheme('focused')" style="background:rgba(243, 156, 18, 0.4); border-color:#f39c12;">🎯</div>
                 </div>
             </div>
-            
-            <div class="settings-section">
-                <h3>🎛️ Afzalliklar</h3>
-                <div class="setting-item">
-                    <span>📳 Vibration</span>
-                    <button class="toggle-switch active" id="vibrationToggle" onclick="app.toggleVibration()"></button>
+
+            <div class="card">
+                <div class="card-title">📱 Distraction Shield</div>
+                <div style="display:flex; align-items:center; gap:10px; margin:10px 0;">
+                    <input type="checkbox" id="distractionShield" checked style="width:20px; height:20px; cursor:pointer;">
+                    <label for="distractionShield" style="flex:1; cursor:pointer;">30s o'zgartirish xavfsizligi</label>
                 </div>
-                <div class="setting-item">
-                    <span>🔊 Ovoz</span>
-                    <button class="toggle-switch active" id="soundToggle" onclick="app.toggleSound()"></button>
-                </div>
-                <div class="setting-item">
-                    <span>🛡️ Distraction Shield</span>
-                    <button class="toggle-switch active" id="distractionToggle" onclick="app.toggleDistraction()"></button>
+                <div class="card-content" style="font-size:12px; color:var(--text-secondary);">
+                    ✓ Tab o'zgarishi yoki distraktsiya niyati aniqlanadi. Duolar va zikr orqali qayta yo'naltirish.
                 </div>
             </div>
-            
-            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="app.showScreen('dashboard')">← Orqaga</button>
-        </div>
-        
-        <div class="footer-nav">
-            <button class="nav-btn active" onclick="app.showScreen('dashboard')">🏠</button>
-            <button class="nav-btn" onclick="app.showScreen('hifzReview')">📖</button>
-            <button class="nav-btn" onclick="app.showScreen('settings')">⚙️</button>
+
+            <div class="card">
+                <div class="card-title">🔊 Ovoz</div>
+                <div style="margin:10px 0;">
+                    <label style="display:block; margin:5px 0; font-size:12px;">
+                        <input type="checkbox" id="ambientSound" checked> Ambient zikr ovozi
+                    </label>
+                    <label style="display:block; margin:5px 0; font-size:12px;">
+                        <input type="checkbox" id="vibration" checked> Haptic feedback
+                    </label>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📊 Ma'lumotlar</div>
+                <button class="btn" style="width:100%; margin:10px 0;" onclick="app.exportData()">📥 Export</button>
+                <button class="btn btn-secondary" style="width:100%; margin:10px 0;" onclick="app.clearData()">🗑️ Tozalash</button>
+            </div>
+
+            <div class="card" style="text-align:center; background:rgba(239, 217, 48, 0.1); border-color:var(--primary);">
+                <div style="font-size:12px; color:var(--text-secondary); margin:20px 0;">
+                    Nur Parvozi v1.0<br>
+                    🌟 Made by Muhammad Daler<br>
+                    Pure vanilla HTML5 • Zero Dependencies<br>
+                    Qur'an & Ilm for 2025+
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="distraction-shield" id="distractionShield">
-        <div class="shield-timer" id="shieldTimer">30</div>
-        <div class="shield-message">⚠️ Diqqati yo'qotmang!<br>Qur'anqa qaytib keling</div>
-        <div class="shield-zikr">لا حول ولا قوة إلا بالله</div>
+
+    <!-- MODAL: Niyyah -->
+    <div class="modal" id="niyyahModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>🤲 Niyyah - Maqsadini Ayting</span>
+                <button class="close-btn" onclick="document.getElementById('niyyahModal').classList.remove('active')">✕</button>
+            </div>
+            <div style="margin:20px 0;">
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">Ovozli yoki matn:</p>
+                <textarea id="niyyahText" placeholder="Masalan: Allah uchun 5 sura hifz qilmoqchiman..." style="margin-bottom:10px;"></textarea>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" style="flex:1;" onclick="app.recordNiyyah()">🎤 Ovozli</button>
+                    <button class="btn" style="flex:1;" onclick="app.submitNiyyah()">✓ Yuborish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Radiance Animation -->
+    <div class="modal" id="radianceModal">
+        <div class="modal-content" style="background:none; border:none; box-shadow:none; max-width:300px;">
+            <div style="text-align:center;">
+                <div style="font-size:64px; margin-bottom:20px; animation:rotate3D 3s linear infinite;">🌟</div>
+                <div id="radianceText" style="font-size:18px; color:var(--primary); font-weight:700;">Nur yayilmoqda...</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Advanced i18n with Qur'anic wisdom
+        // ===== I18N STRINGS =====
         const i18n = {
             uz: {
-                planItems: [
-                    '📖 1 Juz hifz qil',
-                    '🧘 20 daqiqa tadabbur',
-                    '🤲 Salat va zikr',
-                    '💭 Gratituda yozuvi',
-                    '🌙 Dua - Qalbni saqlash'
-                ],
-                zikrs: [
-                    'سُبْحَانَ اللَّهِ\n(Subhan\'Allah)',
-                    'الْحَمْدُ لِلَّهِ\n(Alhamdulillah)',
-                    'لا إله إلا الله\n(La ilaha illallah)',
-                    'اللَّهُ أَكْبَرُ\n(Allahu Akbar)',
-                    'لا حول ولا قوة\n(La hawla wa la quwwata)'
-                ],
-                ayahs: [
-                    {
-                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
-                        trans: 'Balki siz yomon ko\'rinib turayotgan narsani yoqtirmasangiz, lekin u sizga yaxshi'
-                    },
-                    {
-                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
-                        trans: 'Qiyinchilik bilan birga osonlik ham bor'
-                    },
-                    {
-                        arabic: 'فَاذْكُرُونِ أَذْكُرْكُمْ',
-                        trans: 'Meni eslang, Men sizni eslab qolaman'
-                    },
-                    {
-                        arabic: 'يَا أَيُّهَا النَّفْسُ الْمُطْمَئِنَّةُ',
-                        trans: 'Ey tinch qalb, Rabbingizga qaytib kel'
-                    }
-                ],
-                duas: [
-                    'اللهم اجعلني من حافظي كتابك',
-                    'اللهم ارزقني حلاوة الذكر',
-                    'اللهم استودعتك قلبي فاحفظه',
-                    'اللهم ثبت قلبي على دينك',
-                    'اللهم قوِ عزمي وثبت خطاي'
-                ]
-            },
-            en: {
-                planItems: [
-                    '📖 Memorize 1 Juz',
-                    '🧘 20 min Tadabbur',
-                    '🤲 Salat & Dhikr',
-                    '💭 Gratitude Journal',
-                    '🌙 Dua - Heart Guard'
-                ],
-                zikrs: [
-                    'سُبْحَانَ اللَّهِ\n(Subhan\'Allah)',
-                    'الْحَمْدُ لِلَّهِ\n(Alhamdulillah)',
-                    'لا إله إلا الله\n(La ilaha illallah)',
-                    'اللَّهُ أَكْبَرُ\n(Allahu Akbar)',
-                    'لا حول ولا قوة\n(La hawla wa la quwwata)'
-                ],
-                ayahs: [
-                    {
-                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
-                        trans: 'Perhaps you hate a thing and it is good for you'
-                    },
-                    {
-                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
-                        trans: 'Indeed, with hardship comes ease'
-                    },
-                    {
-                        arabic: 'فَاذْكُرُونِ أَذْكُرْكُمْ',
-                        trans: 'Remember Me, and I shall remember you'
-                    },
-                    {
-                        arabic: 'يَا أَيُّهَا النَّفْسُ الْمُطْمَئِنَّةُ',
-                        trans: 'O soul at peace, return to your Lord'
-                    }
-                ],
-                duas: [
-                    'O Allah, make me among Your Quran preservers',
-                    'O Allah, grant me sweetness in remembrance',
-                    'O Allah, I entrust my heart to You',
-                    'O Allah, strengthen my heart upon Your deen',
-                    'O Allah, strengthen my resolve'
-                ]
+                headerTitle: "Nur Parvozi",
+                dailyActivity: "Bugungi Faoliyat",
+                todayPlan: "Bugungi Reja",
+                motivationAyah: "Bugungi Motivatsiya Ayati",
+                startHeartCheck: "❤️ Heart Check Boshlash",
+                selectMood: "Xolatingni Tanlang",
+                moodSubtitle: "Qalbingiz holati nima? Baraka ayatlari va duolar sizni kuzayotgan",
+                tavbaChain: "🔗 40 Kunlik Tavba Zanjiri",
+                sessionTitle: "🎯 Nur Parvozi Seansı",
+                sessionSubtitle: "Ka'badan Jannaning bog'lariga uchaylik",
+                adaptiveHifz: "📖 Adaptive Hifz Coach",
+                todayReview: "🎓 Bugungi Takrorlash",
+                distraction: "📱 Distraction Shield",
+                distractionDesc: "✓ Tab o'zgarishi yoki distraktsiya niyati aniqlanadi. Duolar va zikr orqali qayta yo'naltirish.",
+                language: "🌐 Til",
+                theme: "🎨 Tema",
+                sound: "🔊 Ovoz",
+                data: "📊 Ma'lumotlar",
+                ambientSound: "Ambient zikr ovozi",
+                vibration: "Haptic feedback",
+                niyyah: "🤲 Niyyah - Maqsadini Ayting",
+                niyyahDesc: "Ovozli yoki matn:",
+                voiceRecord: "🎤 Ovozli",
+                submit: "✓ Yuborish",
             },
             ru: {
-                planItems: [
-                    '📖 Выучить джуз',
-                    '🧘 20 минут размышления',
-                    '🤲 Намаз и зикр',
-                    '💭 Дневник благодарности',
-                    '🌙 Дуа - Защита сердца'
-                ],
-                zikrs: [
-                    'سُبْحَانَ اللَّهِ\n(Субхан\'Аллах)',
-                    'الْحَمْدُ لِلَّهِ\n(Альхамду-ли-Ллах)',
-                    'لا إله إلا الله\n(Ля иляха иллаллах)',
-                    'اللَّهُ أَكْبَرُ\n(Аллаху Акбар)',
-                    'لا حول ولا قوة\n(Ля хавла ва ля кувва)'
-                ],
-                ayahs: [
-                    {
-                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
-                        trans: 'Возможно, вы ненавидите что-то, но оно хорошо для вас'
-                    },
-                    {
-                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
-                        trans: 'Воистину, с трудностью приходит облегчение'
-                    },
-                    {
-                        arabic: 'فَاذْكُرُونِ أَذْكُرْكُمْ',
-                        trans: 'Помните обо Мне, и Я буду помнить о вас'
-                    },
-                    {
-                        arabic: 'يَا أَيُّهَا النَّفْسُ الْمُطْمَئِنَّةُ',
-                        trans: 'О душа в мире, вернись к своему Господу'
-                    }
-                ],
-                duas: [
-                    'О Аллах, сделай меня из хафизов Корана',
-                    'О Аллах, дай мне сладость зикра',
-                    'О Аллах, доверяю тебе мое сердце',
-                    'О Аллах, укрепи мое сердце',
-                    'О Аллах, укрепи мою волю'
-                ]
+                headerTitle: "Nur Парвози",
+                dailyActivity: "Дневная активность",
+                todayPlan: "План на сегодня",
+                motivationAyah: "Аят мотивации дня",
+                startHeartCheck: "❤️ Начать проверку сердца",
+                selectMood: "Выберите своё состояние",
+                moodSubtitle: "Какое состояние вашего сердца? Айаты благословения и дуа ждут вас",
+                tavbaChain: "🔗 40-дневная цепь раскаяния",
+                sessionTitle: "🎯 Сеанс Nur Parvozi",
+                sessionSubtitle: "Летим от Каабы в сады Рая",
+                adaptiveHifz: "📖 Адаптивный Хафиз-тренер",
+                todayReview: "🎓 Повторение на сегодня",
+                distraction: "📱 Щит от отвлечений",
+                distractionDesc: "✓ Определяет переключение вкладок и намерение отвлечения. Перенаправление через дуа и зикр.",
+                language: "🌐 Язык",
+                theme: "🎨 Тема",
+                sound: "🔊 Звук",
+                data: "📊 Данные",
+                ambientSound: "Фоновый звук зикра",
+                vibration: "Тактильная обратная связь",
+                niyyah: "🤲 Ния - скажите свою цель",
+                niyyahDesc: "Голосом или текстом:",
+                voiceRecord: "🎤 Голос",
+                submit: "✓ Отправить",
+            },
+            en: {
+                headerTitle: "Nur Parvozi",
+                dailyActivity: "Daily Activity",
+                todayPlan: "Today's Plan",
+                motivationAyah: "Today's Motivation Ayah",
+                startHeartCheck: "❤️ Start Heart Check",
+                selectMood: "Select Your Mood",
+                moodSubtitle: "What is your heart's state? Blessed ayahs and duas await you",
+                tavbaChain: "🔗 40-Day Tawbah Chain",
+                sessionTitle: "🎯 Nur Parvozi Session",
+                sessionSubtitle: "Journey from Ka'ba to Paradise gardens",
+                adaptiveHifz: "📖 Adaptive Hifz Coach",
+                todayReview: "🎓 Today's Review",
+                distraction: "📱 Distraction Shield",
+                distractionDesc: "✓ Detects tab switching or distraction intent. Redirect through duas and zikr.",
+                language: "🌐 Language",
+                theme: "🎨 Theme",
+                sound: "🔊 Sound",
+                data: "📊 Data",
+                ambientSound: "Ambient zikr sound",
+                vibration: "Haptic feedback",
+                niyyah: "🤲 Niyyah - State Your Goal",
+                niyyahDesc: "Voice or text:",
+                voiceRecord: "🎤 Voice",
+                submit: "✓ Submit",
             },
             ar: {
-                planItems: [
-                    '📖 حفظ جزء واحد',
-                    '🧘 20 دقيقة تدبر',
-                    '🤲 الصلاة والذكر',
-                    '💭 دفتر الشكر',
-                    '🌙 دعاء - حفظ القلب'
-                ],
-                zikrs: [
-                    'سُبْحَانَ اللَّهِ',
-                    'الْحَمْدُ لِلَّهِ',
-                    'لا إله إلا الله',
-                    'اللَّهُ أَكْبَرُ',
-                    'لا حول ولا قوة'
-                ],
-                ayahs: [
-                    {
-                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
-                        trans: 'وقد لا تحبون شيئاً وهو خير لكم'
-                    },
-                    {
-                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
-                        trans: 'فمع العسر يسراً'
-                    },
-                    {
-                        arabic: 'فَاذْكُرُونِ أَذْكُرْكُمْ',
-                        trans: 'فاذكروني أذكركم'
-                    },
-                    {
-                        arabic: 'يَا أَيُّهَا النَّفْسُ الْمُطْمَئِنَّةُ',
-                        trans: 'يا أيها النفس المطمئنة ارجعي إلى ربك'
-                    }
-                ],
-                duas: [
-                    'اللهم اجعلني من حافظي كتابك',
-                    'اللهم ارزقني حلاوة الذكر والفهم',
-                    'اللهم استودعتك قلبي فاحفظه',
-                    'اللهم ثبت قلبي على دينك',
-                    'اللهم قوِ عزمي وثبت خطاي'
-                ]
+                headerTitle: "نور الطيران",
+                dailyActivity: "النشاط اليومي",
+                todayPlan: "خطة اليوم",
+                motivationAyah: "آية التحفيز",
+                startHeartCheck: "❤️ ابدأ فحص القلب",
+                selectMood: "اختر مزاجك",
+                moodSubtitle: "ما حالة قلبك؟ الآيات المباركة والأدعية تنتظرك",
+                tavbaChain: "🔗 سلسلة التوبة لمدة 40 يوماً",
+                sessionTitle: "🎯 جلسة نور الطيران",
+                sessionSubtitle: "رحلة من الكعبة إلى جنان الفردوس",
+                adaptiveHifz: "📖 مدرب الحفظ المتكيف",
+                todayReview: "🎓 مراجعة اليوم",
+                distraction: "📱 درع من التشتيت",
+                distractionDesc: "✓ يكتشف تبديل الأجهزة أو نية التشتيت. إعادة توجيه من خلال الأدعية والذكر.",
+                language: "🌐 اللغة",
+                theme: "🎨 المظهر",
+                sound: "🔊 الصوت",
+                data: "📊 البيانات",
+                ambientSound: "صوت الذكر المحيط",
+                vibration: "التغذية الراجعة اللمسية",
+                niyyah: "🤲 النية - اذكر نيتك",
+                niyyahDesc: "صوتياً أو نصياً:",
+                voiceRecord: "🎤 صوت",
+                submit: "✓ إرسال",
             }
         };
 
-        // Advanced NurParvozi Class
+        // ===== PREMIUM CONTENT DATABASE =====
+        const contentDB = {
+            ayahs: {
+                uz: [
+                    { text: "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ", trans: "Albatta, Allah sabur bo'lganlarning bilan birga", surah: "Baqarah 2:153", mood: "anxious" },
+                    { text: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا", trans: "Shubhasiz, qiyinchilikning bilan birga osonlik bor", surah: "Inshirah 94:5", mood: "anxious" },
+                    { text: "رَبِّ اغْفِرْ لِي وَارْحَمْنِي", trans: "Ey Robbim, meni kechi va merhama qil", surah: "Tawbah 9:104", mood: "repentant" },
+                    { text: "إِنَّ اللَّهَ يُحِبُّ التَّوَّابِينَ", trans: "Albatta, Allah tavba qiluvchilarga sevadi", surah: "Baqarah 2:222", mood: "repentant" },
+                    { text: "وَإِن تَشْكُرُوا يَرْضَهُ لَكُمْ", trans: "Va agar shukr qilsangiz, u buni raza ko'radi", surah: "Zumar 39:7", mood: "grateful" },
+                    { text: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", trans: "Barcha hamdlar Allahga, alamlarning Robbiga", surah: "Fatiha 1:2", mood: "grateful" },
+                    { text: "وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ", trans: "Allahga eng chiroyli nomlar tegishli", surah: "A'raf 7:180", mood: "peaceful" },
+                    { text: "إِنَّ نَفْسَ الْمُؤْمِنِ تَطْمَئِنُّ بِذِكْرِ اللَّهِ", trans: "Momin qalbi Allahni zikr bilan tinch topadi", surah: "Ra'd 13:28", mood: "peaceful" },
+                ]
+            },
+            duas: {
+                uz: [
+                    "Allohumma inni as'aluka 'ilman naafi'an wa amalun salihan",
+                    "Rabb-ana atina fi'd-dunya hasanatan wa fi'l-akhirate hasanatan wa qina 'adhaba'n-nar",
+                    "Allohumma inni tawallaytu lla ilaha illa anta wa aslamt wajhi ilayk wa fawwadtu amri ilayk",
+                    "Ya Muqallib al-qulub thabbit qalbi 'ala dinika",
+                    "Allohumma ighfir li dhanbi kulla-hu, daqiqu-hu wa 'adhimu-hu",
+                ]
+            },
+            locations: [
+                { city: "Toshkent", distance: 0 },
+                { city: "Samarqand", distance: 300 },
+                { city: "Buxoro", distance: 600 },
+                { city: "Baghdad", distance: 1500 },
+                { city: "Dimashq", distance: 2000 },
+                { city: "Quds", distance: 2500 },
+                { city: "Makka", distance: 3500 },
+                { city: "Jannaning Bog'lari", distance: 4000 },
+            ]
+        };
+
+        // ===== MAIN APP CLASS =====
         class NurParvozi {
             constructor() {
-                this.language = localStorage.getItem('language') || 'uz';
-                this.currentMood = 'focused';
+                this.currentScreen = 'dashboard';
+                this.currentLanguage = 'uz';
+                this.currentMood = 'peaceful';
                 this.sessionActive = false;
-                this.sessionPaused = false;
                 this.sessionTime = 0;
-                this.vibrationEnabled = localStorage.getItem('vibration') !== 'false';
-                this.soundEnabled = localStorage.getItem('sound') !== 'false';
-                this.distractionEnabled = localStorage.getItem('distraction') !== 'false';
-                this.streakDays = parseInt(localStorage.getItem('streakDays') || '0');
-                this.totalSessions = parseInt(localStorage.getItem('totalSessions') || '0');
-                this.hifzCount = parseInt(localStorage.getItem('hifzCount') || '0');
-                this.distractionShieldActive = false;
-                this.isRecording = false;
+                this.sessionDistance = 0;
+                this.streak = 0;
+                this.tavbaDays = 0;
+                this.reflections = [];
+                this.hifzData = [];
                 
                 this.init();
             }
-            
+
             init() {
-                this.updateUI();
-                this.updateMotivationAyah();
+                this.loadData();
+                this.setupEventListeners();
+                this.registerServiceWorker();
                 this.generateDailyPlan();
-                this.generateHifzReview();
-                this.setupVoiceRecognition();
-                this.setupServiceWorker();
+                this.updateMoodContent();
+                this.setRandomMotivationAyah();
+                this.vibrate(50);
             }
-            
-            updateUI() {
-                document.documentElement.dir = this.language === 'ar' ? 'rtl' : 'ltr';
-                document.getElementById('streakDays').textContent = this.streakDays;
-                document.getElementById('streakTotal').textContent = this.totalSessions;
-                document.getElementById('hifzCount').textContent = this.hifzCount;
-            }
-            
-            showScreen(screenId) {
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById(screenId).classList.add('active');
-                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-                const screenMap = { 'dashboard': 0, 'hifzReview': 1, 'settings': 2 };
-                if (screenMap[screenId] !== undefined) {
-                    document.querySelectorAll('.nav-btn')[screenMap[screenId]].classList.add('active');
-                }
-            }
-            
-            setLanguage(lang) {
-                this.language = lang;
-                localStorage.setItem('language', lang);
-                this.updateUI();
-                this.updateMotivationAyah();
-                this.generateDailyPlan();
-                this.generateHifzReview();
-                document.querySelectorAll('.settings-section .toggle-switch').forEach((btn, idx) => {
-                    btn.classList.toggle('active', idx === ['uz', 'en', 'ru', 'ar'].indexOf(lang));
+
+            setupEventListeners() {
+                // Nav buttons
+                document.querySelectorAll('.btn-nav').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.btn-nav').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.showScreen(e.target.dataset.screen);
+                    });
+                });
+
+                // Session buttons
+                document.getElementById('btnStartSession').addEventListener('click', () => this.startSession());
+                document.getElementById('btnPauseSession').addEventListener('click', () => this.pauseSession());
+                document.getElementById('btnStopSession').addEventListener('click', () => this.stopSession());
+
+                // Tab switch detection (Distraction Shield)
+                document.addEventListener('visibilitychange', () => {
+                    if (this.sessionActive && document.hidden && document.getElementById('distractionShield').checked) {
+                        this.triggerDistractionShield();
+                    }
                 });
             }
-            
+
+            // ===== SCREEN NAVIGATION =====
+            showScreen(screenName) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(screenName).classList.add('active');
+                this.currentScreen = screenName;
+            }
+
+            // ===== MOOD SYSTEM =====
             setMood(mood) {
                 this.currentMood = mood;
-                this.vibrate([100, 50, 100]);
-                document.querySelectorAll('.mood-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.mood === mood);
+                document.body.dataset.mood = mood;
+                document.querySelectorAll('.grid-item').forEach(item => {
+                    item.classList.remove('selected');
+                    if (item.dataset.mood === mood) item.classList.add('selected');
                 });
+                document.getElementById('moodContent').style.display = 'block';
+                this.updateMoodContent();
+                this.vibrate([50, 50, 100]);
             }
-            
-            updateMotivationAyah() {
-                const ayahs = i18n[this.language].ayahs;
-                const random = ayahs[Math.floor(Math.random() * ayahs.length)];
-                const motivationEl = document.getElementById('motivationAyah');
-                motivationEl.innerHTML = `<div class="arabic">${random.arabic}</div><div class="translation">${random.trans}</div>`;
-            }
-            
-            generateDailyPlan() {
-                const planItems = i18n[this.language].planItems;
-                const planEl = document.getElementById('planItems');
-                planEl.innerHTML = planItems.map((item, idx) => `<div class="plan-item" style="animation-delay: ${idx * 0.1}s">${item}</div>`).join('');
-            }
-            
-            generateHifzReview() {
-                const ayahs = i18n[this.language].ayahs.slice(0, 3);
-                const hifzEl = document.getElementById('hifzItems');
-                hifzEl.innerHTML = ayahs.map((ayah, idx) => `
-                    <div class="ayah-item" style="animation-delay: ${idx * 0.1}s">
-                        <div class="ayah-arabic">${ayah.arabic}</div>
-                        <div class="ayah-translation">${ayah.trans}</div>
-                        <div class="review-buttons">
-                            <button class="review-btn review-easy" onclick="app.vibrate(50)">✅ Oson</button>
-                            <button class="review-btn review-hard" onclick="app.vibrate(200)">🔄 Qiyin</button>
-                        </div>
+
+            updateMoodContent() {
+                const moodTitles = {
+                    anxious: "😰 Tashvish Ayatlari",
+                    repentant: "🙏 Tavba Duolari",
+                    grateful: "🙌 Shukr Ayatlari",
+                    focused: "🎯 Murtakaz Ayatlari",
+                    peaceful: "🕊️ Tinch Surah"
+                };
+
+                document.getElementById('moodTitle').textContent = moodTitles[this.currentMood];
+
+                const ayahs = contentDB.ayahs.uz.filter(a => a.mood === this.currentMood);
+                const ayahsHtml = ayahs.map(a => `
+                    <div style="margin:15px 0; padding:15px; background:rgba(0,0,0,0.2); border-radius:8px; border-left:3px solid var(--primary);">
+                        <div style="font-size:16px; line-height:1.8; color:var(--primary); font-weight:500; margin-bottom:8px;">${a.text}</div>
+                        <div style="font-size:12px; color:var(--text-secondary);">${a.trans}</div>
+                        <div style="font-size:11px; color:var(--text-secondary); margin-top:8px;">📍 ${a.surah}</div>
                     </div>
                 `).join('');
+                document.getElementById('moodAyahs').innerHTML = ayahsHtml;
             }
-            
+
+            // ===== SESSION MANAGEMENT =====
             startSession() {
-                this.showScreen('heartCheck');
-                this.vibrate([100, 50, 100, 50, 100]);
-            }
-            
-            proceedFromHeartCheck() {
-                this.showScreen('niyyah');
-            }
-            
-            submitNiyyah() {
-                this.showScreen('focusSession');
-                this.initFocusSession();
-            }
-            
-            initFocusSession() {
                 this.sessionActive = true;
-                this.sessionPaused = false;
-                this.sessionTime = 25 * 60;
-                const moodEmoji = { anxious: '😰', joyful: '😊', repentant: '😔', focused: '🎯' };
-                document.getElementById('sessionMood').textContent = `${moodEmoji[this.currentMood]} ${this.currentMood} Mode`;
-                this.startSessionTimer();
-                this.startZikrRotation();
+                this.sessionTime = 0;
+                this.sessionDistance = 0;
+                document.getElementById('btnStartSession').disabled = true;
+                
+                // Show Niyyah modal
+                document.getElementById('niyyahModal').classList.add('active');
                 this.vibrate([100, 50, 100]);
-                if (this.distractionEnabled) {
-                    document.addEventListener('visibilitychange', () => this.handleDistraction());
-                }
-            }
-            
-            startSessionTimer() {
-                const timerDisplay = document.getElementById('sessionTimer');
-                const timerInterval = setInterval(() => {
-                    if (this.sessionActive && !this.sessionPaused) {
-                        this.sessionTime--;
-                        const mins = Math.floor(this.sessionTime / 60);
-                        const secs = this.sessionTime % 60;
-                        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                        if (this.sessionTime === 0) {
-                            clearInterval(timerInterval);
-                            this.endSession();
-                        }
-                    }
+
+                this.sessionInterval = setInterval(() => {
+                    this.sessionTime++;
+                    this.updateSessionDisplay();
                 }, 1000);
             }
-            
-            startZikrRotation() {
-                const zikrDisplay = document.getElementById('zikrDisplay');
-                const zikrs = i18n[this.language].zikrs;
-                let currentZikr = 0;
-                setInterval(() => {
-                    if (this.sessionActive && !this.sessionPaused) {
-                        zikrDisplay.textContent = zikrs[currentZikr];
-                        currentZikr = (currentZikr + 1) % zikrs.length;
-                    }
-                }, 8000);
+
+            pauseSession() {
+                clearInterval(this.sessionInterval);
+                document.getElementById('btnStartSession').disabled = false;
+                this.vibrate(50);
             }
-            
-            handleDistraction() {
-                if (document.hidden && this.sessionActive && !this.distractionShieldActive) {
-                    this.activateDistractionShield();
-                }
-            }
-            
-            activateDistractionShield() {
-                this.distractionShieldActive = true;
-                const shield = document.getElementById('distractionShield');
-                shield.classList.add('active');
-                const shieldTimer = document.getElementById('shieldTimer');
-                let timeRemaining = 30;
-                
-                this.vibrate([100, 50, 100, 50, 100]);
-                
-                const shieldInterval = setInterval(() => {
-                    timeRemaining--;
-                    shieldTimer.textContent = timeRemaining;
-                    if (timeRemaining === 0) {
-                        clearInterval(shieldInterval);
-                        shield.classList.remove('active');
-                        this.distractionShieldActive = false;
-                    }
-                }, 1000);
-            }
-            
-            togglePause() {
-                this.sessionPaused = !this.sessionPaused;
-                const pauseBtn = document.getElementById('pauseBtn');
-                pauseBtn.textContent = this.sessionPaused ? '▶️ Davom Et' : '⏸ Pauza';
-                this.vibrate(this.sessionPaused ? 200 : [100, 50, 100]);
-            }
-            
-            endSession() {
+
+            stopSession() {
+                clearInterval(this.sessionInterval);
                 this.sessionActive = false;
-                this.totalSessions++;
-                this.streakDays++;
-                this.hifzCount += Math.floor(Math.random() * 2) + 1;
-                localStorage.setItem('totalSessions', this.totalSessions);
-                localStorage.setItem('streakDays', this.streakDays);
-                localStorage.setItem('hifzCount', this.hifzCount);
-                this.updateUI();
-                this.showScreen('reflection');
-                this.vibrate([100, 100, 100]);
+                this.saveReflection();
+                document.getElementById('btnStartSession').disabled = false;
+                this.incrementStreak();
+                this.showRadianceAnimation("Baraka bersin! 🌟");
             }
-            
-            shareReflection() {
-                this.vibrate([50, 50, 50]);
-                this.showScreen('dashboard');
+
+            updateSessionDisplay() {
+                const mins = Math.floor(this.sessionTime / 60);
+                const secs = this.sessionTime % 60;
+                document.getElementById('timerDisplay').textContent = 
+                    `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+                // Update journey
+                this.sessionDistance = Math.floor((this.sessionTime / 60) * 50); // 50km per minute
+                const location = contentDB.locations[Math.min(Math.floor(this.sessionDistance / 500), contentDB.locations.length - 1)];
+                document.getElementById('journeyText').textContent = `📍 ${location.city} (${this.sessionDistance}km)`;
+
+                // Update progress circle
+                const progress = Math.min((this.sessionTime / 900) * 100, 100); // 15 min = 100%
+                const circle = document.getElementById('progressCircle');
+                const radius = circle.r.baseVal.value;
+                const circumference = radius * 2 * Math.PI;
+                circle.style.strokeDashoffset = circumference - (progress / 100) * circumference;
+                document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
             }
-            
-            toggleVibration() {
-                this.vibrationEnabled = !this.vibrationEnabled;
-                localStorage.setItem('vibration', this.vibrationEnabled);
-                document.getElementById('vibrationToggle').classList.toggle('active');
-                this.vibrate(100);
-            }
-            
-            toggleSound() {
-                this.soundEnabled = !this.soundEnabled;
-                localStorage.setItem('sound', this.soundEnabled);
-                document.getElementById('soundToggle').classList.toggle('active');
-            }
-            
-            toggleDistraction() {
-                this.distractionEnabled = !this.distractionEnabled;
-                localStorage.setItem('distraction', this.distractionEnabled);
-                document.getElementById('distractionToggle').classList.toggle('active');
-            }
-            
-            setupVoiceRecognition() {
+
+            // ===== NIYYAH VOICE RECORDING =====
+            recordNiyyah() {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (SpeechRecognition) {
-                    this.recognition = new SpeechRecognition();
-                    this.recognition.lang = this.language === 'ar' ? 'ar-SA' : this.language === 'en' ? 'en-US' : this.language === 'ru' ? 'ru-RU' : 'uz-UZ';
-                    this.recognition.onresult = (event) => {
-                        const transcript = Array.from(event.results).map(r => r[0].transcript).join('');
-                        document.getElementById('niyyahText').value = transcript;
-                    };
-                }
-            }
-            
-            toggleVoiceInput() {
-                const voiceInput = document.getElementById('voiceInput');
-                const niyyahText = document.getElementById('niyyahText');
-                if (!this.recognition) {
-                    niyyahText.style.display = 'block';
+                if (!SpeechRecognition) {
+                    alert("Ovoz tan olish bu brauzerda mavjud emas");
                     return;
                 }
-                if (!this.isRecording) {
-                    this.isRecording = true;
-                    voiceInput.classList.add('recording');
-                    niyyahText.style.display = 'none';
-                    this.recognition.start();
-                    this.vibrate([100, 50, 100]);
-                } else {
-                    this.isRecording = false;
-                    voiceInput.classList.remove('recording');
-                    this.recognition.stop();
-                    niyyahText.style.display = 'block';
+
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'uz-UZ';
+                recognition.start();
+                document.getElementById('niyyahText').placeholder = "🎙️ Tinglanyotgan...";
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('niyyahText').value = transcript;
+                };
+
+                recognition.onerror = () => {
+                    document.getElementById('niyyahText').placeholder = "❌ Xato. Qayta urinib ko'ring.";
+                };
+            }
+
+            submitNiyyah() {
+                const niyyah = document.getElementById('niyyahText').value;
+                if (niyyah.trim()) {
+                    document.getElementById('niyyahModal').classList.remove('active');
+                    this.playZikrSound('subhanallah');
+                    this.showRadianceAnimation("Niyyah qabul bo'ldi 🤲");
                 }
             }
-            
-            vibrate(pattern = 100) {
-                if (this.vibrationEnabled && navigator.vibrate) {
+
+            // ===== ZIKR & BREATHING =====
+            playZikr(zikrType) {
+                const zikrTexts = {
+                    subhanallah: "سبحان الله",
+                    alhamdulillah: "الحمد لله",
+                    allahuakbar: "الله أكبر"
+                };
+
+                this.speak(zikrTexts[zikrType]);
+                this.vibrate([50, 30, 50, 30, 100]);
+            }
+
+            playZikrSound(type) {
+                // Base64 encoded minimal audio sounds (silence + subtle tone)
+                const sounds = {
+                    subhanallah: new Audio('data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAAA='),
+                };
+                if (sounds[type]) sounds[type].play().catch(() => {});
+            }
+
+            speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = this.currentLanguage === 'ar' ? 'ar-SA' : this.currentLanguage === 'ru' ? 'ru-RU' : 'uz-UZ';
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+
+            // ===== REFLECTION CANVAS SHARE =====
+            saveReflection() {
+                const text = document.getElementById('reflectionText').value;
+                if (text.trim()) {
+                    const reflection = {
+                        text,
+                        date: new Date().toLocaleDateString(),
+                        mood: this.currentMood,
+                        time: this.sessionTime
+                    };
+                    this.reflections.push(reflection);
+                    this.generateShareCard(reflection);
+                    document.getElementById('reflectionText').value = '';
+                    this.saveData();
+                    this.vibrate([50, 50, 50]);
+                }
+            }
+
+            generateShareCard(reflection) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 800;
+                canvas.height = 400;
+                const ctx = canvas.getContext('2d');
+
+                // Background
+                ctx.fillStyle = '#0f1922';
+                ctx.fillRect(0, 0, 800, 400);
+
+                // Gradient
+                const gradient = ctx.createLinearGradient(0, 0, 800, 400);
+                gradient.addColorStop(0, '#1a2535');
+                gradient.addColorStop(1, '#0f1922');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 800, 400);
+
+                // Title
+                ctx.fillStyle = '#efd930';
+                ctx.font = 'bold 36px Poppins';
+                ctx.textAlign = 'center';
+                ctx.fillText('Nur Parvozi', 400, 60);
+
+                // Reflection
+                ctx.fillStyle = '#e8f4f8';
+                ctx.font = '20px Poppins';
+                ctx.textAlign = 'center';
+                const words = reflection.text.split(' ');
+                let line = '';
+                let y = 150;
+                for (let i = 0; i < words.length; i++) {
+                    const testLine = line + words[i] + ' ';
+                    const metrics = ctx.measureText(testLine);
+                    if (metrics.width > 700) {
+                        ctx.fillText(line, 400, y);
+                        line = words[i] + ' ';
+                        y += 40;
+                    } else {
+                        line = testLine;
+                    }
+                }
+                ctx.fillText(line, 400, y);
+
+                // Footer
+                ctx.fillStyle = '#a8c5d1';
+                ctx.font = '14px Poppins';
+                ctx.fillText(`📅 ${reflection.date} • 🎯 ${Math.floor(reflection.time / 60)}min`, 400, 360);
+
+                // Download
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `nur-parvozi-${Date.now()}.png`;
+                link.click();
+            }
+
+            // ===== HIFZ SYSTEM =====
+            generateReview() {
+                const ayahs = contentDB.ayahs.uz;
+                const review = ayahs.slice(0, 3).map((ayah, i) => `
+                    <div style="margin:15px 0; padding:15px; background:rgba(0,0,0,0.2); border-radius:8px;">
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span style="font-size:20px;">${ayah.text}</span>
+                            <div style="flex:1;"></div>
+                            <button class="btn btn-small" onclick="app.markHifzCorrect(${i})">✅</button>
+                            <button class="btn btn-small" onclick="app.markHifzWeak(${i})">⚠️</button>
+                        </div>
+                        <div style="font-size:11px; color:var(--text-secondary); margin-top:8px;">${ayah.surah}</div>
+                    </div>
+                `).join('');
+                document.getElementById('reviewList').innerHTML = review;
+            }
+
+            markHifzCorrect(index) {
+                this.vibrate([100, 50, 100]);
+                this.showRadianceAnimation("Eksellent! ⭐");
+            }
+
+            markHifzWeak(index) {
+                this.vibrate(50);
+                alert("Bu ayet qayta takror qil");
+            }
+
+            // ===== DISTRACTION SHIELD =====
+            triggerDistractionShield() {
+                this.speak("Duoning waqti. Allohga yozing...");
+                const dua = contentDB.duas.uz[Math.floor(Math.random() * contentDB.duas.uz.length)];
+                const floating = document.createElement('div');
+                floating.className = 'floating-duaa';
+                floating.textContent = `🤲 ${dua}`;
+                document.body.appendChild(floating);
+                setTimeout(() => floating.remove(), 4000);
+            }
+
+            // ===== STREAK & TAVBAH =====
+            incrementStreak() {
+                this.streak++;
+                this.tavbaDays = Math.min(this.tavbaDays + 1, 40);
+                document.getElementById('streakBadge').textContent = `🔥 ${this.streak} kun`;
+                document.getElementById('tavbaDays').textContent = this.tavbaDays;
+                document.getElementById('tavbaBar').style.width = `${(this.tavbaDays / 40) * 100}%`;
+                this.saveData();
+            }
+
+            // ===== DAILY PLAN =====
+            generateDailyPlan() {
+                const plan = [
+                    "🕐 08:00 - Fajr Qur'an (5 min)",
+                    "🕑 14:00 - Tadabbur (15 min)",
+                    "🕒 20:00 - Hifz Review (10 min)"
+                ];
+                document.getElementById('dailyPlan').innerHTML = plan.map(p => `<p>${p}</p>`).join('');
+            }
+
+            // ===== MOTIVATION AYAH =====
+            setRandomMotivationAyah() {
+                const ayahs = contentDB.ayahs.uz;
+                const ayah = ayahs[Math.floor(Math.random() * ayahs.length)];
+                document.getElementById('motivationAyah').textContent = ayah.text;
+                document.getElementById('motivationTrans').textContent = `${ayah.trans} (${ayah.surah})`;
+            }
+
+            // ===== RADIANCE ANIMATION =====
+            showRadianceAnimation(text) {
+                const modal = document.getElementById('radianceModal');
+                document.getElementById('radianceText').textContent = text;
+                modal.classList.add('active');
+                this.vibrate([100, 50, 100, 50, 150]);
+                setTimeout(() => modal.classList.remove('active'), 2000);
+            }
+
+            // ===== LANGUAGE & THEME =====
+            setLanguage(lang) {
+                this.currentLanguage = lang;
+                document.documentElement.lang = lang;
+                document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                this.saveData();
+            }
+
+            setTheme(theme) {
+                this.setMood(theme);
+            }
+
+            // ===== DATA PERSISTENCE =====
+            saveData() {
+                const data = {
+                    streak: this.streak,
+                    tavbaDays: this.tavbaDays,
+                    reflections: this.reflections,
+                    language: this.currentLanguage,
+                    mood: this.currentMood
+                };
+                localStorage.setItem('nurParvozi', JSON.stringify(data));
+            }
+
+            loadData() {
+                const data = JSON.parse(localStorage.getItem('nurParvozi') || '{}');
+                this.streak = data.streak || 0;
+                this.tavbaDays = data.tavbaDays || 0;
+                this.reflections = data.reflections || [];
+                this.currentLanguage = data.language || 'uz';
+                this.currentMood = data.mood || 'peaceful';
+                
+                document.body.dataset.mood = this.currentMood;
+                document.getElementById('streakBadge').textContent = `🔥 ${this.streak} kun`;
+                document.getElementById('tavbaDays').textContent = this.tavbaDays;
+                document.getElementById('tavbaBar').style.width = `${(this.tavbaDays / 40) * 100}%`;
+            }
+
+            exportData() {
+                const data = JSON.parse(localStorage.getItem('nurParvozi') || '{}');
+                const json = JSON.stringify(data, null, 2);
+                const link = document.createElement('a');
+                link.href = `data:application/json;base64,${btoa(json)}`;
+                link.download = `nur-parvozi-backup-${Date.now()}.json`;
+                link.click();
+            }
+
+            clearData() {
+                if (confirm("Barcha ma'lumotlar o'chiriladi. Ishonchingiz komilmi?")) {
+                    localStorage.removeItem('nurParvozi');
+                    location.reload();
+                }
+            }
+
+            // ===== VIBRATION FEEDBACK =====
+            vibrate(pattern) {
+                if (document.getElementById('vibration')?.checked && navigator.vibrate) {
                     navigator.vibrate(pattern);
                 }
             }
-            
-            setupServiceWorker() {
+
+            // ===== SERVICE WORKER =====
+            registerServiceWorker() {
                 if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('data:application/javascript,self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>e.waitUntil(clients.claim()));self.addEventListener("fetch",e=>{});');
+                    navigator.serviceWorker.register('data:application/javascript;base64,Y29uc3QgQ0FDSEVfTkFNRSA9ICdOdXJQYXJ2b3ppLXYxJzsgY29uc3QgVVJMX0NBQ0hFX0tFWSA9ICduLXAtdXJscyc7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2luc3RhbGwnLCAoZXZlbnQpID0+IHsKICBlc2xpZi53YWl0VW50aWwoKCkgPT4gc2VsZi5jYWNoZXMub3BlbihDQUNIRV9OQU1FKS50aGVuKChjYWNoZSkgPT4gY2FjaGUuYWRkQWxsKFsKICAgICcvJywKICAgICcvaW5kZXguaHRtbCcsCiAgICAnL3N0eWxlLmNzcycsCiAgICAnL2pzL2FwcC5qcycsCiAgICAnL21hbmlmZXN0Lmpzb24nCiAgXSkpCn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdhY3RpdmF0ZScsIChldmVudCkgPT4gewogIGV2ZW50LndhaXRVbnRpbChjYWNoZXMua2V5cyh0aGVuKChjYWNoZXMpID0+IHsKICAgIGNvbnN0IGNhY2hlS2V5cyA9IE9iamVjdC5rZXlzKGNhY2hlcykuZmlsdGVyKChraykgPT4gayAhPT0gQ0FDSEVfTkFNRSk7CiAgICByZXR1cm4gUHJvbWlzZS5hbGwoY2FjaGVLZXlzLm1hcCgoaykgPT4gY2FjaGVzLmRlbGV0ZShraykpKTsKICB9KSkpOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCAoZXZlbnQpID0+IHsKICBpZiAoZXZlbnQucmVxdWVzdC5tZXRob2QgIT09ICdHRVQnKSByZXR1cm47CiAgZXZlbnQucmVzcG9uZFdpdGgoY2FjaGVzLm1hdGNoKGV2ZW50LnJlcXVlc3QpLnRoZW4oKHJlc3BvbnNlKSA9PiB7CiAgICByZXR1cm4gcmVzcG9uc2UgfHwgZmV0Y2goZXZlbnQucmVxdWVzdCkudGhlbigocmVzcG9uc2UpID0+IHsKICAgICAgcmV0dXJuIGNhY2hlcyhDQUNIRV9OQU1FKS50aGVuKChjYWNoZSkgPT4gewogICAgICAgIGNhY2hlLnB1dChldmVudC5yZXF1ZXN0LCByZXNwb25zZS5jbG9uZSgpKTsKICAgICAgICByZXR1cm4gcmVzcG9uc2U7CiAgICAgIH0pOwogICAgfSkuY2F0Y2goKCkgPT4gY2FjaGVzLm1hdGNoKCdvZmZsaW5lJykpOwogIH0pKTsKfSk7CgovLyBCYWNrZ3JvdW5kIFN5bmM6IGHDoCBkZWdpsiEKc2VsZi5vbnN5bmMgPSAoZXZlbnQpID0+IHsKICBpZiAoZXZlbnQudGFnID09PSAnc3luYy10YXNrJykgewogICAgZXZlbnQud2FpdFVudGlsKHNlbGYucmVnaXN0cmF0aW9uLnN5bmMuc2V0VGFnKCduLXAtc3luYycpKTsKICB9Cn07') .catch(() => {});
                 }
             }
         }
 
-        // Initialize app
-        let app = new NurParvozi();
-        
-        // Prevent zoom
-        document.addEventListener('touchmove', (e) => {
-            if (e.scale !== 1) e.preventDefault();
-        }, { passive: false });
+        // ===== INITIALIZE APP =====
+        const app = new NurParvozi();
+
+        // ===== INSTALL PWA PROMPT =====
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
     </script>
+</head>
+<body>
 </body>
 </html>
