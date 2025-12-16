@@ -1,188 +1,1062 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tadabbur UltraPremium</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root{
---c-bg:#0f1115;
---c-bg-grad-start:#14181f;
---c-bg-grad-end:#0a0b0e;
---c-text:#e8e8ea;
---c-muted:#8a8d96;
---c-accent:#10b981;
---c-gold:#d4b483;
---ease:cubic-bezier(0.4,0,0.2,1);
---font-ui:'Inter',sans-serif;
---font-ar:'Amiri',serif;
---space-xs:8px;
---space-s:16px;
---space-m:24px;
---space-l:40px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;width:100%;font-family:var(--font-ui);background:linear-gradient(135deg,var(--c-bg-grad-start),var(--c-bg-grad-end));color:var(--c-text);overflow:hidden;-webkit-font-smoothing:antialiased;}
-#app{position:relative;width:100%;height:100%;display:flex;justify-content:center;align-items:center;}
-.screen{position:absolute;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:0;pointer-events:none;transition:all 0.6s var(--ease);transform:scale(0.96) translateY(6px);filter:blur(4px);}
-.screen.active{opacity:1;pointer-events:auto;transform:scale(1) translateY(0);filter:blur(0);}
-.arabic{font-family:var(--font-ar);font-size:2rem;direction:rtl;margin-bottom:16px;opacity:0;animation:fadeUp 0.8s forwards;}
-.translation{font-size:1rem;color:var(--c-muted);max-width:600px;margin:0 auto;opacity:0;animation:fadeUp 1s forwards;}
-.reflection{font-size:1.1rem;color:var(--c-gold);font-style:italic;margin-top:24px;opacity:0;animation:fadeUp 1.2s forwards;}
-.btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);color:var(--c-text);padding:16px 24px;border-radius:12px;margin:8px;cursor:pointer;transition:all 0.2s var(--ease);}
-.btn:hover{background:rgba(255,255,255,0.06);transform:translateY(-2px) scale(1.02);}
-.btn-group{display:flex;flex-direction:column;}
-.timer{font-size:4rem;font-variant-numeric:tabular-nums;margin-bottom:32px;opacity:0;animation:fadeUp 0.8s forwards;}
-.progress{position:absolute;bottom:0;left:0;height:4px;background:var(--c-gold);width:0%;opacity:0.3;transition:width 0.5s linear;}
-.breath{width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,0.05);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:-1;}
-.breath::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;background:radial-gradient(circle, rgba(212,180,131,0.03) 0%,transparent 70%);animation:breathe 8s ease-in-out infinite;}
-@keyframes breathe{0%,100%{transform:scale(0.8);opacity:0.3}50%{transform:scale(1.2);opacity:0.6}}
-@keyframes fadeUp{0%{opacity:0;transform:translateY(10px) scale(0.98)}100%{opacity:1;transform:translateY(0) scale(1)}}
-.ambient-glow{position:fixed;top:50%;left:50%;width:120vw;height:120vw;background:radial-gradient(circle, rgba(20,30,45,0.4) 0%, rgba(15,17,21,0) 70%);transform:translate(-50%,-50%);pointer-events:none;z-index:0;opacity:0.6;animation:breathe-bg 12s ease-in-out infinite alternate;}
-@keyframes breathe-bg{0%{transform:translate(-50%,-50%) scale(1);opacity:0.5}100%{transform:translate(-50%,-50%) scale(1.1);opacity:0.7}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f766e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nur Parvozi">
+    <meta name="description" content="Supreme Qur'an Tadabbur, Hifz & Spiritual Focus PWA">
+    
+    <title>Nur Parvozi - Qur'an Tadabbur</title>
+    
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTnVyIFBhcnZvemkiLCJzaG9ydF9uYW1lIjoiTnVyIFBhcnZvemkiLCJkZXNjcmlwdGlvbiI6IlF1cuKYm2FuIFRhZGFiYnVyIFBXQSIsInN0YXJ0X3VybCI6Ii8iLCJzY29wZSI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAzMDcxMiIsInRoZW1lX2NvbG9yIjoiIzBmNzY2ZSIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDE5MiAxOTInJTNFJTNDcmVjdCBmaWxsPSclMjMwZjc2NmUnIHdpZHRoPScxOTInIGhlaWdodD0nMTkyJy8lM0UlM0N0ZXh0IHg9JzUwJScgeT0nNTAlJyBmb250LXNpemU9JzEyMCcgZm9udC13ZWlnaHQ9J2JvbGQnIGZpbGw9JyUyMzEwYjk4MScgdGV4dC1hbmNob3I9J21pZGRsZScgZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZScgZm9udC1mYW1pbHk9J3N5c3RlbS11aSclM0XD9TdWhuYW4nQWxsYWglMjAlM0MvdGV4dCUzRSUzQy9zdmclM0UiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCIsInB1cnBvc2UiOiJhbnkifV19">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0f766e;
+            --accent: #10b981;
+            --gold: #f59e0b;
+            --neon: #06b6d4;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glow: 0 0 30px rgba(16, 185, 129, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #030712 0%, #0f3460 50%, #030712 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        body[dir="rtl"] {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        #app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            animation: slideIn 0.4s ease-out;
+            overflow-y: auto;
+            padding-bottom: 60px;
+        }
+        
+        .screen.active {
+            display: flex;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Dashboard */
+        #dashboard {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .settings-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .settings-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            box-shadow: var(--glow);
+        }
+        
+        .streak-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .streak-item {
+            text-align: center;
+        }
+        
+        .streak-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #10b981;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        .streak-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+        
+        .daily-plan {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+        }
+        
+        .daily-plan h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #10b981;
+        }
+        
+        .plan-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .motivation-ayah {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(16, 185, 129, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .motivation-ayah .arabic {
+            font-family: 'Scheherazade New', serif;
+            font-size: 24px;
+            color: #10b981;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+        
+        .motivation-ayah .translation {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            color: #fff;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #10b981;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Heart Check */
+        #heartCheck {
+            background: linear-gradient(135deg, #1e293b 0%, #0f766e 100%);
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .heart-check-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .heart-check-container h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+        
+        .moods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .mood-btn {
+            padding: 20px;
+            background: var(--glass);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 32px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .mood-btn.active {
+            background: rgba(16, 185, 129, 0.3);
+            border-color: #10b981;
+            box-shadow: var(--glow);
+        }
+        
+        /* Niyyah */
+        #niyyah {
+            background: linear-gradient(135deg, #0f3460 0%, #0f766e 100%);
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .niyyah-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .niyyah-container h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #10b981;
+        }
+        
+        .voice-input {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            border: 3px solid rgba(16, 185, 129, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            transition: all 0.3s ease;
+            animation: breathe 2s ease-in-out infinite;
+        }
+        
+        .voice-input.recording {
+            animation: pulse 0.5s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); box-shadow: 0 0 60px rgba(16, 185, 129, 1); }
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            color: #fff;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        
+        /* Focus Session */
+        #focusSession {
+            background: radial-gradient(circle at center, #0f766e 0%, #030712 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .session-timer {
+            font-size: 72px;
+            font-weight: 700;
+            color: #10b981;
+            text-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 10px;
+        }
+        
+        .session-info p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+        
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            border: 3px solid rgba(16, 185, 129, 0.4);
+            border-radius: 50%;
+            margin: 30px 0;
+            animation: breatheCircle 8s ease-in-out infinite;
+        }
+        
+        @keyframes breatheCircle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        .zikr-display {
+            font-family: 'Scheherazade New', serif;
+            font-size: 28px;
+            color: #f59e0b;
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 16px;
+            border: 2px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .session-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .control-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .pause-btn {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 2px solid rgba(245, 158, 11, 0.4);
+        }
+        
+        .end-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 2px solid rgba(239, 68, 68, 0.4);
+        }
+        
+        /* Reflection */
+        #reflection {
+            background: linear-gradient(135deg, #1e293b 0%, #0d9488 100%);
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .reflection-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .reflection-ayah {
+            font-family: 'Scheherazade New', serif;
+            font-size: 24px;
+            color: #10b981;
+            margin-bottom: 15px;
+        }
+        
+        .reflection-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            margin: 15px 0;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Hifz Review */
+        #hifzReview {
+            background: linear-gradient(135deg, #0f3460 0%, #0f766e 100%);
+            padding: 20px;
+            gap: 15px;
+        }
+        
+        .ayah-item {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .ayah-arabic {
+            font-family: 'Scheherazade New', serif;
+            font-size: 20px;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+        
+        .ayah-translation {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+        }
+        
+        .review-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .review-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .review-easy {
+            background: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+        }
+        
+        .review-hard {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        
+        /* Settings */
+        #settings {
+            background: linear-gradient(135deg, #1e293b 0%, #0f766e 100%);
+            padding: 20px;
+            gap: 15px;
+        }
+        
+        .settings-section {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 24px;
+            padding: 16px;
+        }
+        
+        .settings-section h3 {
+            font-size: 16px;
+            color: #10b981;
+            margin-bottom: 12px;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+            font-size: 14px;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid rgba(16, 185, 129, 0.4);
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: rgba(16, 185, 129, 0.5);
+            border-color: #10b981;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 50%;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s ease;
+        }
+        
+        .toggle-switch.active::after {
+            left: 23px;
+        }
+        
+        /* Footer Nav */
+        .footer-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(15, 118, 110, 0.3);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 12px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn.active {
+            color: #10b981;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        /* Distraction Shield */
+        .distraction-shield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 9999;
+            gap: 20px;
+            color: #fff;
+        }
+        
+        .distraction-shield.active {
+            display: flex;
+        }
+        
+        .shield-timer {
+            font-size: 60px;
+            font-weight: 700;
+            color: #ef4444;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
 </head>
-<body>
-<div class="ambient-glow"></div>
-<div id="app">
-<!-- HEART CHECK -->
-<section id="heart" class="screen active">
-<h1 class="arabic">Bugun qalbing qanday?</h1>
-<div class="btn-group">
-<button class="btn" onclick="app.selectHeart('Xotirjam')">Xotirjam</button>
-<button class="btn" onclick="app.selectHeart('Charchagan')">Charchagan</button>
-<button class="btn" onclick="app.selectHeart('Parishon')">Parishon</button>
-<button class="btn" onclick="app.selectHeart('Og‘ir')">Og‘ir</button>
-</div>
-</section>
-<!-- NIYYAH -->
-<section id="niyyah" class="screen">
-<div class="arabic">بِسْمِ اللَّهِ</div>
-<p class="translation">Alloh roziligi uchun Qur’on bilan mashg‘ul bo‘lishni niyat qildim.</p>
-<button class="btn" style="opacity:0;" id="niyyah-btn" onclick="app.goFocus()">Boshlash</button>
-</section>
-<!-- FOCUS SELECTION -->
-<section id="focus" class="screen">
-<h1 class="arabic">Vaqtni belgilang</h1>
-<div class="btn-group">
-<button class="btn" onclick="app.startSession(5)">5 min</button>
-<button class="btn" onclick="app.startSession(10)">10 min</button>
-<button class="btn" onclick="app.startSession(15)">15 min</button>
-<button class="btn" onclick="app.startSession(25)">25 min</button>
-<button class="btn" onclick="app.startSession(30)">30 min</button>
-<button class="btn" onclick="app.startSession(45)">45 min</button>
-<button class="btn" onclick="app.startSession(60)">60 min</button>
-<button class="btn" onclick="app.startSession(90)">90 min</button>
-<button class="btn" onclick="app.startSession(120)">120 min</button>
-</div>
-</section>
-<!-- ACTIVE SESSION -->
-<section id="active" class="screen">
-<div class="breath"></div>
-<div class="timer" id="timer">00:00</div>
-<div class="progress" id="progress"></div>
-<button class="btn" onclick="app.endSession()">Yakunlash</button>
-</section>
-<!-- REFLECTION -->
-<section id="reflection" class="screen">
-<div id="reflection-content"></div>
-<button class="btn" onclick="app.reset()">Tinchlik</button>
-</section>
-</div>
+<body class="dark-mode">
+    <div id="app">
+        <!-- Dashboard -->
+        <div id="dashboard" class="screen active">
+            <div class="dashboard-header">
+                <h1>Nur Parvozi</h1>
+                <button class="settings-btn" onclick="app.showScreen('settings')">⚙️</button>
+            </div>
+            
+            <div class="streak-card">
+                <div class="streak-item">
+                    <div class="streak-number" id="streakDays">0</div>
+                    <div class="streak-label">Kun</div>
+                </div>
+                <div class="streak-item">
+                    <div class="streak-number" id="streakTotal">0</div>
+                    <div class="streak-label">Jami</div>
+                </div>
+                <div class="streak-item">
+                    <div class="streak-number" id="hifzCount">0</div>
+                    <div class="streak-label">Hifz</div>
+                </div>
+            </div>
+            
+            <div class="motivation-ayah" id="motivationAyah">
+                <div class="arabic">وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ</div>
+                <div class="translation">Balki siz biror narsani yomon ko'rib olishingiz mumkin, lekin u sizga yaxshi</div>
+            </div>
+            
+            <div class="daily-plan">
+                <h2>Bugungi Reja</h2>
+                <div id="planItems"></div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="app.startSession()">Boshlash</button>
+                <button class="btn btn-secondary" onclick="app.showScreen('hifzReview')">Tekshirish</button>
+            </div>
+        </div>
+        
+        <!-- Heart Check -->
+        <div id="heartCheck" class="screen">
+            <div class="heart-check-container">
+                <h1>Yuragingiz Holati?</h1>
+                <div class="moods">
+                    <button class="mood-btn" data-mood="anxious" onclick="app.setMood('anxious')">😰</button>
+                    <button class="mood-btn" data-mood="joyful" onclick="app.setMood('joyful')">😊</button>
+                    <button class="mood-btn" data-mood="repentant" onclick="app.setMood('repentant')">😔</button>
+                    <button class="mood-btn" data-mood="focused" onclick="app.setMood('focused')">🎯</button>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="app.proceedFromHeartCheck()">Davom Et</button>
+            </div>
+        </div>
+        
+        <!-- Niyyah -->
+        <div id="niyyah" class="screen">
+            <div class="niyyah-container">
+                <h1>Nimanisiz?</h1>
+                <div class="voice-input" id="voiceInput" onclick="app.toggleVoiceInput()">🎤</div>
+                <textarea class="text-input" id="niyyahText" placeholder="Sizning niyatiz..." style="display: none;"></textarea>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="app.submitNiyyah()">Boshlash</button>
+            </div>
+        </div>
+        
+        <!-- Focus Session -->
+        <div id="focusSession" class="screen">
+            <div class="session-info">
+                <p id="sessionMood"></p>
+                <p>Respiration & Zikr</p>
+            </div>
+            
+            <div class="breathing-circle"></div>
+            <div class="session-timer" id="sessionTimer">25:00</div>
+            <div class="zikr-display" id="zikrDisplay">سُبْحَانَ اللَّهِ</div>
+            
+            <div class="session-controls">
+                <button class="control-btn pause-btn" onclick="app.togglePause()" id="pauseBtn">⏸ Pauza</button>
+                <button class="control-btn end-btn" onclick="app.endSession()">🏁 Tugatish</button>
+            </div>
+        </div>
+        
+        <!-- Reflection -->
+        <div id="reflection" class="screen">
+            <div class="reflection-card">
+                <h2>Fikrlaringiz</h2>
+                <div class="reflection-ayah" id="reflectionAyah">الحمد لله</div>
+                <textarea class="reflection-input" id="reflectionText" placeholder="Bugun sizda nima o'zgardi?"></textarea>
+                <button class="btn btn-primary" style="width: 100%;" onclick="app.shareReflection()">Davom Et</button>
+            </div>
+        </div>
+        
+        <!-- Hifz Review -->
+        <div id="hifzReview" class="screen">
+            <h2 style="margin-bottom: 15px;">Memoriya Tekshirish</h2>
+            <div id="hifzItems"></div>
+        </div>
+        
+        <!-- Settings -->
+        <div id="settings" class="screen">
+            <h2 style="margin-bottom: 15px; color: #10b981;">Sozlamalar</h2>
+            
+            <div class="settings-section">
+                <h3>Til</h3>
+                <div class="setting-item">
+                    <span>Uzbek</span>
+                    <button class="toggle-switch active" onclick="app.setLanguage('uz')"></button>
+                </div>
+                <div class="setting-item">
+                    <span>English</span>
+                    <button class="toggle-switch" onclick="app.setLanguage('en')"></button>
+                </div>
+                <div class="setting-item">
+                    <span>Русский</span>
+                    <button class="toggle-switch" onclick="app.setLanguage('ru')"></button>
+                </div>
+                <div class="setting-item">
+                    <span>العربية</span>
+                    <button class="toggle-switch" onclick="app.setLanguage('ar')"></button>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>Afzalliklar</h3>
+                <div class="setting-item">
+                    <span>Vibration</span>
+                    <button class="toggle-switch active" id="vibrationToggle" onclick="app.toggleVibration()"></button>
+                </div>
+                <div class="setting-item">
+                    <span>Ovoz</span>
+                    <button class="toggle-switch active" id="soundToggle" onclick="app.toggleSound()"></button>
+                </div>
+                <div class="setting-item">
+                    <span>Distraction Shield</span>
+                    <button class="toggle-switch active" id="distractionToggle" onclick="app.toggleDistraction()"></button>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="app.showScreen('dashboard')">← Orqaga</button>
+        </div>
+        
+        <div class="footer-nav">
+            <button class="nav-btn active" onclick="app.showScreen('dashboard')">🏠</button>
+            <button class="nav-btn" onclick="app.showScreen('hifzReview')">📖</button>
+            <button class="nav-btn" onclick="app.showScreen('settings')">⚙️</button>
+        </div>
+    </div>
+    
+    <div class="distraction-shield" id="distractionShield">
+        <div class="shield-timer" id="shieldTimer">30</div>
+        <div>Diqqati yo'qotmang!</div>
+    </div>
 
-<script>
-const DB={
-verses:[
-{ar:"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",uz:"Ogoh bo‘lingki, Allohni zikr etish bilan qalblar orom olur."},
-{ar:"وَرَتِّلِ الْقُرآنَ تَرْتِيلًا",uz:"Qur’onni tartil bilan tilovat qiling."},
-{ar:"رَبِّ زِدْنِي عِلْمًا",uz:"Robbim, ilmimni ziyoda et."},
-{ar:"إِنَّ مَعَ الْعُسْرِ يُسْرًا",uz:"Har qiyinchilik bilan yengillik bordir."},
-{ar:"فَاذْكُرُونِي أَذْكُرْكُمْ",uz:"Meni eslangiz, men ham sizni eslayman."}],
-duas:[
-{ar:"اللهم أحي قلبي بالقرآن",uz:"Allohim, qalbimni Qur’on bilan tiriltir."},
-{ar:"رَبِّ اجْعَلْنِي مِنْ أَهْلِ الْقُرآنِ",uz:"Robbim, meni Qur’on ahlidan qil."},
-{ar:"اللهم اجعل نفسي مطمئنة",uz:"Allohim, nafsimni sokin qil."}],
-reflections:[
-"Bugun oz bo‘lsa ham baraka bor edi.",
-"Sukut qalbni yumshatdi.",
-"Qur’on — ruhning shifosi.",
-"Alloh niyatingizni qabul qilsin.",
-"Sokinlik — buyuk ne'mat."]
-};
+    <script>
+        // i18n Multilingual
+        const i18n = {
+            uz: {
+                planItems: ['📖 Bugun 1 juz', '🧘 20 daqiqa tadabbur', '🤲 Salat', '💭 Gratituda'],
+                zikrs: ['سُبْحَانَ اللَّهِ', 'الْحَمْدُ لِلَّهِ', 'لا إله إلا الله', 'اللَّهُ أَكْبَرُ', 'لا حول ولا قوة'],
+                ayahs: [
+                    {
+                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
+                        trans: 'Balki yomon ko\'rinib turayotgan narsa sizga yaxshi'
+                    },
+                    {
+                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
+                        trans: 'Qiyinchilik bilan birga osonlik ham bor'
+                    }
+                ]
+            },
+            en: {
+                planItems: ['📖 Memorize 1 juz', '🧘 20 min reflection', '🤲 Salat', '💭 Gratitude'],
+                zikrs: ['Subhan\'Allah', 'Alhamdulillah', 'La ilaha illallah', 'Allahu Akbar', 'La hawla wa la quwwata'],
+                ayahs: [
+                    {
+                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
+                        trans: 'Perhaps you hate something and it is good for you'
+                    },
+                    {
+                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
+                        trans: 'Indeed with hardship comes ease'
+                    }
+                ]
+            },
+            ru: {
+                planItems: ['📖 Выучить джуз', '🧘 20 мин медитации', '🤲 Намаз', '💭 Благодарность'],
+                zikrs: ['Субхан\'Аллах', 'Альхамду-ли-Ллах', 'Ля иляха иллаллах', 'Аллаху Акбар', 'Ля хавла'],
+                ayahs: [
+                    {
+                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
+                        trans: 'Возможно, вы ненавидите что-то, но оно хорошо для вас'
+                    },
+                    {
+                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
+                        trans: 'Воистину, с трудностью приходит облегчение'
+                    }
+                ]
+            },
+            ar: {
+                planItems: ['📖 حفظ جزء', '🧘 تأمل 20 دقيقة', '🤲 صلاة', '💭 شكر'],
+                zikrs: ['سبحان الله', 'الحمد لله', 'لا إله إلا الله', 'الله أكبر', 'لا حول ولا قوة'],
+                ayahs: [
+                    {
+                        arabic: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ',
+                        trans: 'وقد لا تحبون شيئاً وهو خير لكم'
+                    },
+                    {
+                        arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
+                        trans: 'فمع العسر يسراً'
+                    }
+                ]
+            }
+        };
 
-class TadabburApp{
-constructor(){
-this.state={heart:null,duration:0,remaining:0,interval:null,isActive:false};
-this.screens={
-heart:document.getElementById('heart'),
-niyyah:document.getElementById('niyyah'),
-focus:document.getElementById('focus'),
-active:document.getElementById('active'),
-reflection:document.getElementById('reflection')
-};
-this.timer=document.getElementById('timer');
-this.progress=document.getElementById('progress');
-this.niyBtn=document.getElementById('niyyah-btn');
-}
-show(id){
-Object.values(this.screens).forEach(s=>s.classList.remove('active'));
-this.screens[id].classList.add('active');
-}
-selectHeart(h){
-this.state.heart=h;
-this.show('niyyah');
-setTimeout(()=>{this.niyBtn.style.opacity=1;},2500);
-}
-goFocus(){this.show('focus');}
-startSession(mins){
-this.state.duration=mins*60;
-this.state.remaining=this.state.duration;
-this.state.isActive=true;
-this.show('active');
-const start=Date.now(),end=start+this.state.duration*1000;
-this.updateTimer(this.state.remaining);
-this.updateProgress(this.state.remaining);
-this.state.interval=setInterval(()=>{
-const now=Date.now();
-const rem=Math.max(0,Math.ceil((end-now)/1000));
-this.state.remaining=rem;
-this.updateTimer(rem);
-this.updateProgress(rem);
-if(rem<=0)this.endSession();
-},1000);
-}
-updateTimer(sec){
-const m=Math.floor(sec/60).toString().padStart(2,'0'),s=(sec%60).toString().padStart(2,'0');
-this.timer.innerText=`${m}:${s}`;
-}
-updateProgress(sec){
-const pct=((this.state.duration-sec)/this.state.duration)*100;
-this.progress.style.width=pct+'%';
-}
-endSession(){
-clearInterval(this.state.interval);
-this.state.isActive=false;
-this.show('reflection');
-this.renderReflection();
-}
-renderReflection(){
-const useDua=Math.random()>0.6;
-const content=useDua?DB.duas[Math.floor(Math.random()*DB.duas.length)]:DB.verses[Math.floor(Math.random()*DB.verses.length)];
-const reflection=DB.reflections[Math.floor(Math.random()*DB.reflections.length)];
-this.screens.reflection.innerHTML=`<div class="arabic">${content.ar}</div><div class="translation">${content.uz}</div><div class="reflection">${reflection}</div><button class="btn" onclick="app.reset()">Tinchlik</button>`;
-}
-reset(){
-this.show('heart');
-this.progress.style.width='0%';
-this.timer.innerText='00:00';
-this.state={heart:null,duration:0,remaining:0,interval:null,isActive:false};
-}
-}
+        // Main App Class
+        class NurParvozi {
+            constructor() {
+                this.language = localStorage.getItem('language') || 'uz';
+                this.currentMood = 'focused';
+                this.sessionActive = false;
+                this.sessionPaused = false;
+                this.sessionTime = 0;
+                this.vibrationEnabled = localStorage.getItem('vibration') !== 'false';
+                this.soundEnabled = localStorage.getItem('sound') !== 'false';
+                this.distractionEnabled = localStorage.getItem('distraction') !== 'false';
+                this.streakDays = parseInt(localStorage.getItem('streakDays') || '0');
+                this.totalSessions = parseInt(localStorage.getItem('totalSessions') || '0');
+                this.hifzCount = parseInt(localStorage.getItem('hifzCount') || '0');
+                this.distractionShieldActive = false;
+                this.isRecording = false;
+                
+                this.init();
+            }
+            
+            init() {
+                this.updateUI();
+                this.updateMotivationAyah();
+                this.generateDailyPlan();
+                this.setupVoiceRecognition();
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('data:application/javascript,self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>e.waitUntil(clients.claim()));self.addEventListener("fetch",e=>{});');
+                }
+            }
+            
+            updateUI() {
+                document.documentElement.dir = this.language === 'ar' ? 'rtl' : 'ltr';
+                document.getElementById('streakDays').textContent = this.streakDays;
+                document.getElementById('streakTotal').textContent = this.totalSessions;
+                document.getElementById('hifzCount').textContent = this.hifzCount;
+            }
+            
+            showScreen(screenId) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(screenId).classList.add('active');
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                const screenMap = { 'dashboard': 0, 'hifzReview': 1, 'settings': 2 };
+                if (screenMap[screenId] !== undefined) {
+                    document.querySelectorAll('.nav-btn')[screenMap[screenId]].classList.add('active');
+                }
+            }
+            
+            setLanguage(lang) {
+                this.language = lang;
+                localStorage.setItem('language', lang);
+                this.updateUI();
+                this.updateMotivationAyah();
+                this.generateDailyPlan();
+                document.querySelectorAll('.settings-section .toggle-switch').forEach((btn, idx) => {
+                    btn.classList.toggle('active', idx === ['uz', 'en', 'ru', 'ar'].indexOf(lang));
+                });
+            }
+            
+            setMood(mood) {
+                this.currentMood = mood;
+                document.querySelectorAll('.mood-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.mood === mood);
+                });
+            }
+            
+            updateMotivationAyah() {
+                const ayahs = i18n[this.language].ayahs;
+                const random = ayahs[Math.floor(Math.random() * ayahs.length)];
+                const motivationEl = document.getElementById('motivationAyah');
+                motivationEl.innerHTML = `<div class="arabic">${random.arabic}</div><div class="translation">${random.trans}</div>`;
+            }
+            
+            generateDailyPlan() {
+                const planItems = i18n[this.language].planItems;
+                const planEl = document.getElementById('planItems');
+                planEl.innerHTML = planItems.map(item => `<div class="plan-item">${item}</div>`).join('');
+            }
+            
+            startSession() {
+                this.showScreen('heartCheck');
+            }
+            
+            proceedFromHeartCheck() {
+                this.showScreen('niyyah');
+            }
+            
+            submitNiyyah() {
+                this.showScreen('focusSession');
+                this.initFocusSession();
+            }
+            
+            initFocusSession() {
+                this.sessionActive = true;
+                this.sessionPaused = false;
+                this.sessionTime = 25 * 60;
+                document.getElementById('sessionMood').textContent = this.currentMood + ' Mode';
+                this.startSessionTimer();
+                this.startZikrRotation();
+                this.vibrate([100, 50, 100]);
+            }
+            
+            startSessionTimer() {
+                const timerDisplay = document.getElementById('sessionTimer');
+                const timerInterval = setInterval(() => {
+                    if (this.sessionActive && !this.sessionPaused) {
+                        this.sessionTime--;
+                        const mins = Math.floor(this.sessionTime / 60);
+                        const secs = this.sessionTime % 60;
+                        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                        if (this.sessionTime === 0) {
+                            clearInterval(timerInterval);
+                            this.endSession();
+                        }
+                    }
+                }, 1000);
+            }
+            
+            startZikrRotation() {
+                const zikrDisplay = document.getElementById('zikrDisplay');
+                const zikrs = i18n[this.language].zikrs;
+                let currentZikr = 0;
+                setInterval(() => {
+                    if (this.sessionActive && !this.sessionPaused) {
+                        zikrDisplay.textContent = zikrs[currentZikr];
+                        currentZikr = (currentZikr + 1) % zikrs.length;
+                    }
+                }, 8000);
+            }
+            
+            togglePause() {
+                this.sessionPaused = !this.sessionPaused;
+                const pauseBtn = document.getElementById('pauseBtn');
+                pauseBtn.textContent = this.sessionPaused ? '▶️ Davom Et' : '⏸ Pauza';
+            }
+            
+            endSession() {
+                this.sessionActive = false;
+                this.totalSessions++;
+                this.streakDays++;
+                this.hifzCount++;
+                localStorage.setItem('totalSessions', this.totalSessions);
+                localStorage.setItem('streakDays', this.streakDays);
+                localStorage.setItem('hifzCount', this.hifzCount);
+                this.updateUI();
+                this.showScreen('reflection');
+                this.vibrate([100, 100, 100]);
+            }
+            
+            shareReflection() {
+                this.showScreen('dashboard');
+            }
+            
+            toggleVibration() {
+                this.vibrationEnabled = !this.vibrationEnabled;
+                localStorage.setItem('vibration', this.vibrationEnabled);
+                document.getElementById('vibrationToggle').classList.toggle('active');
+            }
+            
+            toggleSound() {
+                this.soundEnabled = !this.soundEnabled;
+                localStorage.setItem('sound', this.soundEnabled);
+                document.getElementById('soundToggle').classList.toggle('active');
+            }
+            
+            toggleDistraction() {
+                this.distractionEnabled = !this.distractionEnabled;
+                localStorage.setItem('distraction', this.distractionEnabled);
+                document.getElementById('distractionToggle').classList.toggle('active');
+            }
+            
+            setupVoiceRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition) {
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.onresult = (event) => {
+                        const transcript = Array.from(event.results).map(r => r[0].transcript).join('');
+                        document.getElementById('niyyahText').value = transcript;
+                    };
+                }
+            }
+            
+            toggleVoiceInput() {
+                const voiceInput = document.getElementById('voiceInput');
+                const niyyahText = document.getElementById('niyyahText');
+                if (!this.recognition) {
+                    niyyahText.style.display = 'block';
+                    return;
+                }
+                if (!this.isRecording) {
+                    this.isRecording = true;
+                    voiceInput.classList.add('recording');
+                    niyyahText.style.display = 'none';
+                    this.recognition.start();
+                } else {
+                    this.isRecording = false;
+                    voiceInput.classList.remove('recording');
+                    this.recognition.stop();
+                    niyyahText.style.display = 'block';
+                }
+            }
+            
+            vibrate(pattern = 100) {
+                if (this.vibrationEnabled && navigator.vibrate) {
+                    navigator.vibrate(pattern);
+                }
+            }
+        }
 
-const app=new TadabburApp();
-</script>
+        // Initialize app
+        let app = new NurParvozi();
+    </script>
 </body>
 </html>
