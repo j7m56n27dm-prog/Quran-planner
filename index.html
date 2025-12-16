@@ -1,341 +1,338 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Play, Pause, RotateCcw, CheckCircle2, LayoutGrid, 
-  BarChart2, Settings, Clock, Calendar, ChevronRight, 
-  BookOpen, Wind, Brain, Volume2, X, Plus, Trophy
+  BarChart2, User, Clock, Calendar, ChevronRight, 
+  BookOpen, Wind, Brain, Volume2, X, Plus, Trophy,
+  Zap, Bell, Moon
 } from 'lucide-react';
 
-/** --- DATA & CONTENT --- */
+/** --- MA'LUMOTLAR BAZASI --- */
 const HIKMATLAR = [
   "Agar Qur'on sening qalbingda bo'lsa, qayerda bo'lishingdan qat'iy nazar, Alloh sen bilan.",
-  "Ilm o'rganish igna bilan quduq qazish kabidir, sabr qil va natijani Allohdan so'ra.",
-  "Vaqtingni bekorga sarflama, chunki o'tgan vaqt qaytib kelmaydi.",
+  "Ilm o'rganish igna bilan quduq qazish kabidir.",
+  "Vaqtingni bekorga sarflama, o'tgan vaqt qaytib kelmaydi.",
   "Qur'on o'quvchi xor bo'lmas.",
-  "Bugungi vazifani ertaga qoldirma, ertaga boshqa vazifalar ham bo'ladi.",
-  "Yodlash qiyin bo'lsa, gunohlarni tark etish bilan yengilla.",
+  "Bugungi vazifani ertaga qoldirma.",
   "Muvaffaqiyat siri — davomiylikdadir.",
-  "Har bir harf uchun o'n savob bor. Bu savdo faqat Alloh bilandir.",
+  "Niyatingni to'g'rila, Alloh yo'lingni ochadi.",
 ];
 
 const MASLAHATLAR = [
-  "Telefoningizni 'Bezovta qilinmasin' rejimiga qo'ying.",
+  "Telefonni 'Bezovta qilinmasin' rejimiga qo'ying.",
   "Mushafga qarab o'qish xotirani kuchaytiradi.",
   "Ovoz chiqarib o'qish diqqatni jamlashga yordam beradi.",
-  "Har 25 daqiqada suv ichishni unutmang, miya suvni yaxshi ko'radi.",
-  "Darsni tongda, miya tiniq paytda qilishga harakat qiling."
+  "Har 25 daqiqada suv ichishni unutmang.",
+  "Eng qiyin darsdan boshlang."
 ];
 
-/** --- UTILS --- */
+/** --- YORDAMCHI FUNKSIYALAR --- */
 const formatTime = (seconds) => {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 };
 
-const playNotificationSound = () => {
-  // Oddiy "beep" ovozi brauzer orqali
+const playBeep = () => {
   try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.5);
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
+    
+    osc.start();
+    osc.stop(ctx.currentTime + 0.5);
   } catch (e) {
-    console.error("Audio error:", e);
+    console.error("Audio xatosi:", e);
   }
 };
 
-/** --- COMPONENTS --- */
+/** --- KOMPONENTLAR --- */
 
-// 1. INTRO SCREEN (NIYAT)
-const IntroScreen = ({ onStart }) => {
-  return (
-    <div className="fixed inset-0 z-50 bg-[#050505] flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-1000">
-      <div className="mb-8 relative">
-        <div className="absolute inset-0 bg-amber-500 blur-[60px] opacity-20 rounded-full animate-pulse"></div>
-        <BookOpen size={64} className="text-amber-400 relative z-10" />
-      </div>
-      <h1 className="text-2xl font-bold text-white mb-6 leading-relaxed font-serif">
-        "Allohning roziligi uchun Qur'onni takrorlashga va o'rganishga tayyorman"
-      </h1>
-      <button 
-        onClick={onStart}
-        className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full text-black font-bold text-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(245,158,11,0.3)]"
-      >
-        Bismilloh, Boshladim
-      </button>
-      <div className="mt-12 text-white/20 text-xs">
-        Made by ©️Muhammad Daler
-      </div>
+// 1. KIRISH EKRANI (NIYAT)
+const IntroScreen = ({ onStart }) => (
+  <div className="fixed inset-0 z-[60] bg-[#050505] flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-700">
+    <div className="mb-10 relative">
+      <div className="absolute inset-0 bg-amber-500 blur-[50px] opacity-20 animate-pulse"></div>
+      <BookOpen size={80} className="text-amber-400 relative z-10" />
     </div>
-  );
-};
+    <h1 className="text-3xl font-bold text-white mb-6 leading-relaxed font-serif">
+      Bismillah
+    </h1>
+    <p className="text-gray-300 text-lg mb-12 italic">
+      "Allohning roziligi uchun Qur'onni takrorlashga va o'rganishga tayyorman"
+    </p>
+    <button 
+      onClick={onStart}
+      className="px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full text-black font-bold text-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_30px_rgba(245,158,11,0.4)]"
+    >
+      Boshlash
+    </button>
+    <div className="absolute bottom-8 text-white/20 text-xs">
+      Made by ©️Muhammad Daler
+    </div>
+  </div>
+);
 
-// 2. BREATHING EXERCISE
+// 2. NAFAS MASHQI
 const BreathingExercise = ({ onFinish }) => {
-  const [phase, setPhase] = useState('Nafas oling'); // Nafas oling, Ushlab turing, Chiqaring
-  const [timeLeft, setTimeLeft] = useState(4); // 4-7-8 technique
-
+  const [text, setText] = useState("Nafas oling...");
+  const [scale, setScale] = useState(1);
+  
   useEffect(() => {
-    // Simple 4-7-8 cycle logic simulation for demo
-    const cycle = async () => {
-      setPhase('Nafas oling (Burundan)');
-      await new Promise(r => setTimeout(r, 4000));
-      setPhase('Ushlab turing');
-      await new Promise(r => setTimeout(r, 7000));
-      setPhase('Chiqaring (Og\'izdan)');
-      await new Promise(r => setTimeout(r, 8000));
-      onFinish();
-    };
-    cycle();
+    let step = 0;
+    const interval = setInterval(() => {
+      step++;
+      if (step === 1) {
+        setText("Nafas oling (4s)");
+        setScale(1.5);
+      } else if (step === 5) {
+        setText("Ushlab turing (7s)");
+        setScale(1.5); // O'zgarmaydi
+      } else if (step === 12) {
+        setText("Chiqaring (8s)");
+        setScale(1);
+      } else if (step === 20) {
+        clearInterval(interval);
+        onFinish();
+      }
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="absolute inset-0 bg-black/90 backdrop-blur-xl z-40 flex flex-col items-center justify-center animate-in fade-in">
-      <h2 className="text-xl text-white mb-8 font-medium">Diqqatni jamlash mashqi</h2>
+    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center">
+      <h2 className="text-2xl text-white mb-12 font-medium">Diqqatni jamlash</h2>
       
-      <div className="relative flex items-center justify-center">
-        <div className={`w-48 h-48 rounded-full border-2 border-emerald-500/30 absolute transition-all duration-[4000ms] ease-in-out ${phase.includes('oling') ? 'scale-150 opacity-50' : 'scale-100 opacity-20'}`}></div>
-        <div className={`w-32 h-32 bg-emerald-500 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all duration-[4000ms] ease-in-out ${phase.includes('oling') ? 'scale-125' : phase.includes('Chiqaring') ? 'scale-75' : 'scale-100'}`}>
-          <Wind size={32} className="text-black" />
+      <div className="relative flex items-center justify-center w-64 h-64">
+        <div 
+          className="absolute bg-emerald-500/30 rounded-full transition-all duration-[4000ms] ease-in-out"
+          style={{ width: `${scale * 100}%`, height: `${scale * 100}%` }}
+        ></div>
+        <div className="relative z-10 bg-emerald-500 w-32 h-32 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.5)]">
+          <Wind size={40} className="text-black" />
         </div>
       </div>
 
-      <p className="mt-12 text-2xl font-bold text-emerald-400 animate-pulse">{phase}</p>
-      <button onClick={onFinish} className="mt-8 text-white/40 text-sm hover:text-white underline">
-        Mashqni o'tkazib yuborish
+      <p className="mt-12 text-3xl font-bold text-emerald-400 animate-pulse">{text}</p>
+      
+      <button onClick={onFinish} className="mt-16 text-white/40 text-sm border-b border-transparent hover:border-white/40 pb-1">
+        O'tkazib yuborish
       </button>
     </div>
   );
 };
 
-// 3. MAIN APP
+// --- ASOSIY ILOVA ---
 const App = () => {
-  const [appState, setAppState] = useState('intro'); // intro, app
-  const [activeTab, setActiveTab] = useState('focus');
-  const [showBreathing, setShowBreathing] = useState(false);
-  
-  // -- TIMER STATE --
+  // STATE: Navigatsiya
+  const [introDone, setIntroDone] = useState(false);
+  const [activeTab, setActiveTab] = useState('focus'); // focus, planner, stats, profile
+  const [isBreathing, setIsBreathing] = useState(false);
+
+  // STATE: Taymer
   const [timerActive, setTimerActive] = useState(false);
-  const [timerMode, setTimerMode] = useState('focus'); // focus, break
-  const [focusDuration, setFocusDuration] = useState(25);
-  const [breakDuration, setBreakDuration] = useState(5);
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
+  const [mode, setMode] = useState('focus'); // focus, break
+  const [focusTime, setFocusTime] = useState(25);
+  const [breakTime, setBreakTime] = useState(5);
+  const [secondsLeft, setSecondsLeft] = useState(25 * 60);
   const timerRef = useRef(null);
 
-  // -- TASKS & STATS --
+  // STATE: Vazifalar
   const [tasks, setTasks] = useState([]);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [stats, setStats] = useState({ totalMinutes: 0, streak: 0, lastActive: '' });
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [randomQuote, setRandomQuote] = useState(HIKMATLAR[0]);
+  const [newTask, setNewTask] = useState("");
 
-  // -- INIT --
+  // STATE: Statistika
+  const [stats, setStats] = useState({ totalMinutes: 0, completedTasks: 0 });
+  
+  // INIT
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem('q_tasks') || '[]');
-    const savedStats = JSON.parse(localStorage.getItem('q_stats') || '{"totalMinutes":0,"streak":0,"lastActive":""}');
-    setTasks(savedTasks);
-    setStats(savedStats);
-    
-    // Request Notification Permission on load
-    if ('Notification' in window) {
-      Notification.requestPermission();
-    }
+    const savedTasks = localStorage.getItem('md_tasks');
+    const savedStats = localStorage.getItem('md_stats');
+    if (savedTasks) setTasks(JSON.parse(savedTasks));
+    if (savedStats) setStats(JSON.parse(savedStats));
   }, []);
 
-  // -- SAVE --
+  // SAVE
   useEffect(() => {
-    localStorage.setItem('q_tasks', JSON.stringify(tasks));
-    localStorage.setItem('q_stats', JSON.stringify(stats));
+    localStorage.setItem('md_tasks', JSON.stringify(tasks));
+    localStorage.setItem('md_stats', JSON.stringify(stats));
   }, [tasks, stats]);
 
-  // -- TIMER LOGIC --
+  // TIMER LOGIC
   useEffect(() => {
-    if (timerActive && timeLeft > 0) {
+    if (timerActive && secondsLeft > 0) {
       timerRef.current = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
+        setSecondsLeft((prev) => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0 && timerActive) {
-      handleTimerComplete();
+    } else if (secondsLeft === 0 && timerActive) {
+      handleTimerFinish();
     }
     return () => clearInterval(timerRef.current);
-  }, [timerActive, timeLeft]);
+  }, [timerActive, secondsLeft]);
 
-  const handleTimerComplete = () => {
+  const handleTimerFinish = () => {
     setTimerActive(false);
-    playNotificationSound();
-    
-    // System Notification
-    if (Notification.permission === 'granted') {
-      new Notification(timerMode === 'focus' ? "MashaaAlloh! Vaqt tugadi." : "Dam olish tugadi!", {
-        body: timerMode === 'focus' ? "Darsni tugatdingiz. Endi biroz dam oling." : "Yana ilm olishga qaytamiz!",
-        icon: "/icon.png"
-      });
-    }
+    playBeep();
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
 
-    if (timerMode === 'focus') {
-      // Update Stats
-      const newStats = { ...stats, totalMinutes: stats.totalMinutes + focusDuration };
-      setStats(newStats);
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 5000);
-      setRandomQuote(HIKMATLAR[Math.floor(Math.random() * HIKMATLAR.length)]);
-      
-      // Avto Breakga o'tishni taklif qilish mumkin, hozircha qo'lda
-      alert(`Vaqt tugadi! \n\nHikmat: ${randomQuote}`);
+    if (mode === 'focus') {
+      alert(`MashaAlloh! ${focusTime} daqiqa ilm oldingiz.\n\nHikmat: "${HIKMATLAR[Math.floor(Math.random() * HIKMATLAR.length)]}"`);
+      setStats(prev => ({ ...prev, totalMinutes: prev.totalMinutes + focusTime }));
+      setMode('break');
+      setSecondsLeft(breakTime * 60);
     } else {
-      alert("Dam olish vaqti tugadi. Bismilloh, davom ettiramiz!");
+      alert("Dam olish tugadi. Davom etamizmi?");
+      setMode('focus');
+      setSecondsLeft(focusTime * 60);
     }
   };
 
   const toggleTimer = () => {
-    if (!timerActive && timerMode === 'focus' && timeLeft === focusDuration * 60) {
-      // Start bosilganda birinchi marta Breathing mashqini taklif qilish
-      if (!showBreathing) {
-        // Logika: User xohlasa breathing qiladi, biz shunchaki timer yoqamiz
-      }
+    if (!timerActive && mode === 'focus' && secondsLeft === focusTime * 60 && !isBreathing) {
+      // Birinchi marta boshlaganda nafas mashqini taklif qilish (optional logic here)
+      // Hozircha to'g'ridan-to'g'ri boshlaymiz, lekin "Nafas" tugmasi alohida
     }
     setTimerActive(!timerActive);
   };
 
   const resetTimer = () => {
     setTimerActive(false);
-    setTimeLeft(timerMode === 'focus' ? focusDuration * 60 : breakDuration * 60);
+    setSecondsLeft(mode === 'focus' ? focusTime * 60 : breakTime * 60);
   };
 
-  const changeMode = (mode) => {
-    setTimerMode(mode);
-    setTimerActive(false);
-    setTimeLeft(mode === 'focus' ? focusDuration * 60 : breakDuration * 60);
+  const startBreathing = () => {
+    setIsBreathing(true);
   };
 
-  // -- TASK HANDLERS --
+  const finishBreathing = () => {
+    setIsBreathing(false);
+    setTimerActive(true); // Avtomatik start
+  };
+
+  // TASKS LOGIC
   const addTask = () => {
-    if (!newTaskTitle.trim()) return;
-    setTasks([...tasks, { id: Date.now(), title: newTaskTitle, completed: false }]);
-    setNewTaskTitle('');
+    if (!newTask.trim()) return;
+    setTasks([...tasks, { id: Date.now(), title: newTask, completed: false }]);
+    setNewTask("");
   };
 
   const toggleTask = (id) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-    if (navigator.vibrate) navigator.vibrate(20);
+    const updated = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+    setTasks(updated);
+    // Agar bajarilyapti deb belgilansa statga qo'shish
+    const isCompletedNow = updated.find(t => t.id === id).completed;
+    if (isCompletedNow) {
+       setStats(prev => ({ ...prev, completedTasks: prev.completedTasks + 1 }));
+       if (navigator.vibrate) navigator.vibrate(50);
+    }
   };
 
-  const startFocusWithBreathing = () => {
-    setShowBreathing(true);
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(t => t.id !== id));
   };
 
-  const onBreathingFinish = () => {
-    setShowBreathing(false);
-    setTimerActive(true); // Avtomatik timerni boshlash
-  };
+  // --- RENDER BO'LIMLARI ---
 
-  // --- RENDER ---
-
-  if (appState === 'intro') {
-    return <IntroScreen onStart={() => setAppState('app')} />;
-  }
+  if (!introDone) return <IntroScreen onStart={() => setIntroDone(true)} />;
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white font-sans overflow-hidden selection:bg-amber-500/30">
+    <div className="min-h-screen bg-[#09090b] text-white font-sans overflow-hidden selection:bg-amber-500/30 flex flex-col">
       
-      {/* Dynamic Ambient Background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className={`absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b ${timerActive ? 'from-amber-900/10' : 'from-blue-900/10'} to-transparent transition-colors duration-1000`}></div>
+      {isBreathing && <BreathingExercise onFinish={finishBreathing} />}
+
+      {/* BACKGROUND */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className={`absolute top-0 left-0 w-full h-[60%] bg-gradient-to-b ${mode === 'focus' ? 'from-amber-900/20' : 'from-emerald-900/20'} to-transparent transition-colors duration-1000`}></div>
       </div>
 
-      {showBreathing && <BreathingExercise onFinish={onBreathingFinish} />}
+      {/* HEADER */}
+      <header className="flex justify-between items-center p-6 pt-8 z-10 sticky top-0 bg-[#09090b]/80 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-black font-bold font-serif">Q</div>
+          <span className="font-bold text-lg tracking-tight">Qur'on Focus</span>
+        </div>
+        <div className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+          <Zap size={14} className="text-amber-400 fill-amber-400" />
+          <span className="text-xs font-bold">{Math.floor(stats.totalMinutes / 60)}h {stats.totalMinutes % 60}m</span>
+        </div>
+      </header>
 
-      {/* --- CONTENT --- */}
-      <main className="relative z-10 h-screen flex flex-col pb-24 overflow-y-auto">
+      {/* MAIN CONTENT AREA */}
+      <main className="flex-1 overflow-y-auto pb-32 z-10 px-6">
         
-        {/* HEADER */}
-        <header className="px-6 py-4 flex justify-between items-center bg-white/5 backdrop-blur-md sticky top-0 z-20 border-b border-white/5">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center font-bold text-black font-serif">
-              Q
-            </div>
-            <span className="font-bold text-lg">Qur'on Focus</span>
-          </div>
-          <div className="flex items-center gap-2 bg-[#1a1a1a] px-3 py-1 rounded-full border border-white/10">
-            <Trophy size={14} className="text-amber-400" />
-            <span className="text-xs font-bold">{Math.floor(stats.totalMinutes / 60)}s {stats.totalMinutes % 60}m</span>
-          </div>
-        </header>
-
-        {/* --- TABS --- */}
-
-        {/* 1. FOCUS TAB */}
+        {/* === 1. FOCUS TAB === */}
         {activeTab === 'focus' && (
-          <div className="flex flex-col items-center justify-center flex-1 px-6 py-4 animate-in slide-in-from-right-4 duration-500">
-            
+          <div className="flex flex-col items-center pt-4 animate-in slide-in-from-bottom-4 duration-500">
             {/* Mode Switcher */}
-            <div className="flex bg-[#1a1a1a] p-1 rounded-full mb-8 border border-white/10">
+            <div className="flex bg-[#1a1a1a] p-1 rounded-full mb-8 border border-white/10 w-full max-w-xs">
               <button 
-                onClick={() => changeMode('focus')}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${timerMode === 'focus' ? 'bg-amber-500 text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                onClick={() => { setMode('focus'); setTimerActive(false); setSecondsLeft(focusTime*60); }}
+                className={`flex-1 py-2 rounded-full text-sm font-bold transition-all ${mode === 'focus' ? 'bg-amber-500 text-black' : 'text-gray-400'}`}
               >
                 Tilovat
               </button>
               <button 
-                onClick={() => changeMode('break')}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${timerMode === 'break' ? 'bg-emerald-500 text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                onClick={() => { setMode('break'); setTimerActive(false); setSecondsLeft(breakTime*60); }}
+                className={`flex-1 py-2 rounded-full text-sm font-bold transition-all ${mode === 'break' ? 'bg-emerald-500 text-black' : 'text-gray-400'}`}
               >
                 Dam olish
               </button>
             </div>
 
-            {/* Smart Advice Chip */}
-            <div className="mb-8 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-xl max-w-sm text-center">
-              <p className="text-xs text-blue-200 flex items-center justify-center gap-2">
-                <Brain size={12} />
-                {timerActive ? "Chuqur diqqat rejimi aktiv" : MASLAHATLAR[Math.floor(Math.random() * MASLAHATLAR.length)]}
-              </p>
+            {/* Maslahat Chip */}
+            <div className="mb-6 px-4 py-2 bg-blue-500/10 rounded-xl border border-blue-500/20">
+               <p className="text-xs text-blue-200 flex items-center gap-2">
+                 <Brain size={12} />
+                 {timerActive ? "Chuqur diqqat rejimi..." : MASLAHATLAR[Math.floor(Math.random() * MASLAHATLAR.length)]}
+               </p>
             </div>
 
-            {/* Timer Display */}
-            <div className="relative mb-10 group">
-              <div className={`absolute inset-0 rounded-full blur-[80px] opacity-20 transition-all duration-1000 ${timerActive ? 'bg-amber-500 scale-110' : 'bg-gray-600 scale-100'}`}></div>
-              <div className="relative w-72 h-72 rounded-full border-8 border-[#1a1a1a] bg-[#09090b] flex flex-col items-center justify-center shadow-2xl z-10">
-                 {/* Progress Ring simulation */}
-                 <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
+            {/* Timer Circle */}
+            <div className="relative mb-10">
+              {/* Glow */}
+              <div className={`absolute inset-0 rounded-full blur-[60px] opacity-30 transition-all duration-1000 ${timerActive ? (mode === 'focus' ? 'bg-amber-500' : 'bg-emerald-500') : 'bg-transparent'}`}></div>
+              
+              <div className="relative w-72 h-72 rounded-full border-8 border-[#1a1a1a] bg-[#09090b] flex flex-col items-center justify-center shadow-2xl">
+                <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
                    <circle cx="144" cy="144" r="130" fill="transparent" stroke="#1a1a1a" strokeWidth="4" />
                    <circle 
                       cx="144" cy="144" r="130" fill="transparent" 
-                      stroke={timerMode === 'focus' ? '#f59e0b' : '#10b981'} strokeWidth="4" 
+                      stroke={mode === 'focus' ? '#f59e0b' : '#10b981'} strokeWidth="4" 
                       strokeDasharray={2 * Math.PI * 130}
-                      strokeDashoffset={2 * Math.PI * 130 * (1 - timeLeft / (timerMode === 'focus' ? focusDuration * 60 : breakDuration * 60))}
+                      strokeDashoffset={2 * Math.PI * 130 * (1 - secondsLeft / (mode === 'focus' ? focusTime * 60 : breakTime * 60))}
                       strokeLinecap="round"
-                      className="transition-all duration-1000"
+                      className="transition-all duration-1000 ease-linear"
                    />
-                 </svg>
-                 
-                 <span className="text-7xl font-bold font-mono tracking-tighter tabular-nums text-white">
-                   {formatTime(timeLeft)}
-                 </span>
-                 <span className="text-white/40 text-sm mt-2 uppercase tracking-widest font-medium">
-                   {timerActive ? (timerMode === 'focus' ? 'O\'qimoqdasiz...' : 'Dam olmoqdasiz') : 'Tayyormisiz?'}
-                 </span>
+                </svg>
+                <span className="text-7xl font-bold font-mono tracking-tighter tabular-nums">
+                  {formatTime(secondsLeft)}
+                </span>
+                <span className="text-white/40 text-xs mt-2 font-medium uppercase tracking-widest">
+                  {timerActive ? (mode === 'focus' ? "O'qimoqdasiz" : "Dam olish") : "Tayyormisiz?"}
+                </span>
               </div>
             </div>
 
             {/* Controls */}
             <div className="flex items-center gap-6 mb-8">
-              <button onClick={resetTimer} className="p-4 rounded-full bg-[#1a1a1a] text-gray-400 hover:text-white transition active:scale-95 border border-white/5">
+              <button onClick={resetTimer} className="p-4 rounded-full bg-[#1a1a1a] text-gray-400 border border-white/10 hover:text-white transition active:scale-95">
                 <RotateCcw size={24} />
               </button>
-              
-              {!timerActive && timerMode === 'focus' && timeLeft === focusDuration * 60 ? (
-                 <button 
-                  onClick={startFocusWithBreathing}
-                  className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold text-lg shadow-lg shadow-amber-500/20 active:scale-95 transition flex items-center gap-2"
+
+              {!timerActive && mode === 'focus' && secondsLeft === focusTime * 60 ? (
+                <button 
+                  onClick={startBreathing}
+                  className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold text-lg shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2"
                 >
                   <Wind size={20} />
                   Nafas & Boshlash
@@ -350,113 +347,207 @@ const App = () => {
               )}
             </div>
 
-            {/* Timer Settings (Sliders) - Only visible when paused */}
+            {/* Sliders (faqat pauzada) */}
             {!timerActive && (
-              <div className="w-full max-w-xs bg-[#1a1a1a] p-4 rounded-2xl border border-white/5 animate-in fade-in">
-                <div className="flex justify-between text-xs text-gray-400 mb-2">
-                  <span>Focus: {focusDuration}m</span>
-                  <span>Dam olish: {breakDuration}m</span>
+              <div className="w-full max-w-xs bg-[#1a1a1a] p-5 rounded-2xl border border-white/5 animate-in fade-in">
+                <div className="mb-4">
+                  <div className="flex justify-between text-xs text-gray-400 mb-2">
+                    <span>Tilovat vaqti</span>
+                    <span className="text-white">{focusTime} daqiqa</span>
+                  </div>
+                  <input 
+                    type="range" min="5" max="60" step="5"
+                    value={focusTime} 
+                    onChange={(e) => { 
+                      const val = Number(e.target.value); 
+                      setFocusTime(val); 
+                      if(mode === 'focus') setSecondsLeft(val * 60); 
+                    }}
+                    className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                  />
                 </div>
-                <input 
-                  type="range" min="5" max="60" step="5"
-                  value={focusDuration} onChange={(e) => { setFocusDuration(Number(e.target.value)); setTimeLeft(Number(e.target.value) * 60); }}
-                  className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-amber-500 mb-4"
-                />
-                <input 
-                  type="range" min="1" max="15"
-                  value={breakDuration} onChange={(e) => setBreakDuration(Number(e.target.value))}
-                  className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                />
+                <div>
+                  <div className="flex justify-between text-xs text-gray-400 mb-2">
+                    <span>Dam olish</span>
+                    <span className="text-white">{breakTime} daqiqa</span>
+                  </div>
+                  <input 
+                    type="range" min="1" max="15"
+                    value={breakTime} 
+                    onChange={(e) => { 
+                      const val = Number(e.target.value); 
+                      setBreakTime(val); 
+                      if(mode === 'break') setSecondsLeft(val * 60); 
+                    }}
+                    className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                  />
+                </div>
               </div>
             )}
           </div>
         )}
 
-        {/* 2. PLANNER TAB */}
+        {/* === 2. PLANNER TAB === */}
         {activeTab === 'planner' && (
-          <div className="px-6 py-6 space-y-6 animate-in slide-in-from-right-4 duration-500">
-            <div className="bg-gradient-to-br from-[#1a1a1a] to-black border border-white/10 rounded-3xl p-6 relative overflow-hidden">
-              <div className="absolute right-0 top-0 p-4 opacity-10"><BookOpen size={80} /></div>
-              <h3 className="text-gray-400 text-xs font-medium uppercase mb-1">Bugungi Hikmat</h3>
-              <p className="text-lg font-medium text-white italic leading-relaxed">"{randomQuote}"</p>
+          <div className="pt-4 space-y-6 animate-in slide-in-from-right-4 duration-300">
+             {/* Hikmat Card */}
+             <div className="bg-gradient-to-br from-[#1a1a1a] to-black border border-white/10 rounded-3xl p-6 relative overflow-hidden group">
+                <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition"><BookOpen size={80} /></div>
+                <h3 className="text-amber-500 text-xs font-bold uppercase tracking-wider mb-2">Bugungi Hikmat</h3>
+                <p className="text-lg font-medium text-gray-200 italic leading-relaxed">"{HIKMATLAR[0]}"</p>
+             </div>
+
+             {/* Input */}
+             <div className="flex gap-2">
+               <input 
+                 type="text" 
+                 value={newTask}
+                 onChange={(e) => setNewTask(e.target.value)}
+                 placeholder="Yangi vazifa (masalan: Yosin surasi)"
+                 className="flex-1 bg-[#1a1a1a] border border-white/10 rounded-2xl px-5 text-sm focus:outline-none focus:border-amber-500 transition h-14"
+                 onKeyPress={(e) => e.key === 'Enter' && addTask()}
+               />
+               <button onClick={addTask} className="h-14 w-14 bg-amber-500 rounded-2xl flex items-center justify-center text-black hover:bg-amber-400 active:scale-95 transition">
+                 <Plus size={28} />
+               </button>
+             </div>
+
+             {/* List */}
+             <div className="space-y-3 pb-8">
+               {tasks.length === 0 ? (
+                 <div className="text-center py-10 opacity-40 text-sm">Vazifalar yo'q. Bugun nima o'qiymiz?</div>
+               ) : (
+                 tasks.map(task => (
+                   <div 
+                     key={task.id}
+                     className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${task.completed ? 'bg-emerald-900/10 border-emerald-500/20 opacity-60' : 'bg-[#1a1a1a] border-white/5 hover:border-white/10'}`}
+                   >
+                     <div className="flex items-center gap-4 cursor-pointer flex-1" onClick={() => toggleTask(task.id)}>
+                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${task.completed ? 'bg-emerald-500 border-emerald-500' : 'border-gray-600'}`}>
+                         {task.completed && <CheckCircle2 size={14} className="text-white" />}
+                       </div>
+                       <span className={`text-base font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-200'}`}>{task.title}</span>
+                     </div>
+                     <button onClick={() => deleteTask(task.id)} className="p-2 text-gray-600 hover:text-red-400"><X size={18} /></button>
+                   </div>
+                 ))
+               )}
+             </div>
+          </div>
+        )}
+
+        {/* === 3. STATS TAB === */}
+        {activeTab === 'stats' && (
+          <div className="pt-4 space-y-6 animate-in slide-in-from-right-4 duration-300">
+            <h2 className="text-2xl font-bold">Natijalar</h2>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-[#1a1a1a] p-6 rounded-3xl border border-white/10 flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-500 mb-3"><Clock size={24} /></div>
+                <h3 className="text-3xl font-bold text-white">{Math.floor(stats.totalMinutes / 60)}<span className="text-sm text-gray-500 font-normal"> soat</span></h3>
+                <p className="text-gray-500 text-xs mt-1">Jami sarflangan vaqt</p>
+              </div>
+              <div className="bg-[#1a1a1a] p-6 rounded-3xl border border-white/10 flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center text-emerald-500 mb-3"><CheckCircle2 size={24} /></div>
+                <h3 className="text-3xl font-bold text-white">{stats.completedTasks}</h3>
+                <p className="text-gray-500 text-xs mt-1">Bajarilgan vazifalar</p>
+              </div>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold">Vazifalar</h3>
-                <span className="text-xs text-gray-500">{tasks.filter(t => t.completed).length}/{tasks.length} bajarildi</span>
-              </div>
-
-              {/* Add Task Input */}
-              <div className="flex gap-2 mb-4">
-                <input 
-                  type="text" 
-                  value={newTaskTitle}
-                  onChange={(e) => setNewTaskTitle(e.target.value)}
-                  placeholder="Yangi sura yoki vazifa..."
-                  className="flex-1 bg-[#1a1a1a] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition"
-                  onKeyPress={(e) => e.key === 'Enter' && addTask()}
-                />
-                <button 
-                  onClick={addTask}
-                  className="p-3 bg-amber-500 text-black rounded-xl hover:bg-amber-400 transition"
-                >
-                  <Plus size={24} />
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                {tasks.length === 0 ? (
-                  <div className="text-center py-10 opacity-30">Vazifalar yo'q</div>
-                ) : (
-                  tasks.map(task => (
+            {/* Oddiy Chart Simulyatsiyasi */}
+            <div className="bg-[#1a1a1a] p-6 rounded-3xl border border-white/10">
+              <h3 className="text-sm font-medium text-gray-400 mb-6">Haftalik faollik</h3>
+              <div className="flex items-end justify-between h-32 gap-2">
+                {[30, 45, 20, 60, 50, 80, 40].map((h, i) => (
+                  <div key={i} className="flex flex-col items-center gap-2 flex-1">
                     <div 
-                      key={task.id}
-                      onClick={() => toggleTask(task.id)}
-                      className={`flex items-center gap-4 p-4 rounded-2xl border transition-all cursor-pointer ${task.completed ? 'bg-emerald-900/10 border-emerald-500/20 opacity-60' : 'bg-[#1a1a1a] border-white/5 hover:border-white/10'}`}
-                    >
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${task.completed ? 'bg-emerald-500 border-emerald-500' : 'border-gray-600'}`}>
-                        {task.completed && <CheckCircle2 size={14} className="text-white" />}
-                      </div>
-                      <span className={`text-base ${task.completed ? 'line-through text-gray-500' : 'text-gray-200'}`}>{task.title}</span>
-                    </div>
-                  ))
-                )}
+                      className={`w-full rounded-t-lg transition-all hover:opacity-80 ${i === 5 ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'bg-gray-700'}`} 
+                      style={{ height: `${h}%` }}
+                    ></div>
+                    <span className="text-[10px] text-gray-500">{['D', 'S', 'C', 'P', 'J', 'S', 'Y'][i]}</span>
+                  </div>
+                ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* === 4. PROFILE/SETTINGS TAB === */}
+        {activeTab === 'profile' && (
+          <div className="pt-4 space-y-6 animate-in slide-in-from-right-4 duration-300">
+            <div className="text-center py-8">
+              <div className="w-24 h-24 bg-gradient-to-tr from-amber-400 to-orange-600 rounded-full mx-auto p-1 mb-4">
+                <div className="w-full h-full bg-[#09090b] rounded-full flex items-center justify-center">
+                  <User size={40} className="text-gray-400" />
+                </div>
+              </div>
+              <h2 className="text-xl font-bold">Foydalanuvchi</h2>
+              <p className="text-amber-500 text-sm font-medium">Premium A'zo</p>
+            </div>
+
+            <div className="bg-[#1a1a1a] rounded-3xl overflow-hidden border border-white/10">
+              <button onClick={() => alert('Bildirishnomalar yoqildi!')} className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition border-b border-white/5">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><Bell size={20} /></div>
+                  <span className="text-sm font-medium">Eslatmalar</span>
+                </div>
+                <ChevronRight size={16} className="text-gray-600" />
+              </button>
+              <button className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><Moon size={20} /></div>
+                  <span className="text-sm font-medium">Tungi rejim (Avto)</span>
+                </div>
+                <span className="text-xs text-gray-500">Doimiy</span>
+              </button>
+            </div>
+
+            <div className="text-center pt-8">
+              <p className="text-white/20 text-xs">Versiya 3.0 (2025)</p>
+              <p className="text-white/20 text-xs mt-1">Made by ©️Muhammad Daler</p>
             </div>
           </div>
         )}
 
       </main>
 
-      {/* --- BOTTOM NAVIGATION (Glassmorphism) --- */}
-      <div className="fixed bottom-6 left-6 right-6 h-[72px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-[32px] flex items-center justify-around px-2 shadow-2xl z-50">
+      {/* --- BOTTOM NAVIGATION --- */}
+      <div className="fixed bottom-6 left-6 right-6 h-[72px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-[32px] flex items-center justify-between px-4 shadow-2xl z-50">
+        
         <button 
           onClick={() => setActiveTab('planner')} 
-          className={`p-3 rounded-full transition-all duration-300 flex flex-col items-center gap-1 ${activeTab === 'planner' ? 'text-amber-400' : 'text-gray-500 hover:text-white'}`}
+          className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'planner' ? 'text-amber-400 -translate-y-1' : 'text-gray-500 hover:text-gray-300'}`}
         >
-          <LayoutGrid size={24} className={activeTab === 'planner' ? 'fill-current' : ''} />
-          <span className="text-[10px] font-medium">Reja</span>
+          <LayoutGrid size={22} className={activeTab === 'planner' ? 'fill-current' : ''} />
+          {activeTab === 'planner' && <span className="text-[10px] font-bold">Reja</span>}
         </button>
 
-        <div className="relative -top-6">
-          <button 
-            onClick={() => setActiveTab('focus')}
-            className={`w-16 h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all duration-300 border-4 border-[#09090b] ${activeTab === 'focus' ? 'bg-amber-400 text-black scale-110' : 'bg-[#1a1a1a] text-amber-500'}`}
-          >
+        <button 
+          onClick={() => setActiveTab('focus')} 
+          className="relative -top-6 mx-2"
+        >
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center border-4 border-[#09090b] transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] ${activeTab === 'focus' ? 'bg-amber-400 text-black scale-110' : 'bg-[#1a1a1a] text-amber-500'}`}>
             <Clock size={28} className={activeTab === 'focus' ? 'fill-current animate-pulse' : ''} />
-          </button>
-        </div>
+          </div>
+        </button>
 
         <button 
           onClick={() => setActiveTab('stats')} 
-          className={`p-3 rounded-full transition-all duration-300 flex flex-col items-center gap-1 ${activeTab === 'stats' ? 'text-amber-400' : 'text-gray-500 hover:text-white'}`}
+          className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'stats' ? 'text-amber-400 -translate-y-1' : 'text-gray-500 hover:text-gray-300'}`}
         >
-          <BarChart2 size={24} className={activeTab === 'stats' ? 'fill-current' : ''} />
-          <span className="text-[10px] font-medium">Hisob</span>
+          <BarChart2 size={22} className={activeTab === 'stats' ? 'fill-current' : ''} />
+          {activeTab === 'stats' && <span className="text-[10px] font-bold">Hisob</span>}
         </button>
-      </div>
 
+        <button 
+          onClick={() => setActiveTab('profile')} 
+          className={`flex-1 flex flex-col items-center gap-1 transition-all ${activeTab === 'profile' ? 'text-amber-400 -translate-y-1' : 'text-gray-500 hover:text-gray-300'}`}
+        >
+          <User size={22} className={activeTab === 'profile' ? 'fill-current' : ''} />
+          {activeTab === 'profile' && <span className="text-[10px] font-bold">Profil</span>}
+        </button>
+
+      </div>
     </div>
   );
 };
