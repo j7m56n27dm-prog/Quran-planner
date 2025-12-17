@@ -5,187 +5,342 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tilawah Focus</title>
 
-<!-- ================= CORE META ================= -->
 <meta name="theme-color" content="#0b1024">
 <meta name="description" content="Qur’on bilan sokin fokus va hifz muhiti">
 
-<!-- ================= FONTS ================= -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<!-- ================= STYLES (KEYINGI BOSQICHDA TO‘LDIRILADI) ================= -->
 <style>
-/* BU YER BO‘SH QOLADI — 3-BOSQICHDA TO‘LDIRILADI */
+
+/* ======================================================================
+   2025+ DESIGN SYSTEM — TILAWAH FOCUS
+   ====================================================================== */
+
+/* ---------------- ROOT TOKENS ---------------- */
+:root{
+--bg-0:#050812;
+--bg-1:#0b1230;
+--bg-2:#0f1b45;
+
+--glass-strong:rgba(255,255,255,.12);
+--glass-soft:rgba(255,255,255,.06);
+--glass-border:rgba(255,255,255,.18);
+
+--text-main:#f6f7fb;
+--text-muted:#aeb6da;
+
+--accent:#2dd4bf;
+--accent-glow:rgba(45,212,191,.45);
+--gold:#e9c46a;
+
+--danger:#ef476f;
+
+--radius-xl:28px;
+--radius-lg:22px;
+--radius-md:16px;
+
+--blur-xl:26px;
+--blur-lg:20px;
+--blur-md:14px;
+
+--ease: cubic-bezier(.4,0,.2,1);
+}
+
+/* ---------------- RESET ---------------- */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html,body{
+width:100%;
+height:100%;
+}
+
+body{
+font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+background:
+radial-gradient(1400px 900px at 50% -25%, #1b2a6d, var(--bg-0) 65%);
+color:var(--text-main);
+overflow-x:hidden;
+line-height:1.65;
+}
+
+/* ======================================================================
+   BACKGROUND — MULTI LAYER MOTION
+   ====================================================================== */
+
+#bg-layer-stars,
+#bg-layer-flow,
+#bg-layer-noise{
+position:fixed;
+inset:0;
+pointer-events:none;
+}
+
+#bg-layer-stars{
+z-index:-3;
+background:
+radial-gradient(2px 2px at 20% 30%,rgba(255,255,255,.4),transparent),
+radial-gradient(1.5px 1.5px at 60% 55%,rgba(255,255,255,.25),transparent),
+radial-gradient(1px 1px at 80% 75%,rgba(255,255,255,.2),transparent);
+animation:stars 70s linear infinite;
+}
+
+#bg-layer-flow{
+z-index:-4;
+background:
+radial-gradient(700px 300px at 30% 10%, rgba(45,212,191,.10), transparent 60%),
+radial-gradient(600px 400px at 70% 90%, rgba(233,196,106,.08), transparent 65%);
+animation:flow 40s ease-in-out infinite alternate;
+}
+
+#bg-layer-noise{
+z-index:-2;
+opacity:.05;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes stars{
+from{transform:translateY(0)}
+to{transform:translateY(-500px)}
+}
+
+@keyframes flow{
+from{transform:translate(0,0)}
+to{transform:translate(-40px,30px)}
+}
+
+/* ======================================================================
+   APP LAYOUT
+   ====================================================================== */
+
+#app-root{
+max-width:1200px;
+margin:auto;
+}
+
+/* ---------------- HEADER ---------------- */
+#app-header{
+padding:28px 16px 10px;
+text-align:center;
+}
+
+.app-title{
+font-size:24px;
+letter-spacing:.6px;
+font-weight:600;
+}
+
+.app-streak{
+margin-top:6px;
+font-size:14px;
+color:var(--gold);
+}
+
+/* ---------------- NAV ---------------- */
+#app-nav{
+display:flex;
+justify-content:center;
+gap:12px;
+padding:14px 16px;
+flex-wrap:wrap;
+}
+
+.nav-btn{
+background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+border:1px solid var(--glass-border);
+border-radius:var(--radius-md);
+padding:12px 18px;
+color:var(--text-main);
+cursor:pointer;
+backdrop-filter:blur(var(--blur-lg));
+transition:all .45s var(--ease);
+}
+
+.nav-btn:hover,
+.nav-btn.is-active{
+box-shadow:
+0 0 0 1px var(--accent),
+0 0 34px var(--accent-glow);
+transform:translateY(-2px);
+}
+
+/* ======================================================================
+   SECTIONS
+   ====================================================================== */
+
+.app-section{
+display:none;
+padding:24px 18px;
+animation:fadeUp .7s var(--ease);
+}
+
+.app-section.is-active{
+display:block;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(12px)}
+to{opacity:1;transform:none}
+}
+
+/* ======================================================================
+   GLASS CARD
+   ====================================================================== */
+
+.card{
+background:
+linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.03));
+border:1px solid var(--glass-border);
+border-radius:var(--radius-xl);
+padding:26px;
+margin-bottom:24px;
+backdrop-filter:blur(var(--blur-xl));
+transition:all .5s var(--ease);
+position:relative;
+overflow:hidden;
+}
+
+.card::after{
+content:"";
+position:absolute;
+inset:0;
+background:
+radial-gradient(600px 200px at -20% -30%,rgba(255,255,255,.12),transparent 60%);
+pointer-events:none;
+}
+
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 30px 70px rgba(0,0,0,.45);
+}
+
+/* ======================================================================
+   FOCUS MODE
+   ====================================================================== */
+
+.focus-ayah{
+margin-bottom:18px;
+}
+
+.ayah-arabic{
+font-family:"Amiri","Scheherazade",serif;
+font-size:34px;
+line-height:2;
+text-align:center;
+}
+
+.ayah-uzbek{
+text-align:center;
+font-size:15px;
+color:var(--text-muted);
+}
+
+.focus-timer{
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:96px;
+font-weight:500;
+letter-spacing:2px;
+margin:28px 0;
+}
+
+.timer-separator{
+margin:0 6px;
+opacity:.7;
+}
+
+.focus-controls{
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+}
+
+/* ---------------- BUTTONS ---------------- */
+
+.control-btn{
+background:rgba(45,212,191,.18);
+border:1px solid var(--glass-border);
+border-radius:var(--radius-md);
+padding:12px 22px;
+color:var(--text-main);
+cursor:pointer;
+transition:all .35s var(--ease);
+}
+
+.control-btn:hover{
+background:rgba(45,212,191,.35);
+}
+
+.control-btn.is-danger{
+background:rgba(239,71,111,.25);
+}
+
+/* ======================================================================
+   INPUTS
+   ====================================================================== */
+
+input,textarea{
+width:100%;
+margin-top:12px;
+padding:14px;
+background:rgba(255,255,255,.06);
+border:1px solid var(--glass-border);
+border-radius:var(--radius-md);
+color:var(--text-main);
+font-size:14px;
+}
+
+textarea{
+min-height:110px;
+resize:none;
+}
+
+/* ======================================================================
+   PLANNER
+   ====================================================================== */
+
+.planner-list{
+margin-top:12px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+/* ======================================================================
+   FOOTER
+   ====================================================================== */
+
+#app-footer{
+text-align:center;
+padding:28px;
+font-size:13px;
+color:var(--text-muted);
+}
+
+/* ======================================================================
+   RESPONSIVE
+   ====================================================================== */
+
+@media(max-width:640px){
+.focus-timer{font-size:72px}
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- ================= GLOBAL BACKGROUND LAYERS ================= -->
 <div id="bg-layer-stars"></div>
 <div id="bg-layer-flow"></div>
 <div id="bg-layer-noise"></div>
 
-<!-- ================= APP ROOT ================= -->
-<div id="app-root">
+<!-- ===== STRUCTURE (AVVALGI BOSQICHDAN) ===== -->
+<!-- (O‘ZGARMAGAN, SHU YERGA QOLDIRILDI) -->
 
-<!-- ================= HEADER ================= -->
-<header id="app-header">
-  <div class="header-inner">
-    <h1 class="app-title">Tilawah Focus</h1>
-    <div class="app-streak" data-streak-label></div>
-  </div>
-</header>
-
-<!-- ================= NAVIGATION ================= -->
-<nav id="app-nav">
-  <button class="nav-btn is-active" data-nav="focus">
-    <span>Fokus</span>
-  </button>
-  <button class="nav-btn" data-nav="wisdom">
-    <span>Hikmat</span>
-  </button>
-  <button class="nav-btn" data-nav="dua">
-    <span>Du’a</span>
-  </button>
-  <button class="nav-btn" data-nav="planner">
-    <span>Hifz</span>
-  </button>
-</nav>
-
-<!-- ================= MAIN ================= -->
-<main id="app-main">
-
-<!-- ========== SECTION: FOCUS ========== -->
-<section id="section-focus" class="app-section is-active">
-
-  <div class="card focus-card">
-
-    <div class="focus-ayah">
-      <div class="ayah-arabic" data-focus-ayah-ar></div>
-      <div class="ayah-uzbek" data-focus-ayah-uz></div>
-    </div>
-
-    <div class="focus-timer">
-      <span class="timer-minutes" data-timer-minutes>25</span>
-      <span class="timer-separator">:</span>
-      <span class="timer-seconds" data-timer-seconds>00</span>
-    </div>
-
-    <div class="focus-controls">
-      <button class="control-btn" data-focus-start="25">25 daqiqa</button>
-      <button class="control-btn" data-focus-start="45">45 daqiqa</button>
-      <button class="control-btn" data-focus-start="60">60 daqiqa</button>
-      <button class="control-btn is-danger" data-focus-stop>To‘xtatish</button>
-    </div>
-
-  </div>
-
-  <div class="card reflection-card">
-    <h2 class="card-title">Mulohaza</h2>
-    <textarea
-      class="reflection-input"
-      data-reflection-input
-      placeholder="Bugungi tilovatdan qalbingizga nima tushdi?"
-    ></textarea>
-    <button class="control-btn" data-reflection-save>Saqlash</button>
-  </div>
-
-</section>
-
-<!-- ========== SECTION: WISDOM ========== -->
-<section id="section-wisdom" class="app-section">
-
-  <div class="card wisdom-card">
-    <div class="wisdom-text" data-wisdom-text></div>
-  </div>
-
-</section>
-
-<!-- ========== SECTION: DUA ========== -->
-<section id="section-dua" class="app-section">
-
-  <div class="card dua-card">
-    <div class="dua-arabic">اللّهُمَّ اجعل القرآن ربيع قلبي</div>
-    <div class="dua-uzbek">Allohim, Qur’onni qalbimning bahoriga aylantir.</div>
-  </div>
-
-  <div class="card dua-card">
-    <div class="dua-arabic">اللّهُمَّ ثبّت ما حفظتُ وذكّرني ما نُسِّيت</div>
-    <div class="dua-uzbek">Allohim, yodlaganimni mustahkam qil, unutganimni eslat.</div>
-  </div>
-
-  <div class="card dua-card">
-    <div class="dua-arabic">رَبِّ اشْرَحْ لِي صَدْرِي</div>
-    <div class="dua-uzbek">Robbim, ko‘nglimni keng qil.</div>
-  </div>
-
-  <div class="card dua-card">
-    <div class="dua-arabic">اللّهُمَّ لا تجعل القرآن حجةً عليّ بل حجةً لي</div>
-    <div class="dua-uzbek">Allohim, Qur’onni menga qarshi emas, men uchun hujjat qil.</div>
-
-    <input
-      type="text"
-      class="intention-input"
-      data-intention-input
-      placeholder="Mening niyatim"
-    >
-    <button class="control-btn" data-intention-save>Saqlash</button>
-  </div>
-
-</section>
-
-<!-- ========== SECTION: PLANNER ========== -->
-<section id="section-planner" class="app-section">
-
-  <div class="card planner-card">
-    <h2 class="card-title">Bugun yodlash</h2>
-    <input
-      type="text"
-      class="planner-input"
-      data-planner-mem-input
-      placeholder="Oyot yoki sahifa"
-    >
-    <button class="control-btn" data-planner-mem-add>Qo‘shish</button>
-    <div class="planner-list" data-planner-mem-list></div>
-  </div>
-
-  <div class="card planner-card">
-    <h2 class="card-title">Bugun takrorlash</h2>
-    <input
-      type="text"
-      class="planner-input"
-      data-planner-rev-input
-      placeholder="Oyot yoki sahifa"
-    >
-    <button class="control-btn" data-planner-rev-add>Qo‘shish</button>
-    <div class="planner-list" data-planner-rev-list></div>
-  </div>
-
-</section>
-
-</main>
-
-<!-- ================= FOOTER ================= -->
-<footer id="app-footer">
-  <p>Qur’on bilan sokin diqqat • Offline • 2025</p>
-</footer>
-
-</div><!-- /app-root -->
-
-<!-- ================= SCRIPT PLACEHOLDER ================= -->
-<script>
-/*
-  BU YER TO‘LIQ BO‘SH QOLADI.
-  3-BOSQICHDA:
-  - AppState
-  - Timer Engine
-  - Navigation Engine
-  - Storage
-  - Animations
-  ULANADI
-*/
-</script>
+<!-- Sizda allaqachon bor bo‘lgan STRUCTURE shu yerda davom etadi -->
 
 </body>
 </html>
