@@ -4,432 +4,188 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tilawah Focus</title>
+
+<!-- ================= CORE META ================= -->
+<meta name="theme-color" content="#0b1024">
+<meta name="description" content="Qur’on bilan sokin fokus va hifz muhiti">
+
+<!-- ================= FONTS ================= -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- ================= STYLES (KEYINGI BOSQICHDA TO‘LDIRILADI) ================= -->
 <style>
-/* ===================== ROOT ===================== */
-:root{
---bg-main:#060b18;
---bg-deep:#0b1535;
---glass:rgba(255,255,255,0.08);
---border:rgba(255,255,255,0.16);
---text:#f6f7fb;
---muted:#aab2d5;
---accent:#2dd4bf;
---gold:#e9c46a;
---danger:#ef476f;
-}
-
-/* ===================== RESET ===================== */
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-body{
-font-family:Inter,system-ui,Segoe UI,Roboto;
-background:radial-gradient(1200px 800px at 50% -20%, #1b2a6b, var(--bg-main) 60%);
-color:var(--text);
-min-height:100vh;
-overflow-x:hidden;
-}
-
-/* ===================== BACKGROUND ===================== */
-#particles{
-position:fixed;
-inset:0;
-z-index:-1;
-background:
-radial-gradient(2px 2px at 20% 30%,rgba(255,255,255,.35),transparent),
-radial-gradient(1.5px 1.5px at 60% 50%,rgba(255,255,255,.25),transparent),
-radial-gradient(1px 1px at 80% 70%,rgba(255,255,255,.2),transparent);
-animation:floatBg 50s linear infinite;
-}
-@keyframes floatBg{
-0%{transform:translateY(0)}
-100%{transform:translateY(-400px)}
-}
-
-/* ===================== HEADER ===================== */
-header{
-text-align:center;
-padding:22px 16px 10px;
-}
-header h1{
-font-size:22px;
-font-weight:600;
-letter-spacing:.4px;
-}
-#streak{
-margin-top:6px;
-font-size:14px;
-color:var(--gold);
-}
-
-/* ===================== NAV ===================== */
-nav{
-display:flex;
-gap:10px;
-justify-content:center;
-flex-wrap:wrap;
-padding:12px;
-}
-nav button{
-background:var(--glass);
-border:1px solid var(--border);
-color:var(--text);
-padding:10px 16px;
-border-radius:16px;
-cursor:pointer;
-backdrop-filter:blur(18px);
-transition:all .35s ease;
-}
-nav button.active,
-nav button:hover{
-box-shadow:0 0 0 1px var(--accent),0 0 28px rgba(45,212,191,.25);
-transform:translateY(-1px);
-}
-
-/* ===================== SECTIONS ===================== */
-section{
-display:none;
-max-width:1000px;
-margin:auto;
-padding:18px;
-}
-section.active{display:block}
-
-/* ===================== CARD ===================== */
-.card{
-background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.02));
-border:1px solid var(--border);
-border-radius:26px;
-padding:22px;
-margin-bottom:20px;
-backdrop-filter:blur(20px);
-transition:all .45s ease;
-}
-.card:hover{
-transform:translateY(-4px);
-box-shadow:0 22px 44px rgba(0,0,0,.35);
-}
-
-/* ===================== TEXT ===================== */
-.ayah-ar{
-font-family:"Amiri","Scheherazade",serif;
-font-size:30px;
-line-height:1.9;
-text-align:center;
-margin-bottom:10px;
-}
-.ayah-uz{
-text-align:center;
-font-size:15px;
-color:var(--muted);
-}
-
-/* ===================== TIMER ===================== */
-.timer{
-font-size:84px;
-text-align:center;
-letter-spacing:2px;
-margin:26px 0;
-font-weight:500;
-}
-.controls{
-display:flex;
-gap:10px;
-justify-content:center;
-flex-wrap:wrap;
-}
-.controls button{
-padding:10px 18px;
-border-radius:16px;
-border:1px solid var(--border);
-background:rgba(45,212,191,.14);
-color:var(--text);
-cursor:pointer;
-transition:.3s;
-}
-.controls button:hover{
-background:rgba(45,212,191,.32);
-}
-
-/* ===================== INPUTS ===================== */
-input,textarea{
-width:100%;
-background:rgba(255,255,255,.06);
-border:1px solid var(--border);
-border-radius:16px;
-padding:12px;
-margin-top:10px;
-color:var(--text);
-font-size:14px;
-}
-textarea{min-height:100px}
-
-/* ===================== PLANNER ===================== */
-.item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:10px;
-gap:10px;
-}
-.badge{
-font-size:12px;
-padding:5px 12px;
-border-radius:12px;
-cursor:pointer;
-}
-.strong{background:rgba(45,212,191,.35)}
-.medium{background:rgba(233,196,106,.35)}
-.weak{background:rgba(239,71,111,.35)}
-
-/* ===================== FOOTER ===================== */
-footer{
-text-align:center;
-padding:20px;
-font-size:13px;
-color:var(--muted);
-}
-
-@media(min-width:768px){
-.timer{font-size:96px}
-}
+/* BU YER BO‘SH QOLADI — 3-BOSQICHDA TO‘LDIRILADI */
 </style>
 </head>
+
 <body>
-<div id="particles"></div>
-<header>
-<h1>Tilawah Focus</h1>
-<div id="streak"></div>
+
+<!-- ================= GLOBAL BACKGROUND LAYERS ================= -->
+<div id="bg-layer-stars"></div>
+<div id="bg-layer-flow"></div>
+<div id="bg-layer-noise"></div>
+
+<!-- ================= APP ROOT ================= -->
+<div id="app-root">
+
+<!-- ================= HEADER ================= -->
+<header id="app-header">
+  <div class="header-inner">
+    <h1 class="app-title">Tilawah Focus</h1>
+    <div class="app-streak" data-streak-label></div>
+  </div>
 </header>
-<nav>
-<button class="active" data-tab="focus">Fokus</button>
-<button data-tab="wisdom">Hikmat</button>
-<button data-tab="dua">Du’a</button>
-<button data-tab="planner">Hifz</button>
+
+<!-- ================= NAVIGATION ================= -->
+<nav id="app-nav">
+  <button class="nav-btn is-active" data-nav="focus">
+    <span>Fokus</span>
+  </button>
+  <button class="nav-btn" data-nav="wisdom">
+    <span>Hikmat</span>
+  </button>
+  <button class="nav-btn" data-nav="dua">
+    <span>Du’a</span>
+  </button>
+  <button class="nav-btn" data-nav="planner">
+    <span>Hifz</span>
+  </button>
 </nav>
-<!-- ===================== FOCUS ===================== -->
-<section id="focus" class="active">
-<div class="card">
-<div class="ayah-ar" id="focusAr"></div>
-<div class="ayah-uz" id="focusUz"></div>
-<div class="timer" id="timer">25:00</div>
-<div class="controls">
-<button onclick="startTimer(25)">25 daqiqa</button>
-<button onclick="startTimer(45)">45 daqiqa</button>
-<button onclick="startTimer(60)">60 daqiqa</button>
-<button onclick="stopTimer()">To‘xtatish</button>
-</div>
-</div>
-<div class="card">
-<h3>Mulohaza</h3>
-<textarea id="reflection" placeholder="Bugungi tilovatdan qalbingizga nima tushdi?"></textarea>
-<div class="controls" style="margin-top:10px">
-<button onclick="saveReflection()">Saqlash</button>
-</div>
-</div>
+
+<!-- ================= MAIN ================= -->
+<main id="app-main">
+
+<!-- ========== SECTION: FOCUS ========== -->
+<section id="section-focus" class="app-section is-active">
+
+  <div class="card focus-card">
+
+    <div class="focus-ayah">
+      <div class="ayah-arabic" data-focus-ayah-ar></div>
+      <div class="ayah-uzbek" data-focus-ayah-uz></div>
+    </div>
+
+    <div class="focus-timer">
+      <span class="timer-minutes" data-timer-minutes>25</span>
+      <span class="timer-separator">:</span>
+      <span class="timer-seconds" data-timer-seconds>00</span>
+    </div>
+
+    <div class="focus-controls">
+      <button class="control-btn" data-focus-start="25">25 daqiqa</button>
+      <button class="control-btn" data-focus-start="45">45 daqiqa</button>
+      <button class="control-btn" data-focus-start="60">60 daqiqa</button>
+      <button class="control-btn is-danger" data-focus-stop>To‘xtatish</button>
+    </div>
+
+  </div>
+
+  <div class="card reflection-card">
+    <h2 class="card-title">Mulohaza</h2>
+    <textarea
+      class="reflection-input"
+      data-reflection-input
+      placeholder="Bugungi tilovatdan qalbingizga nima tushdi?"
+    ></textarea>
+    <button class="control-btn" data-reflection-save>Saqlash</button>
+  </div>
+
 </section>
-<!-- ===================== WISDOM ===================== -->
-<section id="wisdom">
-<div class="card">
-<div id="wisdomText" style="text-align:center;font-size:18px;line-height:1.7"></div>
-</div>
+
+<!-- ========== SECTION: WISDOM ========== -->
+<section id="section-wisdom" class="app-section">
+
+  <div class="card wisdom-card">
+    <div class="wisdom-text" data-wisdom-text></div>
+  </div>
+
 </section>
-<!-- ===================== DUA ===================== -->
-<section id="dua">
-<div class="card">
-<div class="ayah-ar">اللّهُمَّ اجعل القرآن ربيع قلبي</div>
-<div class="ayah-uz">Allohim, Qur’onni qalbimning bahoriga aylantir.</div>
-</div>
-<div class="card">
-<div class="ayah-ar">اللّهُمَّ ثبّت ما حفظتُ وذكّرني ما نُسِّيت</div>
-<div class="ayah-uz">Allohim, yodlaganimni mustahkam qil, unutganimni eslat.</div>
-</div>
-<div class="card">
-<div class="ayah-ar">رَبِّ اشْرَحْ لِي صَدْرِي</div>
-<div class="ayah-uz">Robbim, ko‘nglimni keng qil.</div>
-</div>
-<div class="card">
-<div class="ayah-ar">اللّهُمَّ لا تجعل القرآن حجةً عليّ بل حجةً لي</div>
-<div class="ayah-uz">Allohim, Qur’onni menga qarshi emas, men uchun hujjat qil.</div>
-<input id="intention" placeholder="Mening niyatim">
-<div class="controls" style="margin-top:10px">
-<button onclick="saveIntention()">Saqlash</button>
-</div>
-</div>
+
+<!-- ========== SECTION: DUA ========== -->
+<section id="section-dua" class="app-section">
+
+  <div class="card dua-card">
+    <div class="dua-arabic">اللّهُمَّ اجعل القرآن ربيع قلبي</div>
+    <div class="dua-uzbek">Allohim, Qur’onni qalbimning bahoriga aylantir.</div>
+  </div>
+
+  <div class="card dua-card">
+    <div class="dua-arabic">اللّهُمَّ ثبّت ما حفظتُ وذكّرني ما نُسِّيت</div>
+    <div class="dua-uzbek">Allohim, yodlaganimni mustahkam qil, unutganimni eslat.</div>
+  </div>
+
+  <div class="card dua-card">
+    <div class="dua-arabic">رَبِّ اشْرَحْ لِي صَدْرِي</div>
+    <div class="dua-uzbek">Robbim, ko‘nglimni keng qil.</div>
+  </div>
+
+  <div class="card dua-card">
+    <div class="dua-arabic">اللّهُمَّ لا تجعل القرآن حجةً عليّ بل حجةً لي</div>
+    <div class="dua-uzbek">Allohim, Qur’onni menga qarshi emas, men uchun hujjat qil.</div>
+
+    <input
+      type="text"
+      class="intention-input"
+      data-intention-input
+      placeholder="Mening niyatim"
+    >
+    <button class="control-btn" data-intention-save>Saqlash</button>
+  </div>
+
 </section>
-<!-- ===================== PLANNER ===================== -->
-<section id="planner">
-<div class="card">
-<h3>Bugun yodlash</h3>
-<input id="memInput" placeholder="Oyot yoki sahifa">
-<div class="controls">
-<button onclick="addItem('mem')">Qo‘shish</button>
-</div>
-<div id="memList"></div>
-</div>
-<div class="card">
-<h3>Bugun takrorlash</h3>
-<input id="revInput" placeholder="Oyot yoki sahifa">
-<div class="controls">
-<button onclick="addItem('rev')">Qo‘shish</button>
-</div>
-<div id="revList"></div>
-</div>
+
+<!-- ========== SECTION: PLANNER ========== -->
+<section id="section-planner" class="app-section">
+
+  <div class="card planner-card">
+    <h2 class="card-title">Bugun yodlash</h2>
+    <input
+      type="text"
+      class="planner-input"
+      data-planner-mem-input
+      placeholder="Oyot yoki sahifa"
+    >
+    <button class="control-btn" data-planner-mem-add>Qo‘shish</button>
+    <div class="planner-list" data-planner-mem-list></div>
+  </div>
+
+  <div class="card planner-card">
+    <h2 class="card-title">Bugun takrorlash</h2>
+    <input
+      type="text"
+      class="planner-input"
+      data-planner-rev-input
+      placeholder="Oyot yoki sahifa"
+    >
+    <button class="control-btn" data-planner-rev-add>Qo‘shish</button>
+    <div class="planner-list" data-planner-rev-list></div>
+  </div>
+
 </section>
-<footer>
-Qur’on bilan sokin diqqat • Offline • 2025
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer id="app-footer">
+  <p>Qur’on bilan sokin diqqat • Offline • 2025</p>
 </footer>
+
+</div><!-- /app-root -->
+
+<!-- ================= SCRIPT PLACEHOLDER ================= -->
 <script>
-/* ===================== DATA ===================== */
-const ayahs=[
-{ar:"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",uz:"Albatta, qalblar Allohni zikr qilish bilan xotirjam bo‘lur. (Ra’d, 28)"},
-{ar:"وَقُل رَّبِّ زِدْنِي عِلْمًا",uz:"Parvardigorim, ilmimni ziyoda qil. (Toha, 114)"},
-{ar:"فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",uz:"Albatta, qiyinchilik bilan birga yengillik bor. (Sharh, 6)"},
-{ar:"إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",uz:"Albatta, Alloh sabr qiluvchilar bilan birgadir. (Baqara, 153)"}
-];
-
-const wisdoms=[
-"Qur’on bilan o‘tirgan qalb hech qachon yolg‘iz bo‘lmaydi.",
-"Bugun oz o‘qidim deme — davomli o‘qish Allohga suyuklidir.",
-"Bir oyat bilan yashash, ming rejasiz kundan afzaldir.",
-"Qur’on seni o‘zgartirmay qolsa, sen unga hali yetib bormagansan.",
-"Til charchashi mumkin, qalb charchamaydi — davom et.",
-"Hifz sabr bilan bitadi, shoshilish bilan buziladi.",
-"Bugungi ozgina muroja’ah — ertangi mustahkamlik.",
-"Qur’onni tez tugatish emas, sog‘lom olib yurish maqsad.",
-"Alloh Qur’on bilan band bo‘lgan qalbni sinmaydigan qiladi.",
-"Yoddan chiqqan oyat gunoh emas, tashlab qo‘yilgan oyat xatardir."
-];
-
-/* ===================== NAV ===================== */
-document.querySelectorAll("nav button").forEach(btn=>{
-btn.onclick=()=>{
-document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-btn.classList.add("active");
-document.getElementById(btn.dataset.tab).classList.add("active");
-if(btn.dataset.tab==="wisdom")showWisdom();
-};
-});
-
-/* ===================== TIMER ===================== */
-let timerInterval=null;
-let remainingSeconds=1500;
-
-function startTimer(minutes){
-stopTimer();
-remainingSeconds=minutes*60;
-updateTimer();
-setRandomAyah();
-timerInterval=setInterval(()=>{
-remainingSeconds--;
-updateTimer();
-if(remainingSeconds<=0){
-stopTimer();
-completeSession();
-}
-},1000);
-}
-
-function stopTimer(){
-if(timerInterval){
-clearInterval(timerInterval);
-timerInterval=null;
-}
-}
-
-function updateTimer(){
-const m=Math.floor(remainingSeconds/60).toString().padStart(2,"0");
-const s=(remainingSeconds%60).toString().padStart(2,"0");
-timer.textContent=`${m}:${s}`;
-}
-
-function completeSession(){
-updateStreak();
-showWisdom();
-}
-
-/* ===================== AYAH ===================== */
-function setRandomAyah(){
-const a=ayahs[Math.floor(Math.random()*ayahs.length)];
-focusAr.textContent=a.ar;
-focusUz.textContent=a.uz;
-}
-
-/* ===================== WISDOM ===================== */
-function showWisdom(){
-wisdomText.textContent=wisdoms[Math.floor(Math.random()*wisdoms.length)];
-}
-
-/* ===================== STORAGE ===================== */
-function saveReflection(){
-localStorage.setItem("reflection",reflection.value);
-}
-
-function saveIntention(){
-localStorage.setItem("intention",intention.value);
-}
-
-/* ===================== PLANNER ===================== */
-function addItem(type){
-const input=type==="mem"?memInput:revInput;
-const list=type==="mem"?memList:revList;
-if(!input.value.trim())return;
-const div=document.createElement("div");
-div.className="item";
-const badge=document.createElement("span");
-badge.className="badge weak";
-badge.textContent="Zaif";
-badge.onclick=()=>{
-if(badge.classList.contains("weak")){
-badge.className="badge medium";
-badge.textContent="O‘rtacha";
-}else if(badge.classList.contains("medium")){
-badge.className="badge strong";
-badge.textContent="Mustahkam";
-}else{
-badge.className="badge weak";
-badge.textContent="Zaif";
-}
-};
-div.innerHTML=`<span>${input.value}</span>`;
-div.appendChild(badge);
-list.appendChild(div);
-input.value="";
-}
-
-/* ===================== STREAK ===================== */
-function updateStreak(){
-const today=new Date().toDateString();
-const last=localStorage.getItem("lastDay");
-let streak=parseInt(localStorage.getItem("streak")||"0");
-if(last!==today){
-streak++;
-localStorage.setItem("streak",streak);
-localStorage.setItem("lastDay",today);
-}
-renderStreak();
-}
-
-function renderStreak(){
-const s=parseInt(localStorage.getItem("streak")||"0");
-let text="";
-if(s>=40)text="40 kun — Qalbga singdi";
-else if(s>=21)text="21 kun — Mustahkam yo‘l";
-else if(s>=7)text="7 kun — Qur’on bilan odat";
-else if(s>=3)text="3 kun — Barqaror qadam";
-else if(s>=1)text="1 kun — Boshlanish";
-streak.textContent=text;
-}
-
-/* ===================== INIT ===================== */
-reflection.value=localStorage.getItem("reflection")||"";
-intention.value=localStorage.getItem("intention")||"";
-setRandomAyah();
-renderStreak();
+/*
+  BU YER TO‘LIQ BO‘SH QOLADI.
+  3-BOSQICHDA:
+  - AppState
+  - Timer Engine
+  - Navigation Engine
+  - Storage
+  - Animations
+  ULANADI
+*/
 </script>
+
 </body>
 </html>
