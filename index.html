@@ -7,17 +7,18 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Tilawah Focus</title>
     <style>
-        /* Root variables for calm color palette */
+        /* Root variables for calm, spiritual color palette */
         :root {
-            --bg-primary: #0a192f; /* Deep blue */
-            --accent-emerald: #047857;
+            --bg-primary: linear-gradient(135deg, #0a192f, #1e3a8a); /* Deep blue gradient */
+            --accent-emerald: #065f46;
             --sand: #d2b48c;
             --moonlight: #f8f8ff;
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --text-primary: var(--moonlight);
-            --text-secondary: rgba(248, 248, 255, 0.8);
-            --shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --text-secondary: rgba(248, 248, 255, 0.7);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --glow: 0 0 15px rgba(4, 120, 87, 0.3);
         }
     /* Reset and base styles */
     * {
@@ -25,6 +26,8 @@
         padding: 0;
         box-sizing: border-box;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.8;
+        letter-spacing: 0.5px;
     }
 
     body {
@@ -34,94 +37,110 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
         overflow-x: hidden;
         position: relative;
-        line-height: 1.8;
         font-size: 16px;
+        text-rendering: optimizeLegibility;
     }
 
-    /* Arabic font styling */
+    /* Arabic typography */
     .arabic {
-        font-family: 'Traditional Arabic', 'Scheherazade', serif;
-        font-size: 1.2em;
+        font-family: 'Scheherazade New', 'Amiri', serif;
+        font-size: 1.4em;
         direction: rtl;
-        text-align: right;
+        text-align: center;
+        font-weight: 400;
+        line-height: 2;
     }
 
-    /* Glassmorphism card */
+    /* Glassmorphism with subtle Islamic geometry */
     .glass-card {
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        padding: 20px;
-        margin: 20px;
+        border-radius: 24px;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        padding: 24px;
+        margin: 24px auto;
         box-shadow: var(--shadow);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s;
         width: 90%;
-        max-width: 400px;
+        max-width: 480px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjAwcHgiIGhlaWdodD0iMjAwcHgiIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8ZyBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSI+CiAgICAgICAgPHBhdGggZmlsbD0iIzBGMUYzRiIgb3BhY2l0eT0iMC4wNSIgZD0iTTAgMEwyMDAgMEwyMDAgMjAwTDAgMjAwTDAgMFpNMTAwIDUwTDEyNS41IDkzLjlMMTc2LjYgOTMuOUwxMzUuNCAxNDMuNUwxNTEuOCA5My45TDEwMCA1MC4xTDEwMCA1MFoiIC8+CiAgICAgICAgPHBhdGggZmlsbD0iIzBGMUYzRiIgb3BhY2l0eT0iMC4wNSIgZD0iTTEwMCAxNTBMMTI1LjUgMTA2LjFMMTc2LjYgMTA2LjFMMTM1LjQgNTYuNUwxNTEuOCAxMDYuMUwxMDAgMTQ5LjlMMTAwIDE1MFoiIC8+CiAgICA8L2c+Cjwvc3ZnPg==') repeat; /* Subtle Islamic star pattern */
+        opacity: 0.05;
     }
 
     .glass-card:hover {
-        transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
-        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        transform: perspective(1000px) rotateX(3deg) rotateY(3deg) scale(1.02);
+        box-shadow: var(--shadow), var(--glow);
     }
 
-    /* Button styles with ripple */
+    /* Button styles with advanced ripple and glow */
     button {
-        background: linear-gradient(135deg, var(--accent-emerald), #065f46);
+        background: linear-gradient(135deg, var(--accent-emerald), #034e38);
         border: none;
         color: var(--moonlight);
-        padding: 12px 24px;
-        border-radius: 8px;
+        padding: 14px 28px;
+        border-radius: 12px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
-        transition: transform 0.2s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         font-size: 1em;
+        font-weight: 500;
+        z-index: 1;
     }
 
-    button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 20px rgba(4, 120, 87, 0.3);
-    }
-
-    button:active {
-        transform: scale(0.95);
-    }
-
-    /* Ripple effect */
-    button::before {
+    button::after {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 0;
-        height: 0;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        opacity: 0;
-        transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+        width: 300%;
+        height: 300%;
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.6s ease;
+        z-index: -1;
     }
 
-    button:active::before {
-        width: 200px;
-        height: 200px;
-        opacity: 1;
+    button:active::after {
+        transform: translate(-50%, -50%) scale(1);
     }
 
-    /* Input styles */
+    button:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--glow);
+    }
+
+    /* Input and textarea */
     input, textarea {
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
         color: var(--text-primary);
-        padding: 10px;
-        border-radius: 8px;
+        padding: 12px;
+        border-radius: 12px;
         width: 100%;
-        margin: 10px 0;
+        margin: 12px 0;
         font-size: 1em;
+        resize: vertical;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+        border-color: var(--accent-emerald);
+        outline: none;
     }
 
     /* Sections */
@@ -130,7 +149,13 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
-        padding: 20px;
+        padding: 32px 16px;
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     section.active {
@@ -143,21 +168,27 @@
         bottom: 0;
         width: 100%;
         background: var(--glass-bg);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(20px);
         border-top: 1px solid var(--glass-border);
         display: flex;
         justify-content: space-around;
-        padding: 10px 0;
+        padding: 12px 0;
         z-index: 10;
+        box-shadow: var(--shadow);
     }
 
     nav button {
-        background: none;
-        padding: 10px;
-        font-size: 0.9em;
+        background: transparent;
+        padding: 12px;
+        font-size: 0.95em;
+        transition: color 0.3s ease;
     }
 
-    /* Animated background */
+    nav button:hover {
+        color: var(--accent-emerald);
+    }
+
+    /* Advanced animated background: calm stars and light flow */
     #background-canvas {
         position: absolute;
         top: 0;
@@ -165,37 +196,47 @@
         width: 100%;
         height: 100%;
         z-index: -1;
-        opacity: 0.3;
+        opacity: 0.25;
+        pointer-events: none;
     }
 
-    /* Timer display */
+    /* Timer */
     #timer {
-        font-size: 3em;
-        margin: 20px 0;
+        font-size: 4em;
+        font-weight: 300;
+        margin: 32px 0;
+        text-shadow: var(--glow);
+        animation: pulse 2s infinite ease-in-out;
     }
 
-    /* Progress indicators */
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+    }
+
+    /* Progress */
     .progress {
         width: 100%;
-        height: 8px;
+        height: 10px;
         background: var(--glass-bg);
-        border-radius: 4px;
-        margin: 10px 0;
+        border-radius: 5px;
+        margin: 16px 0;
+        overflow: hidden;
     }
 
     .progress-bar {
         height: 100%;
-        background: var(--accent-emerald);
-        border-radius: 4px;
-        transition: width 0.3s ease;
+        background: linear-gradient(to right, var(--accent-emerald), #10b981);
+        border-radius: 5px;
+        transition: width 0.5s ease-in-out;
     }
 
-    /* Strength indicators */
-    .strength-strong { color: var(--accent-emerald); }
+    /* Strength classes */
+    .strength-strong { color: var(--accent-emerald); font-weight: bold; }
     .strength-medium { color: var(--sand); }
-    .strength-weak { color: #ef4444; }
+    .strength-weak { color: #dc2626; text-decoration: underline; }
 
-    /* List items */
+    /* Lists */
     ul {
         list-style: none;
         width: 100%;
@@ -203,55 +244,65 @@
 
     li {
         background: var(--glass-bg);
-        padding: 10px;
-        margin: 5px 0;
-        border-radius: 8px;
+        padding: 12px 16px;
+        margin: 8px 0;
+        border-radius: 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        transition: background 0.3s ease;
     }
 
-    /* Responsive */
+    li:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Responsive design */
     @media (min-width: 768px) {
         .glass-card {
-            max-width: 600px;
+            max-width: 720px;
+        }
+
+        #timer {
+            font-size: 5em;
         }
     }
 </style>
-</head>
-<body>
-    <canvas id="background-canvas"></canvas>
 <!-- Focus Mode Section -->
 <section id="focus-mode" class="active">
     <h1>Tilawah Focus</h1>
-    <div id="focus-options">
+    <div id="focus-options" class="glass-card">
         <button onclick="startFocus(25)">25 daqiqa</button>
         <button onclick="startFocus(45)">45 daqiqa</button>
         <button onclick="startFocus(60)">60 daqiqa</button>
     </div>
-    <div id="focus-active" style="display: none;">
+    <div id="focus-active" style="display: none;" class="glass-card">
         <div id="timer">00:00</div>
         <div id="ayah-display" class="arabic"></div>
-        <div id="ayah-uzbek"></div>
+        <div id="ayah-uzbek" style="text-align: center; font-style: italic;"></div>
     </div>
-    <div id="focus-end" style="display: none;">
+    <div id="focus-end" style="display: none;" class="glass-card">
         <h2>Sessiya tugadi</h2>
-        <div id="motivation"></div>
-        <textarea id="reflection" placeholder="O'ylashlar..."></textarea>
+        <div id="motivation" style="margin-bottom: 16px;"></div>
+        <textarea id="reflection" placeholder="O'ylashlaringizni yozing..."></textarea>
         <button onclick="saveReflection()">Saqlash</button>
-        <button onclick="resetFocus()">Yangi sessiya</button>
+        <button onclick="resetFocus()">Yangi sessiya boshlash</button>
+    </div>
+    <div id="previous-reflection" class="glass-card" style="display: none;">
+        <h3>Avvalgi o'ylash</h3>
+        <p id="prev-ref-text"></p>
     </div>
 </section>
 
-<!-- Motivations Section -->
+<!-- Motivations & Wisdom -->
 <section id="motivations">
-    <h1>Qur’oniy motivatsiyalar</h1>
+    <h1>Qur’oniy Motivatsiyalar va Hikmatlar</h1>
     <div id="motivation-cards"></div>
 </section>
 
-<!-- Du'a Section -->
+<!-- Du’a & Intention -->
 <section id="dua">
-    <h1>Du’olar va niyat</h1>
+    <h1>Du’olar va Niyat</h1>
     <div class="glass-card">
         <h2>Qur’on oldidan</h2>
         <p class="arabic">اللّهُمَّ اجعل القرآن ربيع قلبي</p>
@@ -273,21 +324,21 @@
         <p>Allohim, Qur’onni menga qarshi emas, men uchun hujjat qil.</p>
     </div>
     <textarea id="intention" placeholder="Mening niyatim..."></textarea>
-    <button onclick="saveIntention()">Saqlash</button>
+    <button onclick="saveIntention()">Niyatni saqlash</button>
 </section>
 
-<!-- Planner Section -->
+<!-- Hifz & Muroja’ah Planner -->
 <section id="planner">
     <h1>Hifz va Muroja’ah Rejasi</h1>
     <div class="glass-card">
         <h2>Bugun yodlash</h2>
-        <input id="new-memorize" placeholder="Oyat qo'shish (Surah:oyat)">
+        <input id="new-memorize" placeholder="Oyat qo'shish (misol: Baqara:1-5)">
         <button onclick="addItem('memorize')">Qo'shish</button>
         <ul id="memorize-list"></ul>
     </div>
     <div class="glass-card">
-        <h2>Bugun takrorlash</h2>
-        <input id="new-revise" placeholder="Oyat qo'shish">
+        <h2>Bugun takrorlash (Zaiflar avtomatik taklif qilinadi)</h2>
+        <input id="new-revise" placeholder="Qo‘shimcha oyat qo‘shish">
         <button onclick="addItem('revise')">Qo'shish</button>
         <ul id="revise-list"></ul>
     </div>
@@ -304,15 +355,15 @@
     </div>
 </section>
 
-<!-- Streak Section -->
+<!-- Focus Streak -->
 <section id="streak">
-    <h1>Barqarorlik</h1>
+    <h1>Barqarorlik Kuzatuvchisi</h1>
     <div id="streak-display" class="glass-card"></div>
 </section>
 
-<!-- Navigation -->
+<!-- Bottom Navigation -->
 <nav>
-    <button onclick="showSection('focus-mode')">Focus</button>
+    <button onclick="showSection('focus-mode')">Focus Rejimi</button>
     <button onclick="showSection('motivations')">Motivatsiyalar</button>
     <button onclick="showSection('dua')">Du’olar</button>
     <button onclick="showSection('planner')">Reja</button>
@@ -320,7 +371,7 @@
 </nav>
 
 <script>
-    // Data collections
+    // Built-in data
     const ayahs = [
         { arabic: 'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', uzbek: 'Albatta, qalblar Allohni zikr qilish bilan xotirjam bo‘lur. (Ra’d, 28)' },
         { arabic: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', uzbek: '“Parvardigorim, ilmimni ziyoda qil.” (Toha, 114)' },
@@ -342,11 +393,11 @@
     ];
 
     const streakLabels = {
-        1: 'Boshlanish',
-        3: 'Barqaror qadam',
-        7: 'Qur’on bilan odat',
-        21: 'Mustahkam yo‘l',
-        40: 'Qalbga singdi'
+        1: 'Boshlanish: Birinchi qadam Qur’on bilan',
+        3: 'Barqaror qadam: Uchtalik sabr mevasi',
+        7: 'Qur’on bilan odat: Haftalik mustahkamlik',
+        21: 'Mustahkam yo‘l: Uch haftada qalb o‘sishi',
+        40: 'Qalbga singdi: Qirq kunlik ruhiy sayohat'
     };
 
     // LocalStorage keys
@@ -357,11 +408,12 @@
         revise: 'tf_revise',
         weak: 'tf_weak',
         strong: 'tf_strong',
+        sessionHistory: 'tf_sessionHistory',
         lastSession: 'tf_lastSession',
         streak: 'tf_streak'
     };
 
-    // Background animation (particles)
+    // Background animation: stars with gentle flow
     const canvas = document.getElementById('background-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -371,31 +423,36 @@
         canvas.height = window.innerHeight;
     });
 
-    const particles = [];
-    for (let i = 0; i < 50; i++) {
-        particles.push({
+    const stars = [];
+    for (let i = 0; i < 100; i++) {
+        stars.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            radius: Math.random() * 2 + 1,
-            speed: Math.random() * 0.5 + 0.1
+            radius: Math.random() * 1.5 + 0.5,
+            speed: Math.random() * 0.2 + 0.05,
+            opacity: Math.random() * 0.5 + 0.3
         });
     }
 
     function animateBackground() {
         requestAnimationFrame(animateBackground);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
+        stars.forEach(star => {
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(248, 248, 255, 0.5)';
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(248, 248, 255, ${star.opacity})`;
             ctx.fill();
-            p.y += p.speed;
-            if (p.y > canvas.height) p.y = 0;
+            star.y += star.speed;
+            star.x += Math.sin(star.y / 100) * 0.1; // Gentle wave flow
+            if (star.y > canvas.height) {
+                star.y = 0;
+                star.x = Math.random() * canvas.width;
+            }
         });
     }
     animateBackground();
 
-    // Section navigation
+    // Navigation
     function showSection(id) {
         document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -403,15 +460,17 @@
         if (id === 'dua') loadIntention();
         if (id === 'planner') loadPlanner();
         if (id === 'streak') loadStreak();
+        if (id === 'focus-mode') loadPreviousReflection();
     }
 
-    // Focus Mode
+    // Focus Mode with smart ayah selection
     let timerInterval;
+    let sessionHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.sessionHistory)) || [];
     function startFocus(minutes) {
         document.getElementById('focus-options').style.display = 'none';
         document.getElementById('focus-active').style.display = 'block';
         const endTime = Date.now() + minutes * 60 * 1000;
-        const ayah = ayahs[Math.floor(Math.random() * ayahs.length)];
+        const ayah = getSmartAyah();
         document.getElementById('ayah-display').textContent = ayah.arabic;
         document.getElementById('ayah-uzbek').textContent = ayah.uzbek;
 
@@ -419,7 +478,7 @@
             const remaining = endTime - Date.now();
             if (remaining <= 0) {
                 clearInterval(timerInterval);
-                endFocus();
+                endFocus(minutes);
                 return;
             }
             const mins = Math.floor(remaining / 60000);
@@ -428,12 +487,32 @@
         }, 1000);
     }
 
-    function endFocus() {
+    function getSmartAyah() {
+        const weakItems = plannerItems.weak;
+        if (weakItems.length > 0 && Math.random() > 0.5) {
+            // Sometimes show a weak ayah text instead of predefined
+            const weak = weakItems[Math.floor(Math.random() * weakItems.length)];
+            return { arabic: weak.text, uzbek: '(Zaif oyat: Takrorlang)' };
+        }
+        return ayahs[Math.floor(Math.random() * ayahs.length)];
+    }
+
+    function endFocus(minutes) {
         document.getElementById('focus-active').style.display = 'none';
         document.getElementById('focus-end').style.display = 'block';
-        const motivation = motivations[Math.floor(Math.random() * motivations.length)];
+        const motivation = getSmartMotivation();
         document.getElementById('motivation').textContent = motivation;
         updateStreak();
+        sessionHistory.push({ date: new Date().toISOString(), duration: minutes });
+        localStorage.setItem(STORAGE_KEYS.sessionHistory, JSON.stringify(sessionHistory));
+        suggestRevisions();
+    }
+
+    function getSmartMotivation() {
+        if (sessionHistory.length > 5 && plannerItems.weak.length > 3) {
+            return 'Zaif joylarni takrorlash vaqti keldi — sabr bilan davom eting.';
+        }
+        return motivations[Math.floor(Math.random() * motivations.length)];
     }
 
     function resetFocus() {
@@ -444,6 +523,14 @@
 
     function saveReflection() {
         localStorage.setItem(STORAGE_KEYS.reflection, document.getElementById('reflection').value);
+    }
+
+    function loadPreviousReflection() {
+        const prev = localStorage.getItem(STORAGE_KEYS.reflection);
+        if (prev) {
+            document.getElementById('prev-ref-text').textContent = prev;
+            document.getElementById('previous-reflection').style.display = 'block';
+        }
     }
 
     // Motivations
@@ -458,7 +545,7 @@
         });
     }
 
-    // Du'a Intention
+    // Du’a & Intention
     function saveIntention() {
         localStorage.setItem(STORAGE_KEYS.intention, document.getElementById('intention').value);
     }
@@ -467,7 +554,7 @@
         document.getElementById('intention').value = localStorage.getItem(STORAGE_KEYS.intention) || '';
     }
 
-    // Planner
+    // Planner with smart suggestions
     let plannerItems = {
         memorize: [],
         revise: [],
@@ -477,12 +564,13 @@
 
     function addItem(type) {
         const input = document.getElementById(`new-${type}`);
-        if (!input.value) return;
-        plannerItems[type].push({ text: input.value, strength: 'medium' });
+        if (!input.value.trim()) return;
+        plannerItems[type].push({ text: input.value.trim(), strength: 'medium' });
         savePlanner();
         renderPlanner(type);
         input.value = '';
         updateProgress();
+        if (type === 'memorize') suggestRevisions();
     }
 
     function renderPlanner(type) {
@@ -503,59 +591,76 @@
     }
 
     function changeStrength(type, index, strength) {
-        plannerItems[type][index].strength = strength;
+        const item = plannerItems[type][index];
+        item.strength = strength;
+        // Move between lists based on strength
+        plannerItems[type].splice(index, 1);
         if (strength === 'weak') {
-            plannerItems.weak.push(plannerItems[type][index]);
+            plannerItems.weak.push(item);
         } else if (strength === 'strong') {
-            plannerItems.strong.push(plannerItems[type][index]);
+            plannerItems.strong.push(item);
+        } else {
+            plannerItems[type].push(item); // Keep in original if medium
         }
         savePlanner();
         renderAllLists();
         updateProgress();
+        suggestRevisions();
     }
 
     function renderAllLists() {
         ['memorize', 'revise', 'weak', 'strong'].forEach(renderPlanner);
     }
 
+    function suggestRevisions() {
+        // Rule-based: Add weak items to revise if not already there
+        plannerItems.weak.forEach(weak => {
+            if (!plannerItems.revise.some(r => r.text === weak.text)) {
+                plannerItems.revise.push({ ...weak, strength: 'weak' });
+            }
+        });
+        savePlanner();
+        renderPlanner('revise');
+    }
+
     function loadPlanner() {
-        const saved = localStorage.getItem(STORAGE_KEYS.memorize);
-        if (saved) plannerItems.memorize = JSON.parse(saved);
-        const savedRevise = localStorage.getItem(STORAGE_KEYS.revise);
-        if (savedRevise) plannerItems.revise = JSON.parse(savedRevise);
-        const savedWeak = localStorage.getItem(STORAGE_KEYS.weak);
-        if (savedWeak) plannerItems.weak = JSON.parse(savedWeak);
-        const savedStrong = localStorage.getItem(STORAGE_KEYS.strong);
-        if (savedStrong) plannerItems.strong = JSON.parse(savedStrong);
+        ['memorize', 'revise', 'weak', 'strong'].forEach(type => {
+            const saved = localStorage.getItem(STORAGE_KEYS[type]);
+            if (saved) plannerItems[type] = JSON.parse(saved);
+        });
         renderAllLists();
         updateProgress();
+        suggestRevisions();
     }
 
     function savePlanner() {
-        localStorage.setItem(STORAGE_KEYS.memorize, JSON.stringify(plannerItems.memorize));
-        localStorage.setItem(STORAGE_KEYS.revise, JSON.stringify(plannerItems.revise));
-        localStorage.setItem(STORAGE_KEYS.weak, JSON.stringify(plannerItems.weak));
-        localStorage.setItem(STORAGE_KEYS.strong, JSON.stringify(plannerItems.strong));
+        ['memorize', 'revise', 'weak', 'strong'].forEach(type => {
+            localStorage.setItem(STORAGE_KEYS[type], JSON.stringify(plannerItems[type]));
+        });
     }
 
     function updateProgress() {
-        const total = plannerItems.memorize.length + plannerItems.revise.length;
+        const total = plannerItems.memorize.length + plannerItems.revise.length + plannerItems.weak.length + plannerItems.strong.length;
         if (total === 0) return;
-        const strong = plannerItems.strong.length;
-        const percentage = (strong / total) * 100;
+        const strongCount = plannerItems.strong.length;
+        const percentage = (strongCount / total) * 100;
         document.getElementById('progress-bar').style.width = `${percentage}%`;
     }
 
-    // Streak
+    // Streak System
     function updateStreak() {
         const today = new Date().toDateString();
         const last = localStorage.getItem(STORAGE_KEYS.lastSession);
         let streak = parseInt(localStorage.getItem(STORAGE_KEYS.streak)) || 0;
         if (last === today) return;
-        if (new Date(last).getTime() + 86400000 === new Date(today).getTime()) {
+        const lastDate = new Date(last);
+        const todayDate = new Date(today);
+        if (lastDate.getTime() + 86400000 === todayDate.getTime()) {
             streak++;
-        } else {
+        } else if (todayDate > lastDate) {
             streak = 1;
+        } else {
+            streak = 0;
         }
         localStorage.setItem(STORAGE_KEYS.streak, streak);
         localStorage.setItem(STORAGE_KEYS.lastSession, today);
@@ -564,18 +669,21 @@
     function loadStreak() {
         let streak = parseInt(localStorage.getItem(STORAGE_KEYS.streak)) || 0;
         let label = `${streak} kun — `;
-        if (streakLabels[streak]) {
-            label += streakLabels[streak];
-        } else if (streak > 40) {
-            label += 'Qalbga singdi va undan ham ko‘proq';
-        } else {
-            label += 'Davom eting';
+        const keys = Object.keys(streakLabels).sort((a, b) => b - a);
+        for (let key of keys) {
+            if (streak >= key) {
+                label += streakLabels[key];
+                break;
+            }
         }
+        if (streak > 40) label += 'Qalbga chuqur singgan yo‘l';
+        else if (streak === 0) label += 'Bugun boshlang';
         document.getElementById('streak-display').textContent = label;
     }
 
-    // Initial loads
+    // Initial setup
     loadPlanner();
     loadIntention();
     loadStreak();
+    loadPreviousReflection();
 </script>
