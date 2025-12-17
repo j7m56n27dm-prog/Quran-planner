@@ -1,395 +1,581 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a1a2f">
-<title>Tilawah Focus</title>
-<style>
-:root{
-  --bg1:#0a1a2f;
-  --bg2:#10384f;
-  --glass-bg:rgba(255,255,255,0.08);
-  --text:#f0f8ff;
-  --accent:#4dd4b0;
-  --weak:#d47979;
-  --medium:#e8d177;
-  --strong:#9ce89c;
-  --arabic-font:'Scheherazade New', serif;
-  --latin-font:'Poppins', sans-serif;
-}
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Scheherazade+New&display=swap');
-*{box-sizing:border-box;margin:0;padding:0;font-family:var(--latin-font);}
-body{
-  background:linear-gradient(120deg,var(--bg1),var(--bg2));
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  overflow-x:hidden;
-}
-canvas#bgAnim{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  z-index:-1;
-}
-header{
-  text-align:center;
-  padding:2rem 1rem;
-}
-h1{font-size:1.8rem;letter-spacing:1px;}
-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem;margin:1rem 0;}
-nav button{
-  background:var(--glass-bg);
-  border:none;
-  color:var(--text);
-  padding:0.7rem 1.4rem;
-  border-radius:25px;
-  backdrop-filter:blur(8px);
-  cursor:pointer;
-  transition:all .3s;
-}
-nav button:hover{
-  background:rgba(255,255,255,0.15);
-  transform:scale(1.05);
-}
-section{
-  display:none;
-  width:90%;
-  max-width:600px;
-  background:var(--glass-bg);
-  border-radius:20px;
-  backdrop-filter:blur(12px);
-  padding:1.5rem;
-  margin-bottom:3rem;
-  animation:fadeIn .5s ease;
-}
-section.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-button.primary{
-  background:var(--accent);
-  color:#003;
-  padding:0.7rem 1.4rem;
-  border:none;
-  border-radius:25px;
-  cursor:pointer;
-  transition:.3s;
-}
-button.primary:hover{background:#6ee0c0;}
-.timer-display{
-  font-size:3rem;
-  text-align:center;
-  margin:1rem 0;
-}
-.ayah{
-  font-family:var(--arabic-font);
-  font-size:1.4rem;
-  text-align:center;
-  line-height:2.2rem;
-  margin-top:1rem;
-}
-.motivation-card{
-  background:rgba(255,255,255,0.08);
-  border-radius:15px;
-  padding:1rem;
-  margin:1rem 0;
-  text-align:center;
-  transition:transform .3s,box-shadow .3s;
-}
-.motivation-card:hover{
-  transform:translateY(-5px) scale(1.03);
-  box-shadow:0 0 20px rgba(255,255,255,0.1);
-}
-.dua{margin:1rem 0;text-align:center;}
-.dua .arabic{font-family:var(--arabic-font);font-size:1.3rem;line-height:2.2rem;}
-.dua .meaning{margin-top:0.5rem;font-size:0.95rem;}
-input,textarea{
-  width:100%;
-  background:rgba(255,255,255,0.1);
-  border:none;
-  border-radius:10px;
-  color:var(--text);
-  padding:0.6rem;
-  margin-top:0.5rem;
-}
-.hifz-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:0.6rem;
-  border-bottom:1px solid rgba(255,255,255,0.1);
-}
-.hifz-item span{flex:1;}
-.hifz-item select{
-  background:rgba(255,255,255,0.1);
-  color:var(--text);
-  border:none;
-  border-radius:8px;
-  padding:0.3rem;
-}
-.progress-bar{
-  height:8px;border-radius:5px;background:rgba(255,255,255,0.1);margin-top:1rem;
-}
-.progress-bar div{
-  height:8px;border-radius:5px;background:var(--accent);width:0%;
-  transition:width 0.5s ease;
-}
-.streak{text-align:center;margin-top:1rem;font-size:1rem;}
-.reflection{margin-top:1rem;}
-@media(max-width:600px){
-  h1{font-size:1.5rem;}
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Tilawah Focus</title>
+    <style>
+        /* Root variables for calm color palette */
+        :root {
+            --bg-primary: #0a192f; /* Deep blue */
+            --accent-emerald: #047857;
+            --sand: #d2b48c;
+            --moonlight: #f8f8ff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: var(--moonlight);
+            --text-secondary: rgba(248, 248, 255, 0.8);
+            --shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+    /* Reset and base styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow-x: hidden;
+        position: relative;
+        line-height: 1.8;
+        font-size: 16px;
+    }
+
+    /* Arabic font styling */
+    .arabic {
+        font-family: 'Traditional Arabic', 'Scheherazade', serif;
+        font-size: 1.2em;
+        direction: rtl;
+        text-align: right;
+    }
+
+    /* Glassmorphism card */
+    .glass-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        margin: 20px;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .glass-card:hover {
+        transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Button styles with ripple */
+    button {
+        background: linear-gradient(135deg, var(--accent-emerald), #065f46);
+        border: none;
+        color: var(--moonlight);
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s ease;
+        font-size: 1em;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 20px rgba(4, 120, 87, 0.3);
+    }
+
+    button:active {
+        transform: scale(0.95);
+    }
+
+    /* Ripple effect */
+    button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+    }
+
+    button:active::before {
+        width: 200px;
+        height: 200px;
+        opacity: 1;
+    }
+
+    /* Input styles */
+    input, textarea {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        color: var(--text-primary);
+        padding: 10px;
+        border-radius: 8px;
+        width: 100%;
+        margin: 10px 0;
+        font-size: 1em;
+    }
+
+    /* Sections */
+    section {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 20px;
+    }
+
+    section.active {
+        display: flex;
+    }
+
+    /* Navigation */
+    nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        z-index: 10;
+    }
+
+    nav button {
+        background: none;
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    /* Animated background */
+    #background-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.3;
+    }
+
+    /* Timer display */
+    #timer {
+        font-size: 3em;
+        margin: 20px 0;
+    }
+
+    /* Progress indicators */
+    .progress {
+        width: 100%;
+        height: 8px;
+        background: var(--glass-bg);
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: var(--accent-emerald);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    /* Strength indicators */
+    .strength-strong { color: var(--accent-emerald); }
+    .strength-medium { color: var(--sand); }
+    .strength-weak { color: #ef4444; }
+
+    /* List items */
+    ul {
+        list-style: none;
+        width: 100%;
+    }
+
+    li {
+        background: var(--glass-bg);
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+        .glass-card {
+            max-width: 600px;
+        }
+    }
 </style>
 </head>
 <body>
-<canvas id="bgAnim"></canvas>
-<header>
-  <h1>Tilawah Focus</h1>
-  <p>Qur’on bilan xotirjamlik va diqqat</p>
-</header>
+    <canvas id="background-canvas"></canvas>
+<!-- Focus Mode Section -->
+<section id="focus-mode" class="active">
+    <h1>Tilawah Focus</h1>
+    <div id="focus-options">
+        <button onclick="startFocus(25)">25 daqiqa</button>
+        <button onclick="startFocus(45)">45 daqiqa</button>
+        <button onclick="startFocus(60)">60 daqiqa</button>
+    </div>
+    <div id="focus-active" style="display: none;">
+        <div id="timer">00:00</div>
+        <div id="ayah-display" class="arabic"></div>
+        <div id="ayah-uzbek"></div>
+    </div>
+    <div id="focus-end" style="display: none;">
+        <h2>Sessiya tugadi</h2>
+        <div id="motivation"></div>
+        <textarea id="reflection" placeholder="O'ylashlar..."></textarea>
+        <button onclick="saveReflection()">Saqlash</button>
+        <button onclick="resetFocus()">Yangi sessiya</button>
+    </div>
+</section>
+
+<!-- Motivations Section -->
+<section id="motivations">
+    <h1>Qur’oniy motivatsiyalar</h1>
+    <div id="motivation-cards"></div>
+</section>
+
+<!-- Du'a Section -->
+<section id="dua">
+    <h1>Du’olar va niyat</h1>
+    <div class="glass-card">
+        <h2>Qur’on oldidan</h2>
+        <p class="arabic">اللّهُمَّ اجعل القرآن ربيع قلبي</p>
+        <p>Allohim, Qur’onni qalbimning bahoriga aylantir.</p>
+    </div>
+    <div class="glass-card">
+        <h2>Yodlash uchun</h2>
+        <p class="arabic">اللّهُمَّ ثبّت ما حفظتُ وذكّرني ما نُسِّيت</p>
+        <p>Allohim, yodlaganimni mustahkam qil, unutganimni eslat.</p>
+    </div>
+    <div class="glass-card">
+        <h2>Unutganlikka qarshi</h2>
+        <p class="arabic">رَبِّ اشْرَحْ لِي صَدْرِي</p>
+        <p>Robbim, ko‘nglimni keng qil.</p>
+    </div>
+    <div class="glass-card">
+        <h2>Barqarorlik uchun</h2>
+        <p class="arabic">اللّهُمَّ لا تجعل القرآن حجةً عليّ بل حجةً لي</p>
+        <p>Allohim, Qur’onni menga qarshi emas, men uchun hujjat qil.</p>
+    </div>
+    <textarea id="intention" placeholder="Mening niyatim..."></textarea>
+    <button onclick="saveIntention()">Saqlash</button>
+</section>
+
+<!-- Planner Section -->
+<section id="planner">
+    <h1>Hifz va Muroja’ah Rejasi</h1>
+    <div class="glass-card">
+        <h2>Bugun yodlash</h2>
+        <input id="new-memorize" placeholder="Oyat qo'shish (Surah:oyat)">
+        <button onclick="addItem('memorize')">Qo'shish</button>
+        <ul id="memorize-list"></ul>
+    </div>
+    <div class="glass-card">
+        <h2>Bugun takrorlash</h2>
+        <input id="new-revise" placeholder="Oyat qo'shish">
+        <button onclick="addItem('revise')">Qo'shish</button>
+        <ul id="revise-list"></ul>
+    </div>
+    <div class="glass-card">
+        <h2>Zaif joylar</h2>
+        <ul id="weak-list"></ul>
+    </div>
+    <div class="glass-card">
+        <h2>Mustahkam oyatlar</h2>
+        <ul id="strong-list"></ul>
+    </div>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+    </div>
+</section>
+
+<!-- Streak Section -->
+<section id="streak">
+    <h1>Barqarorlik</h1>
+    <div id="streak-display" class="glass-card"></div>
+</section>
+
+<!-- Navigation -->
 <nav>
-  <button data-target="focus">Tilawah Fokusi</button>
-  <button data-target="motivations">Ilhomlar</button>
-  <button data-target="duas">Duolar</button>
-  <button data-target="hifz">Hifz reja</button>
-  <button data-target="streak">Barqarorlik</button>
+    <button onclick="showSection('focus-mode')">Focus</button>
+    <button onclick="showSection('motivations')">Motivatsiyalar</button>
+    <button onclick="showSection('dua')">Du’olar</button>
+    <button onclick="showSection('planner')">Reja</button>
+    <button onclick="showSection('streak')">Barqarorlik</button>
 </nav>
 
-<section id="focus" class="active">
-  <h2>Tilawah Fokusi</h2>
-  <div class="session-options" style="text-align:center;margin:1rem 0;">
-    <button class="primary" data-min="25">25 daqiqa</button>
-    <button class="primary" data-min="45">45 daqiqa</button>
-    <button class="primary" data-min="60">60 daqiqa</button>
-  </div>
-  <div class="timer-display" id="timer">00:00</div>
-  <div class="ayah" id="focus-ayah"></div>
-  <div class="reflection">
-    <label for="reflectionText">Bugungi tafakkur:</label>
-    <textarea id="reflectionText" rows="3" placeholder="Fikrlaringizni yozing..."></textarea>
-    <button class="primary" id="saveReflection">Saqlash</button>
-  </div>
-</section>
-
-<section id="motivations">
-  <h2>Qur’on ilhomlari</h2>
-  <div id="motivationList"></div>
-</section>
-
-<section id="duas">
-  <h2>Duolar va Niyat</h2>
-  <div id="duasList"></div>
-  <h3>Mening niyatim</h3>
-  <input type="text" id="intentionInput" placeholder="Niyatim...">
-  <button class="primary" id="saveIntention">Saqlash</button>
-</section>
-
-<section id="hifz">
-  <h2>Hifz va Muroja’ah reja</h2>
-  <div id="hifzList"></div>
-  <button class="primary" id="addHifz">Yangi oyat qo‘shish</button>
-  <div class="progress-bar"><div id="hifzProgress"></div></div>
-</section>
-
-<section id="streak">
-  <h2>Barqarorlik</h2>
-  <div class="streak" id="streakText"></div>
-</section>
-
 <script>
-// Background animation - flowing gradient waves
-const canvas=document.getElementById('bgAnim');
-const ctx=canvas.getContext('2d');
-let w,h,time=0;
-function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}
-window.addEventListener('resize',resize);resize();
-function wave(t,x,o){return Math.sin((x/100)+t+o)*20;}
-function draw(){
- ctx.clearRect(0,0,w,h);
- let grd=ctx.createLinearGradient(0,0,w,h);
- grd.addColorStop(0,'#0a1a2f');
- grd.addColorStop(1,'#10384f');
- ctx.fillStyle=grd;ctx.fillRect(0,0,w,h);
- ctx.beginPath();
- for(let x=0;x<=w;x++){
-   let y=h/2+wave(time/20,x,0)+wave(time/40,x,2)+wave(time/50,x,5);
-   x==0?ctx.moveTo(x,y):ctx.lineTo(x,y);
- }
- ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
- ctx.fillStyle='rgba(77,212,176,0.1)';
- ctx.fill();
- time+=1;
- requestAnimationFrame(draw);
-}
-draw();
+    // Data collections
+    const ayahs = [
+        { arabic: 'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', uzbek: 'Albatta, qalblar Allohni zikr qilish bilan xotirjam bo‘lur. (Ra’d, 28)' },
+        { arabic: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', uzbek: '“Parvardigorim, ilmimni ziyoda qil.” (Toha, 114)' },
+        { arabic: 'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا', uzbek: 'Albatta, qiyinchilik bilan birga yengillik bor. (Sharh, 6)' },
+        { arabic: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', uzbek: 'Albatta, Alloh sabr qiluvchilar bilan birgadir. (Baqara, 153)' }
+    ];
 
-// Navigation
-const buttons=document.querySelectorAll('nav button');
-const sections=document.querySelectorAll('section');
-buttons.forEach(btn=>{
-  btn.onclick=()=>{
-    sections.forEach(s=>s.classList.remove('active'));
-    document.getElementById(btn.dataset.target).classList.add('active');
-  };
-});
+    const motivations = [
+        'Qur’on bilan o‘tirgan qalb hech qachon yolg‘iz bo‘lmaydi.',
+        'Bugun oz o‘qidim deme — davomli o‘qish Allohga suyuklidir.',
+        'Bir oyat bilan yashash, ming rejasiz kundan afzaldir.',
+        'Qur’on seni o‘zgartirmay qolsa, sen unga hali yetib bormagansan.',
+        'Til charchashi mumkin, qalb charchamaydi — davom et.',
+        'Hifz sabr bilan bitadi, shoshilish bilan buziladi.',
+        'Bugungi ozgina muroja’ah — ertangi mustahkamlik.',
+        'Qur’onni tez tugatish emas, sog‘lom olib yurish maqsad.',
+        'Alloh Qur’on bilan band bo‘lgan qalbni sinmaydigan qiladi.',
+        'Yoddan chiqqan oyat gunoh emas, tashlab qo‘yilgan oyat xatardir.'
+    ];
 
-// Data
-const ayahs=[
-{ar:'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ',uz:'Albatta, qalblar Allohni zikr qilish bilan xotirjam bo‘lur. (Ra’d, 28)'},
-{ar:'وَقُل رَّبِّ زِدْنِي عِلْمًا',uz:'Parvardigorim, ilmimni ziyoda qil. (Toha, 114)'},
-{ar:'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا',uz:'Albatta, qiyinchilik bilan birga yengillik bor. (Sharh, 6)'},
-{ar:'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ',uz:'Albatta, Alloh sabr qiluvchilar bilan birgadir. (Baqara, 153)'}
-];
-const motivations=[
-"Qur’on bilan o‘tirgan qalb hech qachon yolg‘iz bo‘lmaydi.",
-"Bugun oz o‘qidim deme — davomli o‘qish Allohga suyuklidir.",
-"Bir oyat bilan yashash, ming rejasiz kundan afzaldir.",
-"Qur’on seni o‘zgartirmay qolsa, sen unga hali yetib bormagansan.",
-"Til charchashi mumkin, qalb charchamaydi — davom et.",
-"Hifz sabr bilan bitadi, shoshilish bilan buziladi.",
-"Bugungi ozgina muroja’ah — ertangi mustahkamlik.",
-"Qur’onni tez tugatish emas, sog‘lom olib yurish maqsad.",
-"Alloh Qur’on bilan band bo‘lgan qalbni sinmaydigan qiladi.",
-"Yoddan chiqqan oyat gunoh emas, tashlab qo‘yilgan oyat xatardir."
-];
-const duas=[
-{ar:"اللّهُمَّ اجعل القرآن ربيع قلبي",uz:"Allohim, Qur’onni qalbimning bahoriga aylantir."},
-{ar:"اللّهُمَّ ثبّت ما حفظتُ وذكّرني ما نُسِّيت",uz:"Allohim, yodlaganimni mustahkam qil, unutganimni eslat."},
-{ar:"رَبِّ اشْرَحْ لِي صَدْرِي",uz:"Robbim, ko‘nglimni keng qil."},
-{ar:"اللّهُمَّ لا تجعل القرآن حجةً عليّ بل حجةً لي",uz:"Allohim, Qur’onni menga qarshi emas, men uchun hujjat qil."}
-];
+    const streakLabels = {
+        1: 'Boshlanish',
+        3: 'Barqaror qadam',
+        7: 'Qur’on bilan odat',
+        21: 'Mustahkam yo‘l',
+        40: 'Qalbga singdi'
+    };
 
-// Focus timer
-let timerInterval,remaining=0;
-const timerDisplay=document.getElementById('timer');
-const focusAyah=document.getElementById('focus-ayah');
-document.querySelectorAll('.session-options button').forEach(b=>{
- b.onclick=()=>{
-   startFocus(b.dataset.min);
- };
-});
-function startFocus(min){
- clearInterval(timerInterval);
- remaining=min*60;
- const ayah=ayahs[Math.floor(Math.random()*ayahs.length)];
- focusAyah.innerHTML=`<div>${ayah.ar}</div><div style="font-size:0.9rem;margin-top:0.5rem;">${ayah.uz}</div>`;
- smoothUpdate();
- timerInterval=setInterval(()=>{
-   remaining--;
-   smoothUpdate();
-   if(remaining<=0){
-     clearInterval(timerInterval);
-     endFocus();
-   }
- },1000);
-}
-function smoothUpdate(){
- let m=Math.floor(remaining/60).toString().padStart(2,'0');
- let s=(remaining%60).toString().padStart(2,'0');
- timerDisplay.textContent=`${m}:${s}`;
-}
-function endFocus(){
- const msg=motivations[Math.floor(Math.random()*motivations.length)];
- focusAyah.innerHTML=`<div style="margin-top:1rem;">${msg}</div>`;
-}
+    // LocalStorage keys
+    const STORAGE_KEYS = {
+        reflection: 'tf_reflection',
+        intention: 'tf_intention',
+        memorize: 'tf_memorize',
+        revise: 'tf_revise',
+        weak: 'tf_weak',
+        strong: 'tf_strong',
+        lastSession: 'tf_lastSession',
+        streak: 'tf_streak'
+    };
 
-// Reflections
-const reflectionText=document.getElementById('reflectionText');
-const savedRef=localStorage.getItem('reflection')||'';
-reflectionText.value=savedRef;
-document.getElementById('saveReflection').onclick=()=>{
- localStorage.setItem('reflection',reflectionText.value);
- alert('Tafakkur saqlandi.');
-};
+    // Background animation (particles)
+    const canvas = document.getElementById('background-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
 
-// Motivations list
-const motList=document.getElementById('motivationList');
-motivations.forEach(m=>{
- const div=document.createElement('div');
- div.className='motivation-card';
- div.textContent=m;
- motList.appendChild(div);
-});
+    const particles = [];
+    for (let i = 0; i < 50; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 2 + 1,
+            speed: Math.random() * 0.5 + 0.1
+        });
+    }
 
-// Duas
-const duasList=document.getElementById('duasList');
-duas.forEach(d=>{
- const div=document.createElement('div');
- div.className='dua';
- div.innerHTML=`<div class="arabic">${d.ar}</div><div class="meaning">${d.uz}</div>`;
- duasList.appendChild(div);
-});
-const intentionInput=document.getElementById('intentionInput');
-intentionInput.value=localStorage.getItem('intention')||'';
-document.getElementById('saveIntention').onclick=()=>{
- localStorage.setItem('intention',intentionInput.value);
- alert('Niyat saqlandi.');
-};
+    function animateBackground() {
+        requestAnimationFrame(animateBackground);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(248, 248, 255, 0.5)';
+            ctx.fill();
+            p.y += p.speed;
+            if (p.y > canvas.height) p.y = 0;
+        });
+    }
+    animateBackground();
 
-// Hifz planner
-let hifz=JSON.parse(localStorage.getItem('hifz')||'[]');
-const hifzList=document.getElementById('hifzList');
-function renderHifz(){
- hifzList.innerHTML='';
- hifz.forEach((item,i)=>{
-   const div=document.createElement('div');
-   div.className='hifz-item';
-   div.innerHTML=`<span>${item.text}</span>
-   <select data-i="${i}">
-     <option value="weak" ${item.status==='weak'?'selected':''}>Zaif</option>
-     <option value="medium" ${item.status==='medium'?'selected':''}>O‘rtacha</option>
-     <option value="strong" ${item.status==='strong'?'selected':''}>Mustahkam</option>
-   </select>`;
-   hifzList.appendChild(div);
- });
- updateProgress();
-}
-renderHifz();
-hifzList.addEventListener('change',e=>{
- if(e.target.tagName==='SELECT'){
-   const i=e.target.dataset.i;
-   hifz[i].status=e.target.value;
-   localStorage.setItem('hifz',JSON.stringify(hifz));
-   updateProgress();
- }
-});
-document.getElementById('addHifz').onclick=()=>{
- const text=prompt("O‘rganiladigan oyat:");
- if(!text)return;
- hifz.push({text,status:'weak'});
- localStorage.setItem('hifz',JSON.stringify(hifz));
- renderHifz();
-};
-function updateProgress(){
- const bar=document.getElementById('hifzProgress');
- if(hifz.length===0){bar.style.width='0%';return;}
- const strong=hifz.filter(i=>i.status==='strong').length;
- const pct=Math.round((strong/hifz.length)*100);
- bar.style.width=pct+'%';
-}
+    // Section navigation
+    function showSection(id) {
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if (id === 'motivations') loadMotivations();
+        if (id === 'dua') loadIntention();
+        if (id === 'planner') loadPlanner();
+        if (id === 'streak') loadStreak();
+    }
 
-// Streak system
-function getStreak(){
- const last=localStorage.getItem('lastFocusDate');
- const today=new Date().toDateString();
- let count=parseInt(localStorage.getItem('streakCount')||'0');
- if(last!==today){
-   const diff=last?Math.floor((new Date(today)-new Date(last))/86400000):1;
-   if(diff===1)count++;
-   else count=1;
-   localStorage.setItem('streakCount',count);
-   localStorage.setItem('lastFocusDate',today);
- }
- return count;
-}
-function streakLabel(c){
- if(c>=40)return"Qalbga singdi";
- if(c>=21)return"Mustahkam yo‘l";
- if(c>=7)return"Qur’on bilan odat";
- if(c>=3)return"Barqaror qadam";
- if(c>=1)return"Boshlanish";
- return"Boshlanish";
-}
-const streakCount=getStreak();
-document.getElementById('streakText').textContent=`${streakCount} kun — ${streakLabel(streakCount)}`;
+    // Focus Mode
+    let timerInterval;
+    function startFocus(minutes) {
+        document.getElementById('focus-options').style.display = 'none';
+        document.getElementById('focus-active').style.display = 'block';
+        const endTime = Date.now() + minutes * 60 * 1000;
+        const ayah = ayahs[Math.floor(Math.random() * ayahs.length)];
+        document.getElementById('ayah-display').textContent = ayah.arabic;
+        document.getElementById('ayah-uzbek').textContent = ayah.uzbek;
+
+        timerInterval = setInterval(() => {
+            const remaining = endTime - Date.now();
+            if (remaining <= 0) {
+                clearInterval(timerInterval);
+                endFocus();
+                return;
+            }
+            const mins = Math.floor(remaining / 60000);
+            const secs = Math.floor((remaining % 60000) / 1000);
+            document.getElementById('timer').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    function endFocus() {
+        document.getElementById('focus-active').style.display = 'none';
+        document.getElementById('focus-end').style.display = 'block';
+        const motivation = motivations[Math.floor(Math.random() * motivations.length)];
+        document.getElementById('motivation').textContent = motivation;
+        updateStreak();
+    }
+
+    function resetFocus() {
+        document.getElementById('focus-end').style.display = 'none';
+        document.getElementById('focus-options').style.display = 'block';
+        document.getElementById('reflection').value = '';
+    }
+
+    function saveReflection() {
+        localStorage.setItem(STORAGE_KEYS.reflection, document.getElementById('reflection').value);
+    }
+
+    // Motivations
+    function loadMotivations() {
+        const container = document.getElementById('motivation-cards');
+        container.innerHTML = '';
+        motivations.forEach(m => {
+            const card = document.createElement('div');
+            card.classList.add('glass-card');
+            card.textContent = m;
+            container.appendChild(card);
+        });
+    }
+
+    // Du'a Intention
+    function saveIntention() {
+        localStorage.setItem(STORAGE_KEYS.intention, document.getElementById('intention').value);
+    }
+
+    function loadIntention() {
+        document.getElementById('intention').value = localStorage.getItem(STORAGE_KEYS.intention) || '';
+    }
+
+    // Planner
+    let plannerItems = {
+        memorize: [],
+        revise: [],
+        weak: [],
+        strong: []
+    };
+
+    function addItem(type) {
+        const input = document.getElementById(`new-${type}`);
+        if (!input.value) return;
+        plannerItems[type].push({ text: input.value, strength: 'medium' });
+        savePlanner();
+        renderPlanner(type);
+        input.value = '';
+        updateProgress();
+    }
+
+    function renderPlanner(type) {
+        const list = document.getElementById(`${type}-list`);
+        list.innerHTML = '';
+        plannerItems[type].forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="strength-${item.strength}">${item.text}</span>
+                <select onchange="changeStrength('${type}', ${index}, this.value)">
+                    <option value="strong" ${item.strength === 'strong' ? 'selected' : ''}>Mustahkam</option>
+                    <option value="medium" ${item.strength === 'medium' ? 'selected' : ''}>O‘rtacha</option>
+                    <option value="weak" ${item.strength === 'weak' ? 'selected' : ''}>Zaif</option>
+                </select>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    function changeStrength(type, index, strength) {
+        plannerItems[type][index].strength = strength;
+        if (strength === 'weak') {
+            plannerItems.weak.push(plannerItems[type][index]);
+        } else if (strength === 'strong') {
+            plannerItems.strong.push(plannerItems[type][index]);
+        }
+        savePlanner();
+        renderAllLists();
+        updateProgress();
+    }
+
+    function renderAllLists() {
+        ['memorize', 'revise', 'weak', 'strong'].forEach(renderPlanner);
+    }
+
+    function loadPlanner() {
+        const saved = localStorage.getItem(STORAGE_KEYS.memorize);
+        if (saved) plannerItems.memorize = JSON.parse(saved);
+        const savedRevise = localStorage.getItem(STORAGE_KEYS.revise);
+        if (savedRevise) plannerItems.revise = JSON.parse(savedRevise);
+        const savedWeak = localStorage.getItem(STORAGE_KEYS.weak);
+        if (savedWeak) plannerItems.weak = JSON.parse(savedWeak);
+        const savedStrong = localStorage.getItem(STORAGE_KEYS.strong);
+        if (savedStrong) plannerItems.strong = JSON.parse(savedStrong);
+        renderAllLists();
+        updateProgress();
+    }
+
+    function savePlanner() {
+        localStorage.setItem(STORAGE_KEYS.memorize, JSON.stringify(plannerItems.memorize));
+        localStorage.setItem(STORAGE_KEYS.revise, JSON.stringify(plannerItems.revise));
+        localStorage.setItem(STORAGE_KEYS.weak, JSON.stringify(plannerItems.weak));
+        localStorage.setItem(STORAGE_KEYS.strong, JSON.stringify(plannerItems.strong));
+    }
+
+    function updateProgress() {
+        const total = plannerItems.memorize.length + plannerItems.revise.length;
+        if (total === 0) return;
+        const strong = plannerItems.strong.length;
+        const percentage = (strong / total) * 100;
+        document.getElementById('progress-bar').style.width = `${percentage}%`;
+    }
+
+    // Streak
+    function updateStreak() {
+        const today = new Date().toDateString();
+        const last = localStorage.getItem(STORAGE_KEYS.lastSession);
+        let streak = parseInt(localStorage.getItem(STORAGE_KEYS.streak)) || 0;
+        if (last === today) return;
+        if (new Date(last).getTime() + 86400000 === new Date(today).getTime()) {
+            streak++;
+        } else {
+            streak = 1;
+        }
+        localStorage.setItem(STORAGE_KEYS.streak, streak);
+        localStorage.setItem(STORAGE_KEYS.lastSession, today);
+    }
+
+    function loadStreak() {
+        let streak = parseInt(localStorage.getItem(STORAGE_KEYS.streak)) || 0;
+        let label = `${streak} kun — `;
+        if (streakLabels[streak]) {
+            label += streakLabels[streak];
+        } else if (streak > 40) {
+            label += 'Qalbga singdi va undan ham ko‘proq';
+        } else {
+            label += 'Davom eting';
+        }
+        document.getElementById('streak-display').textContent = label;
+    }
+
+    // Initial loads
+    loadPlanner();
+    loadIntention();
+    loadStreak();
 </script>
-</body>
-</html>
