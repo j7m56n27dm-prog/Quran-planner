@@ -2,38 +2,55 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tilawah Focus</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tilawah Focus — Advanced</title>
 
 <style>
-body{
-margin:0;
-font-family:system-ui,Segoe UI,Roboto;
-background:radial-gradient(1200px 800px at 50% -20%,#1b2a6d,#050812 65%);
-color:#f6f7fb;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
+:root{
+--bg:#050812;
+--glass:rgba(255,255,255,.08);
+--border:rgba(255,255,255,.18);
+--accent:#2dd4bf;
+--danger:#ef476f;
+--text:#f6f7fb;
+--muted:#b5bddc;
 }
 
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+font-family:system-ui,Segoe UI,Roboto;
+background:radial-gradient(1200px 800px at 50% -20%,#1b2a6d,var(--bg) 65%);
+color:var(--text);
+min-height:100vh;
+overflow:hidden;
+}
+
+/* ===== PARTICLES ===== */
+canvas{
+position:fixed;
+inset:0;
+z-index:-1;
+}
+
+/* ===== LAYOUT ===== */
 .app{
-width:100%;
 max-width:420px;
-padding:20px;
+margin:auto;
+padding:24px;
 }
 
 .card{
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.18);
-border-radius:20px;
-padding:20px;
+background:var(--glass);
+border:1px solid var(--border);
+border-radius:22px;
+padding:22px;
 backdrop-filter:blur(18px);
-text-align:center;
-animation:fadeUp .8s ease;
+box-shadow:0 20px 50px rgba(0,0,0,.35);
+animation:fade .8s ease;
 }
 
-@keyframes fadeUp{
+@keyframes fade{
 from{opacity:0;transform:translateY(20px)}
 to{opacity:1;transform:none}
 }
@@ -41,111 +58,176 @@ to{opacity:1;transform:none}
 .ayah-ar{
 font-family:serif;
 font-size:28px;
-line-height:1.8;
-margin-bottom:10px;
+line-height:1.9;
+text-align:center;
 }
 
 .ayah-uz{
+text-align:center;
 font-size:14px;
-opacity:.8;
+color:var(--muted);
+margin-top:6px;
 }
 
 .timer{
-font-size:64px;
-margin:20px 0;
+font-size:72px;
+text-align:center;
+margin:24px 0;
 letter-spacing:2px;
 }
 
-.controls button{
-margin:6px;
-padding:10px 16px;
+.controls{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+button{
+padding:10px 18px;
 border-radius:14px;
 border:none;
 cursor:pointer;
-background:#2dd4bf;
-color:#022;
 font-weight:600;
+background:var(--accent);
+color:#022;
+transition:.25s;
 }
 
-.controls button.stop{
-background:#ef476f;
-color:white;
+button.stop{
+background:var(--danger);
+color:#fff;
 }
+
+button:hover{transform:scale(1.05)}
 
 .status{
-margin-top:10px;
+margin-top:14px;
 font-size:13px;
-opacity:.8;
+text-align:center;
+color:var(--muted);
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="bg"></canvas>
+
 <div class="app">
 <div class="card">
 
-<div class="ayah-ar" id="ayahAr">
-أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
-</div>
-<div class="ayah-uz" id="ayahUz">
-Albatta, qalblar Allohni zikr qilish bilan xotirjam bo‘lur.
-</div>
+<div class="ayah-ar" id="ayahAr"></div>
+<div class="ayah-uz" id="ayahUz"></div>
 
 <div class="timer" id="timer">25:00</div>
 
 <div class="controls">
-<button onclick="start(25)">25</button>
-<button onclick="start(45)">45</button>
-<button onclick="start(60)">60</button>
-<button class="stop" onclick="stop()">Stop</button>
+<button onclick="engine.start(25)">25</button>
+<button onclick="engine.start(45)">45</button>
+<button onclick="engine.start(60)">60</button>
+<button class="stop" onclick="engine.stop()">Stop</button>
 </div>
 
-<div class="status" id="status">Tayyor</div>
+<div class="status" id="status"></div>
 
 </div>
 </div>
 
 <script>
+/* ================= PARTICLE BACKGROUND ================= */
+const c=document.getElementById("bg"),ctx=c.getContext("2d");
+let w,h,stars=[];
+function resize(){
+w=c.width=window.innerWidth;
+h=c.height=window.innerHeight;
+stars=Array.from({length:120},()=>({
+x:Math.random()*w,
+y:Math.random()*h,
+r:Math.random()*1.5+0.3,
+v:Math.random()*0.3+0.1
+}));
+}
+window.onresize=resize;resize();
+
+function draw(){
+ctx.clearRect(0,0,w,h);
+ctx.fillStyle="white";
+stars.forEach(s=>{
+ctx.globalAlpha=.6;
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
+s.y-=s.v;
+if(s.y<0)s.y=h;
+});
+requestAnimationFrame(draw);
+}
+draw();
+
+/* ================= SMART ENGINE ================= */
 const ayahs=[
 ["أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ","Qalblar Allohni zikr qilish bilan xotirjam bo‘lur."],
 ["وَقُل رَّبِّ زِدْنِي عِلْمًا","Parvardigorim, ilmimni ziyoda qil."],
-["إِنَّ اللَّهَ مَعَ الصَّابِرِينَ","Alloh sabr qiluvchilar bilan birgadir."]
+["إِنَّ اللَّهَ مَعَ الصَّابِرِينَ","Alloh sabr qiluvchilar bilan birgadir."],
+["فَإِنَّ مَعَ الْعُسْرِ يُسْرًا","Qiyinchilik bilan birga yengillik bor."]
 ];
 
-let endTime=null;
-let raf=null;
+const engine={
+state:"idle",
+end:0,
+raf:null,
 
-function start(min){
-stop();
-const now=Date.now();
-endTime=now+min*60000;
-tick();
-document.getElementById("status").textContent="Fokus davom etmoqda…";
+start(min){
+this.stop();
+this.state="running";
+this.end=Date.now()+min*60000;
+this.pickAyah();
+this.tick();
+status.textContent="Fokus boshlandi…";
+},
+
+stop(){
+if(this.raf)cancelAnimationFrame(this.raf);
+this.state="idle";
+status.textContent="To‘xtatildi";
+},
+
+tick(){
+if(this.state!=="running")return;
+const diff=Math.max(0,this.end-Date.now());
+const sec=Math.ceil(diff/1000);
+const m=String(Math.floor(sec/60)).padStart(2,"0");
+const s=String(sec%60).padStart(2,"0");
+timer.textContent=`${m}:${s}`;
+if(diff>0){
+this.raf=requestAnimationFrame(this.tick.bind(this));
+}else{
+this.complete();
+}
+},
+
+complete(){
+this.state="idle";
+status.textContent="Yakunlandi. Alloh baraka bersin.";
+this.saveSession();
+},
+
+pickAyah(){
 const a=ayahs[Math.floor(Math.random()*ayahs.length)];
 ayahAr.textContent=a[0];
 ayahUz.textContent=a[1];
-}
+},
 
-function stop(){
-if(raf)cancelAnimationFrame(raf);
-endTime=null;
-document.getElementById("status").textContent="To‘xtatildi";
+saveSession(){
+const list=JSON.parse(localStorage.getItem("sessions")||"[]");
+list.push({date:new Date().toISOString()});
+localStorage.setItem("sessions",JSON.stringify(list));
 }
+};
 
-function tick(){
-if(!endTime)return;
-const diff=Math.max(0,endTime-Date.now());
-const s=Math.ceil(diff/1000);
-const m=String(Math.floor(s/60)).padStart(2,"0");
-const r=String(s%60).padStart(2,"0");
-timer.textContent=`${m}:${r}`;
-if(diff>0){
-raf=requestAnimationFrame(tick);
-}else{
-document.getElementById("status").textContent="Yakunlandi. Alloh baraka bersin.";
-}
-}
+engine.pickAyah();
+status.textContent="Tayyor";
 </script>
 
 </body>
