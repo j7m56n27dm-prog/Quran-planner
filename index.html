@@ -1,234 +1,528 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tilawah Focus — Advanced</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Hand Control</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-<style>
-:root{
---bg:#050812;
---glass:rgba(255,255,255,.08);
---border:rgba(255,255,255,.18);
---accent:#2dd4bf;
---danger:#ef476f;
---text:#f6f7fb;
---muted:#b5bddc;
-}
+    <!-- MediaPipe Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-font-family:system-ui,Segoe UI,Roboto;
-background:radial-gradient(1200px 800px at 50% -20%,#1b2a6d,var(--bg) 65%);
-color:var(--text);
-min-height:100vh;
-overflow:hidden;
-}
-
-/* ===== PARTICLES ===== */
-canvas{
-position:fixed;
-inset:0;
-z-index:-1;
-}
-
-/* ===== LAYOUT ===== */
-.app{
-max-width:420px;
-margin:auto;
-padding:24px;
-}
-
-.card{
-background:var(--glass);
-border:1px solid var(--border);
-border-radius:22px;
-padding:22px;
-backdrop-filter:blur(18px);
-box-shadow:0 20px 50px rgba(0,0,0,.35);
-animation:fade .8s ease;
-}
-
-@keyframes fade{
-from{opacity:0;transform:translateY(20px)}
-to{opacity:1;transform:none}
-}
-
-.ayah-ar{
-font-family:serif;
-font-size:28px;
-line-height:1.9;
-text-align:center;
-}
-
-.ayah-uz{
-text-align:center;
-font-size:14px;
-color:var(--muted);
-margin-top:6px;
-}
-
-.timer{
-font-size:72px;
-text-align:center;
-margin:24px 0;
-letter-spacing:2px;
-}
-
-.controls{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:10px;
-}
-
-button{
-padding:10px 18px;
-border-radius:14px;
-border:none;
-cursor:pointer;
-font-weight:600;
-background:var(--accent);
-color:#022;
-transition:.25s;
-}
-
-button.stop{
-background:var(--danger);
-color:#fff;
-}
-
-button:hover{transform:scale(1.05)}
-
-.status{
-margin-top:14px;
-font-size:13px;
-text-align:center;
-color:var(--muted);
-}
-</style>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #050505; }
+        canvas { display: block; }
+    </style>
 </head>
-
 <body>
+    <div id="root"></div>
 
-<canvas id="bg"></canvas>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-<div class="app">
-<div class="card">
+        // --- ICONS (Inline SVGs for standalone compatibility) ---
+        const IconHand = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>;
+        const IconSparkles = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 15v4"/><path d="M23 17h-4"/></svg>;
+        const IconOrbit = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>;
+        const IconHeart = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>;
+        const IconZap = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+        const IconMaximize = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>;
+        const IconMinimize = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg>;
+        const IconRadio = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"/></svg>;
+        const IconActivity = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>;
+        const IconAlert = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>;
 
-<div class="ayah-ar" id="ayahAr"></div>
-<div class="ayah-uz" id="ayahUz"></div>
+        // --- TYPES & CONSTANTS ---
+        const ParticleShape = {
+            SPHERE: 'SPHERE',
+            HEART: 'HEART',
+            FLOWER: 'FLOWER',
+            SATURN: 'SATURN',
+            FIREWORKS: 'FIREWORKS'
+        };
 
-<div class="timer" id="timer">25:00</div>
+        const PARTICLE_COUNT = 12000;
+        const LERP_FACTOR = 0.08;
 
-<div class="controls">
-<button onclick="engine.start(25)">25</button>
-<button onclick="engine.start(45)">45</button>
-<button onclick="engine.start(60)">60</button>
-<button class="stop" onclick="engine.stop()">Stop</button>
-</div>
+        // --- SHAPE GENERATION LOGIC ---
+        const ShapeGenerator = {
+            [ParticleShape.SPHERE]: (count) => {
+                const positions = new Float32Array(count * 3);
+                for (let i = 0; i < count; i++) {
+                const r = 40 + Math.random() * 5; 
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                
+                positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                positions[i * 3 + 2] = r * Math.cos(phi);
+                }
+                return positions;
+            },
+            [ParticleShape.HEART]: (count) => {
+                const positions = new Float32Array(count * 3);
+                for (let i = 0; i < count; i++) {
+                const t = Math.random() * Math.PI * 2;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+                const z = (Math.random() - 0.5) * 10;
+                const scale = 2.5;
+                positions[i * 3] = x * scale;
+                positions[i * 3 + 1] = y * scale;
+                positions[i * 3 + 2] = z;
+                }
+                return positions;
+            },
+            [ParticleShape.FLOWER]: (count) => {
+                const positions = new Float32Array(count * 3);
+                for (let i = 0; i < count; i++) {
+                const u = Math.random() * Math.PI * 2;
+                const v = Math.random() * Math.PI;
+                const r = 30 + 10 * Math.sin(5 * u) * Math.sin(5 * v);
+                positions[i * 3] = r * Math.sin(v) * Math.cos(u);
+                positions[i * 3 + 1] = r * Math.sin(v) * Math.sin(u);
+                positions[i * 3 + 2] = r * Math.cos(v);
+                }
+                return positions;
+            },
+            [ParticleShape.SATURN]: (count) => {
+                const positions = new Float32Array(count * 3);
+                const planetCount = Math.floor(count * 0.4);
+                
+                for (let i = 0; i < planetCount; i++) {
+                const r = 20 + Math.random() * 2;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                positions[i * 3 + 2] = r * Math.cos(phi);
+                }
 
-<div class="status" id="status"></div>
+                for (let i = planetCount; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 35 + Math.random() * 25;
+                positions[i * 3] = dist * Math.cos(angle);
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 2;
+                positions[i * 3 + 2] = dist * Math.sin(angle);
+                }
+                return positions;
+            },
+            [ParticleShape.FIREWORKS]: (count) => {
+                const positions = new Float32Array(count * 3);
+                for (let i = 0; i < count; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.random() * Math.PI;
+                const r = Math.random() * 60;
+                positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                positions[i * 3 + 2] = r * Math.cos(phi);
+                }
+                return positions;
+            }
+        };
 
-</div>
-</div>
+        // --- AUDIO ENGINE ---
+        class AudioEngine {
+            constructor() {
+                this.ctx = null;
+                this.droneOsc = null;
+                this.droneGain = null;
+                this.filter = null;
+                this.isStarted = false;
+            }
 
-<script>
-/* ================= PARTICLE BACKGROUND ================= */
-const c=document.getElementById("bg"),ctx=c.getContext("2d");
-let w,h,stars=[];
-function resize(){
-w=c.width=window.innerWidth;
-h=c.height=window.innerHeight;
-stars=Array.from({length:120},()=>({
-x:Math.random()*w,
-y:Math.random()*h,
-r:Math.random()*1.5+0.3,
-v:Math.random()*0.3+0.1
-}));
-}
-window.onresize=resize;resize();
+            init() {
+                if (this.ctx) return;
+                const AudioCtor = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtor) return;
+                
+                this.ctx = new AudioCtor();
+                this.filter = this.ctx.createBiquadFilter();
+                this.filter.type = 'lowpass';
+                this.filter.frequency.value = 200;
+                this.droneGain = this.ctx.createGain();
+                this.droneGain.gain.value = 0.0;
+                this.droneOsc = this.ctx.createOscillator();
+                this.droneOsc.type = 'sine';
+                this.droneOsc.frequency.value = 55;
 
-function draw(){
-ctx.clearRect(0,0,w,h);
-ctx.fillStyle="white";
-stars.forEach(s=>{
-ctx.globalAlpha=.6;
-ctx.beginPath();
-ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-ctx.fill();
-s.y-=s.v;
-if(s.y<0)s.y=h;
-});
-requestAnimationFrame(draw);
-}
-draw();
+                this.droneOsc.connect(this.filter);
+                this.filter.connect(this.droneGain);
+                this.droneGain.connect(this.ctx.destination);
+                this.droneOsc.start();
+                this.isStarted = true;
+            }
 
-/* ================= SMART ENGINE ================= */
-const ayahs=[
-["أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ","Qalblar Allohni zikr qilish bilan xotirjam bo‘lur."],
-["وَقُل رَّبِّ زِدْنِي عِلْمًا","Parvardigorim, ilmimni ziyoda qil."],
-["إِنَّ اللَّهَ مَعَ الصَّابِرِينَ","Alloh sabr qiluvchilar bilan birgadir."],
-["فَإِنَّ مَعَ الْعُسْرِ يُسْرًا","Qiyinchilik bilan birga yengillik bor."]
-];
+            resume() {
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+                if (this.droneGain && this.ctx) {
+                    this.droneGain.gain.setTargetAtTime(0.15, this.ctx.currentTime, 2);
+                }
+            }
 
-const engine={
-state:"idle",
-end:0,
-raf:null,
+            update(pinchDistance, isPinching) {
+                if (!this.ctx || !this.isStarted) return;
+                const now = this.ctx.currentTime;
+                
+                if (isPinching) {
+                    const normalized = Math.max(0, Math.min(1, (0.2 - pinchDistance) * 5)); 
+                    this.filter.frequency.setTargetAtTime(200 + (normalized * 800), now, 0.1);
+                    this.droneOsc.frequency.setTargetAtTime(55 + (normalized * 20), now, 0.1);
+                    this.droneGain.gain.setTargetAtTime(0.2 + (normalized * 0.1), now, 0.1);
+                } else {
+                    this.filter.frequency.setTargetAtTime(200, now, 0.5);
+                    this.droneOsc.frequency.setTargetAtTime(55, now, 0.5);
+                    this.droneGain.gain.setTargetAtTime(0.15, now, 0.5);
+                }
+            }
 
-start(min){
-this.stop();
-this.state="running";
-this.end=Date.now()+min*60000;
-this.pickAyah();
-this.tick();
-status.textContent="Fokus boshlandi…";
-},
+            triggerSwap() {
+                if (!this.ctx || this.ctx.state !== 'running') return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                const filter = this.ctx.createBiquadFilter();
 
-stop(){
-if(this.raf)cancelAnimationFrame(this.raf);
-this.state="idle";
-status.textContent="To‘xtatildi";
-},
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.1);
+                
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(200, this.ctx.currentTime);
+                filter.frequency.linearRampToValueAtTime(2000, this.ctx.currentTime + 0.3);
 
-tick(){
-if(this.state!=="running")return;
-const diff=Math.max(0,this.end-Date.now());
-const sec=Math.ceil(diff/1000);
-const m=String(Math.floor(sec/60)).padStart(2,"0");
-const s=String(sec%60).padStart(2,"0");
-timer.textContent=`${m}:${s}`;
-if(diff>0){
-this.raf=requestAnimationFrame(this.tick.bind(this));
-}else{
-this.complete();
-}
-},
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
 
-complete(){
-this.state="idle";
-status.textContent="Yakunlandi. Alloh baraka bersin.";
-this.saveSession();
-},
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.5);
+            }
+        }
 
-pickAyah(){
-const a=ayahs[Math.floor(Math.random()*ayahs.length)];
-ayahAr.textContent=a[0];
-ayahUz.textContent=a[1];
-},
+        const audioRef = new AudioEngine();
 
-saveSession(){
-const list=JSON.parse(localStorage.getItem("sessions")||"[]");
-list.push({date:new Date().toISOString()});
-localStorage.setItem("sessions",JSON.stringify(list));
-}
-};
+        // --- MAIN APP COMPONENT ---
+        const App = () => {
+            const [started, setStarted] = useState(false);
+            const [loading, setLoading] = useState(false);
+            const [error, setError] = useState(null);
+            const [shape, setShape] = useState(ParticleShape.SPHERE);
+            const [handDetected, setHandDetected] = useState(false);
 
-engine.pickAyah();
-status.textContent="Tayyor";
-</script>
+            const containerRef = useRef(null);
+            const videoRef = useRef(null);
+            const canvasRef = useRef(null);
+            const sceneRef = useRef(null);
+            const cameraRef = useRef(null);
+            const particlesRef = useRef(null);
+            const targetPositionsRef = useRef(null);
+            const rendererRef = useRef(null);
+            const animationFrameRef = useRef(0);
+            const timeRef = useRef(0);
 
+            // Interaction State
+            const interactionState = useRef({
+                attractMode: false,
+                handCentroid: { x: 0.5, y: 0.5 },
+                pinchStrength: 0
+            });
+
+            // Init Three.js
+            useEffect(() => {
+                if (!canvasRef.current) return;
+
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color('#050505');
+                scene.fog = new THREE.FogExp2('#050505', 0.002);
+                sceneRef.current = scene;
+
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.z = 100;
+                cameraRef.current = camera;
+
+                const renderer = new THREE.WebGLRenderer({ 
+                    canvas: canvasRef.current, 
+                    antialias: true,
+                    powerPreference: "high-performance"
+                });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                rendererRef.current = renderer;
+
+                const geometry = new THREE.BufferGeometry();
+                const positions = ShapeGenerator[ParticleShape.SPHERE](PARTICLE_COUNT);
+                targetPositionsRef.current = positions;
+
+                const currentPositions = new Float32Array(PARTICLE_COUNT * 3); 
+                geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
+                
+                const colors = new Float32Array(PARTICLE_COUNT * 3);
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+                const material = new THREE.PointsMaterial({
+                    size: 0.8,
+                    vertexColors: true,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                const particles = new THREE.Points(geometry, material);
+                scene.add(particles);
+                particlesRef.current = particles;
+
+                const animate = () => {
+                    animationFrameRef.current = requestAnimationFrame(animate);
+                    
+                    if (!particlesRef.current || !targetPositionsRef.current || !rendererRef.current) return;
+
+                    const positions = particlesRef.current.geometry.attributes.position.array;
+                    const target = targetPositionsRef.current;
+                    const colors = particlesRef.current.geometry.attributes.color.array;
+                    
+                    timeRef.current += 0.005;
+                    const time = timeRef.current;
+                    const { attractMode, handCentroid } = interactionState.current;
+
+                    for (let i = 0; i < PARTICLE_COUNT; i++) {
+                        const i3 = i * 3;
+                        let tx = target[i3];
+                        let ty = target[i3 + 1];
+                        let tz = target[i3 + 2];
+
+                        if (attractMode) {
+                            tx *= 0.1;
+                            ty *= 0.1;
+                            tz *= 0.1;
+                        } else {
+                            tx += Math.sin(time + i * 0.1) * 0.5;
+                            ty += Math.cos(time + i * 0.1) * 0.5;
+                        }
+
+                        positions[i3] += (tx - positions[i3]) * LERP_FACTOR;
+                        positions[i3 + 1] += (ty - positions[i3 + 1]) * LERP_FACTOR;
+                        positions[i3 + 2] += (tz - positions[i3 + 2]) * LERP_FACTOR;
+
+                        const hue = (time * 0.1 + (positions[i3] * 0.01)) % 1;
+                        const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
+                        colors[i3] = color.r;
+                        colors[i3 + 1] = color.g;
+                        colors[i3 + 2] = color.b;
+                    }
+
+                    particlesRef.current.geometry.attributes.position.needsUpdate = true;
+                    particlesRef.current.geometry.attributes.color.needsUpdate = true;
+                    
+                    if (!attractMode && !handDetected && sceneRef.current) {
+                        sceneRef.current.rotation.y += 0.001;
+                    }
+
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                const handleResize = () => {
+                    if (camera && renderer) {
+                        camera.aspect = window.innerWidth / window.innerHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(window.innerWidth, window.innerHeight);
+                    }
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    cancelAnimationFrame(animationFrameRef.current);
+                    if(renderer) renderer.dispose();
+                };
+            }, []);
+
+            // Handle Shape Change
+            useEffect(() => {
+                if (particlesRef.current) {
+                    targetPositionsRef.current = ShapeGenerator[shape](PARTICLE_COUNT);
+                    audioRef.triggerSwap();
+                }
+            }, [shape]);
+
+            // Start CV
+            const handleStart = async () => {
+                if (started) return;
+                setLoading(true);
+                
+                try {
+                    audioRef.init();
+                    audioRef.resume();
+
+                    if (!videoRef.current || !window.Hands || !window.Camera) {
+                        throw new Error("Kutubxonalar to'liq yuklanmadi");
+                    }
+
+                    const hands = new window.Hands({
+                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+                    });
+
+                    hands.setOptions({
+                        maxNumHands: 2,
+                        modelComplexity: 1,
+                        minDetectionConfidence: 0.5,
+                        minTrackingConfidence: 0.5
+                    });
+
+                    hands.onResults((results) => {
+                        setHandDetected(results.multiHandLandmarks.length > 0);
+                        
+                        if (results.multiHandLandmarks.length > 0) {
+                            const hand = results.multiHandLandmarks[0];
+                            const cx = (hand[0].x + hand[5].x + hand[17].x) / 3;
+                            const cy = (hand[0].y + hand[5].y + hand[17].y) / 3;
+                            
+                            const cur = interactionState.current.handCentroid;
+                            cur.x += (cx - cur.x) * 0.1;
+                            cur.y += (cy - cur.y) * 0.1;
+
+                            if (sceneRef.current) {
+                                const targetRotY = (cur.x - 0.5) * -Math.PI; 
+                                const targetRotX = (cur.y - 0.5) * Math.PI * 0.5;
+                                sceneRef.current.rotation.y += (targetRotY - sceneRef.current.rotation.y) * 0.1;
+                                sceneRef.current.rotation.x += (targetRotX - sceneRef.current.rotation.x) * 0.1;
+                            }
+
+                            const t = hand[4];
+                            const i = hand[8];
+                            const dist = Math.sqrt(Math.pow(t.x - i.x, 2) + Math.pow(t.y - i.y, 2));
+                            interactionState.current.pinchStrength = dist;
+                            interactionState.current.attractMode = dist < 0.05;
+                        } else {
+                            interactionState.current.attractMode = false;
+                        }
+
+                        // Zoom (Two Hands)
+                        if (results.multiHandLandmarks.length === 2 && cameraRef.current) {
+                            const h1 = results.multiHandLandmarks[0][8];
+                            const h2 = results.multiHandLandmarks[1][8];
+                            const dist = Math.sqrt(Math.pow(h1.x - h2.x, 2) + Math.pow(h1.y - h2.y, 2));
+                            const targetZ = 150 - (dist * 100); 
+                            const safeZ = Math.max(50, Math.min(200, targetZ));
+                            cameraRef.current.position.z += (safeZ - cameraRef.current.position.z) * 0.1;
+                        }
+
+                        audioRef.update(interactionState.current.pinchStrength, interactionState.current.attractMode);
+                    });
+
+                    const camera = new window.Camera(videoRef.current, {
+                        onFrame: async () => {
+                            if (hands) await hands.send({image: videoRef.current});
+                        },
+                        width: 640,
+                        height: 480
+                    });
+                    
+                    await camera.start();
+                    setStarted(true);
+                    setLoading(false);
+
+                } catch (e) {
+                    console.error(e);
+                    setError("Kamera ruxsati berilmadi yoki xatolik yuz berdi.");
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="relative w-full h-screen overflow-hidden text-white font-sans selection:bg-cyan-500/30">
+                    <canvas ref={canvasRef} className="absolute inset-0 z-0 block" />
+                    <video ref={videoRef} className="hidden" playsInline muted />
+
+                    {error && (
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[60] bg-red-500/90 text-white px-6 py-3 rounded-lg flex items-center gap-3 shadow-xl backdrop-blur">
+                            <IconAlert className="w-5 h-5" />
+                            <span>{error}</span>
+                            <button onClick={() => setError(null)} className="ml-4 hover:bg-white/20 rounded p-1">✕</button>
+                        </div>
+                    )}
+
+                    {!started && (
+                        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+                            <div className="max-w-md text-center space-y-8 p-8 border border-white/10 rounded-2xl bg-black/40 shadow-2xl shadow-cyan-900/20">
+                                <div className="space-y-2">
+                                    <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">NEBULA</h1>
+                                    <p className="text-white/50 text-sm tracking-widest uppercase">Hand Control Interface</p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 text-left text-sm text-gray-400">
+                                    <div className="flex items-center gap-3"><IconHand className="w-5 h-5 text-cyan-400" /><span>Move hand to rotate</span></div>
+                                    <div className="flex items-center gap-3"><IconMinimize className="w-5 h-5 text-purple-400" /><span>Pinch to implode</span></div>
+                                    <div className="flex items-center gap-3"><IconMaximize className="w-5 h-5 text-pink-400" /><span>Two hands to zoom</span></div>
+                                    <div className="flex items-center gap-3"><IconRadio className="w-5 h-5 text-green-400" /><span>Audio reactive</span></div>
+                                </div>
+                                <button onClick={handleStart} disabled={loading} className="group relative px-8 py-4 bg-white text-black font-bold text-lg rounded-full hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden w-full">
+                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                        {loading ? 'YUKLANMOQDA...' : 'TIZIMNI YURGIZISH'}
+                                        {!loading && <IconZap className="w-4 h-4" />}
+                                    </span>
+                                </button>
+                                <p className="text-xs text-white/30">Kamera ruxsati talab etiladi • {PARTICLE_COUNT.toLocaleString()} Particles</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {started && (
+                        <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between">
+                            <div className="w-full p-6 flex justify-between items-start bg-gradient-to-b from-black/50 to-transparent">
+                                <div>
+                                    <h2 className="text-xl font-bold tracking-tight">NEBULA <span className="text-cyan-400 text-xs align-top">LIVE</span></h2>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <div className={`w-2 h-2 rounded-full transition-colors ${handDetected ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' : 'bg-red-500'}`} />
+                                        <span className="text-xs text-white/50 uppercase tracking-wider">{handDetected ? 'Sensor Active' : 'Qo\'l qidirilmoqda...'}</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 pointer-events-auto bg-black/40 backdrop-blur-md p-2 rounded-full border border-white/10">
+                                    {[
+                                        { id: ParticleShape.SPHERE, icon: IconOrbit, label: 'Sphere' },
+                                        { id: ParticleShape.HEART, icon: IconHeart, label: 'Heart' },
+                                        { id: ParticleShape.FLOWER, icon: IconActivity, label: 'Flower' },
+                                        { id: ParticleShape.SATURN, icon: IconRadio, label: 'Saturn' },
+                                        { id: ParticleShape.FIREWORKS, icon: IconSparkles, label: 'Burst' },
+                                    ].map((item) => (
+                                        <button key={item.id} onClick={() => setShape(item.id)} className={`p-3 rounded-full transition-all ${shape === item.id ? 'bg-white text-black shadow-lg shadow-white/20' : 'text-white/50 hover:bg-white/10 hover:text-white'}`} title={item.label}>
+                                            <item.icon className="w-5 h-5" />
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="w-full p-6 flex justify-between items-end text-xs text-white/30 font-mono bg-gradient-to-t from-black/50 to-transparent">
+                                <div><p>PARTICLES: {PARTICLE_COUNT}</p><p>FPS: 60</p></div>
+                                <div className="text-right"><p>AUDIO: {audioRef.ctx?.state === 'running' ? 'ON' : 'OFF'}</p><p>VERSION: 1.0 (Standalone)</p></div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
+
