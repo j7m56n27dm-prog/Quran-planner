@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>NUR & ILM | Digital Tadabbur Pro</title>
+    <title>NUR & ILM | Digital Tadabbur Pro v2</title>
     
     <!-- LIBRARIES (CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -18,11 +18,11 @@
 
         body {
             margin: 0;
-            background-color: #020202; /* Deepest Black */
+            background-color: #000000;
             overflow: hidden;
             font-family: 'Inter', sans-serif;
             color: #e5e7eb;
-            touch-action: none; /* Prevent scroll on mobile */
+            touch-action: none;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -45,7 +45,8 @@
             justify-content: space-between;
             padding: 20px;
             box-sizing: border-box;
-            background: radial-gradient(circle at center, transparent 0%, #000000 120%);
+            background: radial-gradient(circle at center, transparent 0%, #000000 130%);
+            transition: opacity 1s ease;
         }
 
         /* Header */
@@ -53,8 +54,47 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            opacity: 0.7;
+            opacity: 0.8;
+            pointer-events: auto; 
         }
+
+        .zikr-container {
+            text-align: left;
+        }
+        
+        .zikr-count {
+            font-size: 24px;
+            font-weight: 200;
+            color: #34d399;
+            letter-spacing: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .zikr-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #059669;
+            display: block;
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 1px solid #064e3b;
+            color: #064e3b;
+            font-size: 8px;
+            padding: 2px 8px;
+            margin-top: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .reset-btn:hover {
+            border-color: #10b981;
+            color: #10b981;
+        }
+
         .status-badge {
             font-size: 10px;
             text-transform: uppercase;
@@ -64,6 +104,7 @@
             color: #10b981;
             border-radius: 4px;
             background: rgba(16, 185, 129, 0.1);
+            text-align: right;
         }
         .status-badge.error { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
@@ -71,34 +112,42 @@
         .content-wrapper {
             text-align: center;
             position: absolute;
-            top: 50%; left: 50%;
+            top: 45%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%;
-            transition: opacity 1s ease;
+            width: 85%;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .content-wrapper.fade-out {
+            opacity: 0;
+            transform: translate(-50%, -45%);
         }
 
         .arabic-text {
             font-family: 'Amiri', serif;
-            font-size: clamp(2rem, 5vw, 4rem);
-            color: #fffbeb; /* Antique White */
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            margin-bottom: 15px;
-            line-height: 1.6;
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            color: #fffbeb;
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-weight: 400;
         }
 
         .divider {
-            width: 50px;
+            width: 40px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, #10b981, transparent);
-            margin: 15px auto;
+            background: linear-gradient(90deg, transparent, #34d399, transparent);
+            margin: 20px auto;
+            opacity: 0.5;
         }
 
         .uzbek-text {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            font-weight: 200;
+            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+            font-weight: 300;
             font-style: italic;
-            color: #d1fae5;
+            color: #ecfdf5;
             letter-spacing: 0.5px;
+            line-height: 1.5;
         }
 
         .meta-text {
@@ -106,35 +155,80 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             color: #059669;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
-        /* Footer (Hikmah) */
+        /* Footer (Hikmah & Credits) */
         .footer {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             text-align: center;
-            opacity: 0.8;
+            opacity: 0.9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
+        
         .hikmah-box {
-            background: rgba(0, 20, 10, 0.6);
-            border-left: 2px solid #10b981;
-            padding: 15px;
-            backdrop-filter: blur(4px);
-            max-width: 600px;
+            background: rgba(0, 10, 5, 0.4);
+            border-left: 2px solid #059669;
+            padding: 10px 20px;
+            backdrop-filter: blur(8px);
+            max-width: 650px;
             margin: 0 auto;
+            border-radius: 0 8px 8px 0;
         }
+        
         .hikmah-title {
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #34d399;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-weight: 600;
         }
+        
         .hikmah-content {
-            font-size: 12px;
+            font-size: 11px;
             color: #9ca3af;
-            line-height: 1.4;
+            line-height: 1.5;
+        }
+
+        .credits {
+            font-size: 9px;
+            color: #333;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            pointer-events: auto;
+            display: flex;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .nav-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #555;
+            font-size: 14px;
+            width: 40px; 
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-btn:hover {
+            border-color: #10b981;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
         }
 
         /* Start Screen */
@@ -142,7 +236,7 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: #020202;
+            background: #000000;
             z-index: 50;
             display: flex;
             flex-direction: column;
@@ -152,61 +246,66 @@
         }
         
         .start-btn {
-            margin-top: 30px;
-            padding: 15px 40px;
+            margin-top: 40px;
+            padding: 15px 50px;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e5e5e5;
             text-transform: uppercase;
             letter-spacing: 4px;
-            font-size: 12px;
+            font-size: 11px;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.5s;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
+        
         .start-btn:hover {
-            background: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.1);
             border-color: #10b981;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
+            letter-spacing: 6px;
         }
 
-        .hidden { opacity: 0; pointer-events: none; transition: opacity 1s; }
+        .hidden { opacity: 0; pointer-events: none; transition: opacity 1.5s ease; }
         .visible { opacity: 1; pointer-events: auto; }
 
-        /* Utility */
-        .pinch-alert {
-            color: #fbbf24;
-            font-weight: bold;
-            text-shadow: 0 0 10px #fbbf24;
-            opacity: 0;
-            transition: opacity 0.3s;
+        /* Zikr Pulse Effect */
+        @keyframes zikrPulse {
+            0% { transform: scale(1); text-shadow: 0 0 0 rgba(52, 211, 153, 0); }
+            50% { transform: scale(1.2); text-shadow: 0 0 20px rgba(52, 211, 153, 0.8); }
+            100% { transform: scale(1); text-shadow: 0 0 0 rgba(52, 211, 153, 0); }
         }
-        .pinch-active { opacity: 1; }
+        .pulse-text { animation: zikrPulse 0.4s ease-out; color: #fff !important; }
+
     </style>
 </head>
 <body>
 
     <!-- START SCREEN -->
     <div id="start-screen">
-        <h1 style="font-weight: 200; letter-spacing: 8px; font-size: 32px; margin-bottom: 10px;">NUR & ILM</h1>
-        <p style="font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase;">Digital Tadabbur Experience</p>
+        <h1 style="font-weight: 200; letter-spacing: 8px; font-size: 32px; margin-bottom: 10px; color: #fff;">NUR & ILM</h1>
+        <p style="font-size: 10px; color: #666; letter-spacing: 3px; text-transform: uppercase;">PRO VERSION</p>
         <button class="start-btn" id="btn-start">Bismillah • Kirish</button>
-        <p style="margin-top: 20px; font-size: 9px; color: #444;">Kamera ruxsati va Ovoz talab qilinadi.<br>Iltimos, sokin joyda foydalaning.</p>
+        <p style="margin-top: 30px; font-size: 9px; color: #333;">Kamera va Ovoz talab qilinadi.<br>Sokin joyda, "👌" ishorasi bilan Zikr qiling.</p>
+        <div style="position: absolute; bottom: 20px; font-size: 8px; color: #222;">Made by ©️Muhammad Daler</div>
     </div>
 
     <!-- MAIN UI -->
     <div id="ui-layer" class="hidden">
         <div class="header">
-            <div>
-                <div style="font-size: 10px; color: #333; letter-spacing: 2px;">V1.0 FINAL</div>
+            <div class="zikr-container">
+                <span class="zikr-label">ZIKR</span>
+                <div id="zikr-display" class="zikr-count">0</div>
+                <button onclick="app.resetZikr()" class="reset-btn">Reset</button>
             </div>
+            
             <div style="text-align: right;">
-                <div id="hand-status" class="status-badge error">Qo'l izlanmoqda...</div>
-                <div id="pinch-status" class="pinch-alert" style="font-size: 10px; margin-top: 5px; letter-spacing: 1px;">VAHDAT (BIRLIK)</div>
+                <div id="hand-status" class="status-badge error">Kamera...</div>
+                <div id="pinch-status" style="font-size: 9px; margin-top: 5px; letter-spacing: 1px; color: #444; transition: color 0.3s;">👌 BOSIB TURING</div>
             </div>
         </div>
 
-        <div class="content-wrapper">
+        <div class="content-wrapper" id="content-box">
             <div id="arabic" class="arabic-text"></div>
             <div class="divider"></div>
             <div id="uzbek" class="uzbek-text"></div>
@@ -218,11 +317,13 @@
                 <span id="hikmah-source" class="hikmah-title"></span>
                 <span id="hikmah-body" class="hikmah-content"></span>
             </div>
-            <!-- Manual Navigation for Backup -->
-            <div style="margin-top: 15px; pointer-events: auto;">
-                <button onclick="app.prevAyah()" style="background:none; border:none; color:#333; font-size: 20px;">←</button>
-                <button onclick="app.nextAyah()" style="background:none; border:none; color:#333; font-size: 20px;">→</button>
+            
+            <div class="nav-buttons">
+                <button onclick="app.prevAyah()" class="nav-btn">←</button>
+                <button onclick="app.nextAyah()" class="nav-btn">→</button>
             </div>
+            
+            <div class="credits">Made by ©️Muhammad Daler</div>
         </div>
     </div>
 
@@ -233,182 +334,381 @@
 
     <script>
         /**
-         * NUR & ILM - Yagona Fayl Arxitekturasi
+         * NUR & ILM PRO - Kengaytirilgan Versiya
          * Muallif: Muhammad Daler
-         * Texnologiyalar: Three.js (WebGL), Web Audio API, MediaPipe Hands
+         * Funksiyalar: 3D Fizika, Zikr Counter, Generativ Ovoz, MediaPipe Hand Tracking
          */
 
-        // --- 1. MA'LUMOTLAR BAZASI (DATA) ---
+        // --- 1. KENGAYTIRILGAN MA'LUMOTLAR BAZASI (35+ OYATLAR) ---
         const AYAHS = [
+            // 1-5 (Originals Enhanced)
             {
-                id: 1,
-                surah: "An-Nur 24:35",
+                id: 1, surah: "An-Nur 24:35",
                 arabic: "اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ",
                 uzbek: "Alloh osmonlar va yerning nuridir.",
-                source: "Fizika va Irfon",
-                hikmah: "Koinotdagi har bir foton, har bir energiya Uning nuri tajalliysidir. Zulmat yo'q, faqat Nurning yo'qligi bor.",
+                source: "Fizika (Optika/Energiya)",
+                hikmah: "Koinotdagi barcha materiya aslida quyuqlashgan nur (energiya)dir (E=mc²). Zulmat mustaqil mavjud emas, u faqat nurning yo'qligidir.",
                 shape: 'SPHERE'
             },
             {
-                id: 2,
-                surah: "Al-Alaq 96:1",
-                arabic: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
-                uzbek: "Yaratgan Robbing nomi bilan o'qi!",
-                source: "Ibn Sino Hikmati",
-                hikmah: "Inson aqli faol bo'lganda, u Koinot Aqli bilan bog'lanadi. O'qish - neyronlarning ilohiy raqsidir.",
-                shape: 'SPIRAL'
-            },
-            {
-                id: 3,
-                surah: "Al-Anbiya 21:30",
+                id: 2, surah: "Al-Anbiya 21:30",
                 arabic: "أَوَلَمْ يَرَ الَّذِينَ كَفَرُوا أَنَّ السَّمَاوَاتِ وَالْأَرْضَ كَانَتَا رَتْقًا فَفَتَقْنَاهُمَا",
                 uzbek: "Osmonlar va Yer bitishgan edilar, Biz ularni ajratdik.",
-                source: "Katta Portlash (Big Bang)",
-                hikmah: "Koinot yagona o'ta zich nuqtadan kengayishni boshladi. Biz hammamiz yulduz changidan yaralganmiz.",
+                source: "Kosmologiya (Katta Portlash)",
+                hikmah: "Zamonaviy fan Koinot 'Singulyar' nuqtadan kengayib paydo bo'lganini tasdiqlaydi. Biz hammamiz bir paytlar bitta nuqtada edik.",
                 shape: 'EXPANSION'
             },
             {
-                id: 4,
-                surah: "Az-Zumar 39:9",
-                arabic: "قُلْ هَلْ يَسْتَوِي الَّذِينَ يَعْلَمُونَ وَالَّذِينَ لَا يَعْلَمُونَ",
-                uzbek: "Aytgin: «Biladiganlar bilan bilmaydiganlar teng bo'lurmi?!»",
-                source: "Al-Farabi",
-                hikmah: "Ilm — bu shunchaki ma'lumot emas, u qalb ko'zining ochilishidir.",
-                shape: 'HALO'
+                id: 3, surah: "Az-Zariyat 51:47",
+                arabic: "وَالسَّمَاءَ بَنَيْنَاهَا بِأَيْدٍ وَإِنَّا لَمُوسِعُونَ",
+                uzbek: "Osmonni kuch-qudrat bilan bino qildik va albatta, Biz uni kengaytiruvchimiz.",
+                source: "Astrofizika (Kengayuvchi Koinot)",
+                hikmah: "Koinot statik emas, u doimiy ravishda kengaymoqda. Hubble qonuni buni 20-asrda kashf qildi, Qur'on esa 14 asr oldin aytdi.",
+                shape: 'GALAXY'
             },
             {
-                id: 5,
-                surah: "Fussilat 41:53",
-                arabic: "سَنُرِيهِمْ آيَاتِنَا فِي الْآفَاقِ وَفِي أَنفُسِهِمْ",
-                uzbek: "Biz ularga ufq-koinotdagi va o'z nafslaridagi belgilarimizni ko'rsaturmiz.",
-                source: "Mikro va Makro Kosmos",
-                hikmah: "Atomdagi elektronlarning aylanishi bilan Galaktikalar aylanishi bir xil qonuniyatga bo'ysunadi.",
-                shape: 'HEART'
+                id: 4, surah: "Al-Hadid 57:25",
+                arabic: "وَأَنزَلْنَا الْحَدِيدَ فِيهِ بَأْسٌ شَدِيدٌ وَمَنَافِعُ لِلنَّاسِ",
+                uzbek: "Va Biz temirni tushirdik. Unda kuchli, shiddatli zarba va odamlar uchun manfaatlar bor.",
+                source: "Astrofizika (Temirning Paydo Bo'lishi)",
+                hikmah: "Temir Yerda hosil bo'lmaydi. U o'ta yangi yulduzlar (Supernova) portlashi natijasida koinotdan 'tushirilgan' elementdir.",
+                shape: 'CUBE' // Crystal structure
+            },
+            {
+                id: 5, surah: "Az-Zumar 39:6",
+                arabic: "خَلَقَكُم مِّن نَّفْسٍ وَاحِدَةٍ ثُمَّ جَعَلَ مِنْهَا زَوْجَهَا",
+                uzbek: "U sizlarni bir jondan yaratdi, so'ngra undan juftini qildi.",
+                source: "Biologiya (Genetika)",
+                hikmah: "Barcha insoniyat yagona genetik koddan (DNK) kelib chiqqan. Hujayra bo'linishi hayotning davomiyligini ta'minlaydi.",
+                shape: 'DNA'
+            },
+            // Yangi Oyatlar 6-35
+            {
+                id: 6, surah: "Ya-Sin 36:38",
+                arabic: "وَالشَّمْسُ تَجْرِي لِمُسْتَقَرٍّ لَّهَا",
+                uzbek: "Quyosh ham o'z istiqrori (belgilangan yo'li) sari joriy bo'lur.",
+                source: "Astronomiya (Quyosh Orbitasi)",
+                hikmah: "Quyosh joyida turmaydi, u Somon Yo'li galaktikasi markazi atrofida soatiga 800,000 km tezlikda harakatlanadi.",
+                shape: 'VORTEX'
+            },
+            {
+                id: 7, surah: "At-Tariq 86:11",
+                arabic: "وَالسَّمَاءِ ذَاتِ الرَّجْعِ",
+                uzbek: "Qaytaruvchi osmon bilan qasam.",
+                source: "Atmosfera Fizikasi",
+                hikmah: "Osmon (atmosfera) suv bug'ini yomg'ir qilib qaytaradi, radioto'lqinlarni qaytaradi va zararli nurlarni koinotga qaytaradi.",
+                shape: 'WAVE'
+            },
+            {
+                id: 8, surah: "An-Naba 78:7",
+                arabic: "وَالْجِبَالَ أَوْتَادًا",
+                uzbek: "Va tog'larni qoziqlar qilib qo'ymadikmi?",
+                source: "Geologiya (Izostaziya)",
+                hikmah: "Tog'larning yer ostida chuqur ildizlari bor (qoziq kabi). Bu Yer qobig'ining (litosfera) muvozanatini saqlaydi.",
+                shape: 'PYRAMID'
+            },
+            {
+                id: 9, surah: "Al-Mulk 67:3",
+                arabic: "مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ",
+                uzbek: "Rahmonning yaratganida biror tafovut (nuqson) ko'rmaysan.",
+                source: "Fizika (Nozik Sozlanish)",
+                hikmah: "Koinotdagi barcha fizik konstantalar (gravitatsiya, elektromagnetizm) shunday aniq sozlanganki, ozgina o'zgarish hayotni yo'q qilardi.",
+                shape: 'NETWORK' // Web/Connections
+            },
+            {
+                id: 10, surah: "Az-Zariyat 51:49",
+                arabic: "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+                uzbek: "Eslatma olishingiz uchun biz har bir narsani juft qilib yaratdik.",
+                source: "Kvant Fizikasi (Juftlik)",
+                hikmah: "Materiya va Antimateriya, Elektron va Proton, Shimol va Janub qutblari. Koinot muvozanat va qarama-qarshiliklar ustiga qurilgan.",
+                shape: 'DUALITY' // Two spheres orbiting
+            },
+            {
+                id: 11, surah: "Al-Ankabut 29:41",
+                arabic: "مَثَلُ الَّذِينَ اتَّخَذُوا مِن دُونِ اللَّهِ أَوْلِيَاءَ كَمَثَلِ الْعَنكَبُوتِ اتَّخَذَتْ بَيْتًا",
+                uzbek: "Allohdan o'zga do'stlar tutganlarning misoli xuddi uy qurib olgan o'rgimchakka o'xshaydi.",
+                source: "Muhandislik (O'rgimchak Ipi)",
+                hikmah: "O'rgimchak ipi po'latdan mustahkam, lekin uning uyi (oilasi) zaif. Tabiatdagi geometriya va mustahkamlik mo'jizasi.",
+                shape: 'WEB'
+            },
+            {
+                id: 12, surah: "Fussilat 41:11",
+                arabic: "ثُمَّ اسْتَوَىٰ إِلَى السَّمَاءِ وَهِيَ دُخَانٌ",
+                uzbek: "So'ngra tutun holidagi osmonni iroda qildi.",
+                source: "Kosmologiya (Gaz Bulutlari)",
+                hikmah: "Yulduzlar va galaktikalar paydo bo'lishidan oldin koinot qizigan gaz va chang (tutun) bulutlaridan iborat edi.",
+                shape: 'SMOKE'
+            },
+            {
+                id: 13, surah: "Al-An'am 6:95",
+                arabic: "إِنَّ اللَّهَ فَالِقُ الْحَبِّ وَالنَّوَىٰ",
+                uzbek: "Albatta, Alloh donni va danakni yoruvchidir.",
+                source: "Biologiya (O'sish)",
+                hikmah: "Kichik bir urug' ichida ulkan daraxtning butun dasturi (genetik kodi) yashiringan. Hayotning uyg'onishi - ilohiy qudrat.",
+                shape: 'SPIRAL'
+            },
+            {
+                id: 14, surah: "Al-Qamar 54:49",
+                arabic: "إِنَّا كُلَّ شَيْءٍ خَلَقْنَاهُ بِقَدَرٍ",
+                uzbek: "Albatta, Biz har bir narsani o'lchov bilan yaratdik.",
+                source: "Matematika (Oltin Kesim)",
+                hikmah: "Tabiatdagi barglardan tortib galaktikalargacha hamma narsa aniq matematik qonuniyatlar (Fibonachchi ketma-ketligi) asosida qurilgan.",
+                shape: 'TORUS'
+            },
+            {
+                id: 15, surah: "Ar-Rahman 55:19-20",
+                arabic: "مَرَجَ الْبَحْرَيْنِ يَلْتَقِيَانِ بَيْنَهُمَا بَرْزَخٌ لَّا يَبْغِيَانِ",
+                uzbek: "U ikki dengizni bir-biri bilan uchrashadigan qilib qo'yverdi. O'rtalarida to'siq bor, aralashib ketmaslar.",
+                source: "Okeanologiya (Suv Zichligi)",
+                hikmah: "Dengiz suvlarining zichligi va sho'rligi har xil bo'lgani uchun ular ko'rinmas fizika qonunlari bilan chegaralanadi.",
+                shape: 'WAVE_SPLIT'
+            },
+            {
+                id: 16, surah: "An-Nahl 16:68",
+                arabic: "وَأَوْحَىٰ رَبُّكَ إِلَى النَّحْلِ",
+                uzbek: "Robbing asalariga vahiy (ilhom) qildi.",
+                source: "Entomologiya (Asalarilar)",
+                hikmah: "Asalarilarning olti burchakli uylari eng kam mum sarflab, eng ko'p asal saqlash imkonini beruvchi mukammal muhandislik yechimidir.",
+                shape: 'HEXAGON'
+            },
+            {
+                id: 17, surah: "Al-Insan 76:2",
+                arabic: "إِنَّا خَلَقْنَا الْإِنسَانَ مِن نُّطْفَةٍ أَمْشَاجٍ",
+                uzbek: "Biz insonni aralash nutfadan yaratdik.",
+                source: "Embriologiya",
+                hikmah: "Inson otaning va onaning xromosomalari aralashuvidan (zigota) paydo bo'ladi. Bu mikroskopik olamdagi buyuk boshlanish.",
+                shape: 'CELL_DIVIDE'
+            },
+            {
+                id: 18, surah: "Qaf 50:6",
+                arabic: "أَفَلَمْ يَنظُرُوا إِلَى السَّمَاءِ فَوْقَهُمْ كَيْفَ بَنَيْنَاهَا وَزَيَّنَّاهَا",
+                uzbek: "Tepalaridagi osmonga nazar solmaydilarmi? Biz uni qandoq bino qildik va ziynatladik.",
+                source: "Astranomiya (Kuzatuv)",
+                hikmah: "Yulduzlar osmonning ziynatidir. Ularning joylashuvi va nuri koinotning ulug'vorligini va bizning naqadar kichikligimizni eslatadi.",
+                shape: 'CONSTELLATION'
+            },
+            {
+                id: 19, surah: "Yunus 10:5",
+                arabic: "هُوَ الَّذِي جَعَلَ الشَّمْسَ ضِيَاءً وَالْقَمَرَ نُورًا",
+                uzbek: "U quyoshni ziyo (yondiruvchi nur), oyni esa nur (aks etuvchi) qilgan zotdir.",
+                source: "Fizika (Nur Manbalari)",
+                hikmah: "Quyosh termoyadroviy reaksiya tufayli o'zidan nur va issiqlik chiqaradi (Ziyo). Oy esa Quyosh nurini qaytaradi xolos (Nur).",
+                shape: 'SUN_MOON'
+            },
+            {
+                id: 20, surah: "Al-Baqara 2:164",
+                arabic: "وَتَصْرِيفِ الرِّيَاحِ وَالسَّحَابِ الْمُسَخَّرِ",
+                uzbek: "Shamollarning yo'naltirilishida va bo'ysundirilgan bulutlarda aql yuritadigan qavm uchun belgilar bor.",
+                source: "Meteorologiya",
+                hikmah: "Shamollar shunchaki havo harakati emas, ular yomg'ir bulutlarini haydaydi, o'simliklarni changlatadi va haroratni muvozanatlashtiradi.",
+                shape: 'WIND_FLOW'
+            },
+            {
+                id: 21, surah: "Ar-Rum 30:22",
+                arabic: "وَمِنْ آيَاتِهِ خَلْقُ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافُ أَلْسِنَتِكُمْ وَأَلْوَانِكُمْ",
+                uzbek: "Osmonlaru yerning yaratilishi hamda tillaringiz va ranglaringizning turlicha bo'lishi Uning belgilaridandir.",
+                source: "Antropologiya/Lingvistika",
+                hikmah: "Turli millat va tillar insoniyatning boyligidir. Bu xilma-xillik tanishish va hamkorlik qilish uchun berilgan ne'matdir.",
+                shape: 'EARTH_GLOBE'
+            },
+            {
+                id: 22, surah: "An-Nur 24:43",
+                arabic: "أَلَمْ تَرَ أَنَّ اللَّهَ يُزْجِي سَحَابًا ثُمَّ يُؤَلِّفُ بَيْنَهُ",
+                uzbek: "Allohning bulutlarni haydashini, so'ngra ularni birlashtirishini ko'rmadingmi?",
+                source: "Fizika (Gidrologiya)",
+                hikmah: "Yomg'ir hosil bo'lishi uchun bulutlar ma'lum bir tartibda birlashishi (kondensatsiya) va elektr zaryadlari to'planishi kerak.",
+                shape: 'CLOUD_RAIN'
+            },
+            {
+                id: 23, surah: "Al-Mursalat 77:25-26",
+                arabic: "أَلَمْ نَجْعَلِ الْأَرْضَ كِفَاتًا * أَحْيَاءً وَأَمْوَاتًا",
+                uzbek: "Biz yerni tiriklar va o'liklarni o'z ichiga oluvchi qilmadikmi?",
+                source: "Ekologiya (Recycling)",
+                hikmah: "Yer - mukammal qayta ishlash tizimi. O'lik materiya parchalanib, yangi hayot uchun oziqaga aylanadi. Tabiatda chiqindi yo'q.",
+                shape: 'CYCLE'
+            },
+            {
+                id: 24, surah: "Al-Hajj 22:65",
+                arabic: "وَيُمْسِكُ السَّمَاءَ أَن تَقَعَ عَلَى الْأَرْضِ إِلَّا بِإِذْنِهِ",
+                uzbek: "U osmonni yerga qulab tushishidan O'z izni ila ushlab turadi.",
+                source: "Fizika (Gravitatsiya va Markazdan qochma kuch)",
+                hikmah: "Sayyoralar va yulduzlar nozik muvozanat (Gravitatsiya) tufayli o'z orbitalarida turadi. Agar bu kuch yo'qolsa, koinot qulardi.",
+                shape: 'ORBIT_HOLD'
+            },
+            {
+                id: 25, surah: "At-Takwir 81:15-16",
+                arabic: "فَلَا أُقْسِمُ بِالْخُنَّسِ * الْجَوَارِ الْكُنَّسِ",
+                uzbek: "Berkinib turuvchi, harakatlanib uyasiga kirib ketuvchi yulduzlar bilan qasam.",
+                source: "Astrofizika (Qora Tuynuklar)",
+                hikmah: "Ba'zi olimlar bu oyatni yorug'likni ham yutib yuboradigan, ko'rinmas lekin ulkan massaga ega Qora Tuynuklarga ishora deb biladilar.",
+                shape: 'BLACK_HOLE'
+            },
+            {
+                id: 26, surah: "Al-Waqi'a 56:75",
+                arabic: "فَلَا أُقْسِمُ بِمَوَاقِعِ النُّجُومِ",
+                uzbek: "Yulduzlarning joylari (mavqelari) bilan qasam ichaman.",
+                source: "Astronomiya (Yorug'lik tezligi)",
+                hikmah: "Biz ko'rayotgan yulduzning o'zi emas, uning o'tmishdagi 'joyi'dir. Yorug'lik yillab yo'l bosguncha yulduz u yerdan ketib bo'lgan bo'ladi.",
+                shape: 'STAR_FIELD'
+            },
+             {
+                id: 27, surah: "Az-Zumar 39:5",
+                arabic: "يُكَوِّرُ اللَّيْلَ عَلَى النَّهَارِ وَيُكَوِّرُ النَّهَارَ عَلَى اللَّيْلِ",
+                uzbek: "Tunni kun ustiga o'raydi, kunni tun ustiga o'raydi.",
+                source: "Geografiya (Yerning shakli)",
+                hikmah: "'Yukavviru' so'zi sallani boshga o'rash kabi narsani yumaloq jismga o'rashni anglatadi. Bu Yerning sharsimon ekanligiga nozik ishoradir.",
+                shape: 'SPHERE_ROTATE'
+            },
+             {
+                id: 28, surah: "Ar-Rahman 55:33",
+                arabic: "يَا مَعْشَرَ الْجِنِّ وَالْإِنسِ إِنِ اسْتَطَعْتُمْ أَن تَنفُذُوا مِنْ أَقْطَارِ السَّمَاوَاتِ وَالْأَرْضِ فَانفُذُوا",
+                uzbek: "Ey jin va ins jamoasi! Agar osmonlaru yer chegaralaridan o'tib ketishga qodir bo'lsangiz, o'tib ketingiz!",
+                source: "Kosmonavtika",
+                hikmah: "Yerni tark etish uchun ulkan energiya (qochish tezligi) va ilm kerak. Insoniyat bu chegarani ilm-fan orqaligina kesib o'tdi.",
+                shape: 'ROCKET_LAUNCH'
+            },
+            {
+                id: 29, surah: "Al-Ghashiyah 88:17",
+                arabic: "أَفَلَا يَنظُرُونَ إِلَى الْإِبِلِ كَيْفَ خُلِقَتْ",
+                uzbek: "Tuyaga nazar solmaydilarmi, qanday yaratilgan?",
+                source: "Zoologiya (Moslashuv)",
+                hikmah: "Tuya sahro sharoitiga mukammal moslashgan bio-texnologiyadir. Suvsizlikka chidami, ko'z tuzilishi va oyoqlari qumda yurishga moslangan.",
+                shape: 'DNA_BEAST'
+            },
+            {
+                id: 30, surah: "Al-Mulk 67:19",
+                arabic: "أَوَلَمْ يَرَوْا إِلَى الطَّيْرِ فَوْقَهُمْ صَافَّاتٍ وَيَقْبِضْنَ",
+                uzbek: "Tepalarida qanotlarini yoyib va yig'ib turgan qushlarni ko'rmadilarmi?",
+                source: "Aerodinamika",
+                hikmah: "Qushlarning parvozi samolyotlar ixtirosiga ilhom berdi. Bernoulli qonuni va qanot shakli havoda ko'tarilish kuchini hosil qiladi.",
+                shape: 'WINGS'
             }
         ];
 
-        // --- 2. AUDIO ENGINE (Generative Sound) ---
+        // --- 2. AUDIO ENGINE (Sokin va Generativ) ---
         class AudioEngine {
             constructor() {
                 this.ctx = null;
+                this.mainGain = null;
                 this.osc = null;
-                this.gain = null;
                 this.filter = null;
-                this.noise = null;
-                this.noiseGain = null;
             }
 
             init() {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 this.ctx = new AudioContext();
                 
-                // 1. Drone (55Hz Hum) - Asosiy sokinlik ovozi
+                this.mainGain = this.ctx.createGain();
+                this.mainGain.gain.value = 0.05; // Juda past (sokin)
+                this.mainGain.connect(this.ctx.destination);
+
+                // Asosiy Ambient (Drone)
                 this.osc = this.ctx.createOscillator();
                 this.osc.type = 'sine';
-                this.osc.frequency.value = 55; // A1 (Juda past)
+                this.osc.frequency.value = 60; 
                 
-                this.gain = this.ctx.createGain();
-                this.gain.gain.value = 0.15;
-
                 this.filter = this.ctx.createBiquadFilter();
                 this.filter.type = 'lowpass';
-                this.filter.frequency.value = 200;
+                this.filter.frequency.value = 100;
 
                 this.osc.connect(this.filter);
-                this.filter.connect(this.gain);
-                this.gain.connect(this.ctx.destination);
+                this.filter.connect(this.mainGain);
                 this.osc.start();
-
-                // 2. White Noise (Atmosphere/Breath)
-                const bufferSize = this.ctx.sampleRate * 2;
-                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1;
-                }
-
-                this.noise = this.ctx.createBufferSource();
-                this.noise.buffer = buffer;
-                this.noise.loop = true;
-
-                this.noiseGain = this.ctx.createGain();
-                this.noiseGain.gain.value = 0.03;
-
-                const noiseFilter = this.ctx.createBiquadFilter();
-                noiseFilter.type = 'lowpass';
-                noiseFilter.frequency.value = 400;
-
-                this.noise.connect(noiseFilter);
-                noiseFilter.connect(this.noiseGain);
-                this.noiseGain.connect(this.ctx.destination);
-                this.noise.start();
             }
 
-            // Qo'l harakatiga qarab ovozni o'zgartirish
-            update(velocity, pinchStrength) {
+            // Qo'l harakati ovozni o'zgartiradi
+            update(velocity) {
                 if (!this.ctx) return;
                 const t = this.ctx.currentTime;
-                
-                // Harakat tez bo'lsa, filtr ochiladi (shovqin ko'payadi)
-                const targetFreq = 200 + (velocity * 1000);
-                this.filter.frequency.setTargetAtTime(targetFreq, t, 0.1);
-
-                // Pinch (Vahdat) bo'lsa, ovoz pasayadi (Sokinlik)
-                const targetVol = 0.15 + (velocity * 0.1) - (pinchStrength * 0.1);
-                this.gain.gain.setTargetAtTime(Math.max(0, targetVol), t, 0.1);
+                // Harakat bo'lganda filtr ochiladi
+                const targetFreq = 100 + (velocity * 400); 
+                this.filter.frequency.setTargetAtTime(targetFreq, t, 0.2);
             }
 
-            playWhoosh() {
+            // Zikr tovushi (Yumshoq tomchi)
+            playZikrSound() {
                 if (!this.ctx) return;
                 const osc = this.ctx.createOscillator();
                 const g = this.ctx.createGain();
-                osc.frequency.setValueAtTime(100, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.4);
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, this.ctx.currentTime + 0.3);
+                
                 g.gain.setValueAtTime(0.1, this.ctx.currentTime);
-                g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
+                g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3);
+                
                 osc.connect(g);
                 g.connect(this.ctx.destination);
                 osc.start();
-                osc.stop(this.ctx.currentTime + 0.5);
+                osc.stop(this.ctx.currentTime + 0.35);
+            }
+
+            // Oyat o'zgarganda (Shamol)
+            playWhoosh() {
+                if (!this.ctx) return;
+                const noiseBuffer = this.ctx.createBuffer(1, this.ctx.sampleRate * 1, this.ctx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < noiseBuffer.length; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = noiseBuffer;
+                const noiseFilter = this.ctx.createBiquadFilter();
+                noiseFilter.type = 'lowpass';
+                noiseFilter.frequency.value = 100;
+                
+                const noiseGain = this.ctx.createGain();
+                noiseGain.gain.value = 0.05;
+
+                noise.connect(noiseFilter);
+                noiseFilter.connect(noiseGain);
+                noiseGain.connect(this.ctx.destination);
+                
+                noiseFilter.frequency.linearRampToValueAtTime(800, this.ctx.currentTime + 0.5);
+                noiseGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.5);
+                noise.start();
             }
         }
 
-        // --- 3. PHYSICS & PARTICLES (High-End Logic) ---
+        // --- 3. PHYSICS & PARTICLES (Yangilangan Shakllar) ---
         class ParticleSystem {
             constructor(scene) {
-                this.count = 12000; // 12k zarracha (Mijoz talabi 15k, lekin iPhone uchun optimal 12k)
+                this.count = 8000; // Optimal son
                 this.geometry = new THREE.BufferGeometry();
                 this.positions = new Float32Array(this.count * 3);
                 this.targetPositions = new Float32Array(this.count * 3);
                 this.colors = new Float32Array(this.count * 3);
-                
-                // Ranglar palitrasi (Nur va Ilm)
+                this.originalColors = new Float32Array(this.count * 3);
+
+                // Ranglar
                 const colorGold = new THREE.Color(0xFFD700);
+                const colorTeal = new THREE.Color(0x2dd4bf);
                 const colorWhite = new THREE.Color(0xFFFFFF);
-                const colorBlue = new THREE.Color(0x004466);
 
                 for (let i = 0; i < this.count; i++) {
                     const i3 = i * 3;
-                    this.positions[i3] = (Math.random() - 0.5) * 10;
-                    this.positions[i3+1] = (Math.random() - 0.5) * 10;
-                    this.positions[i3+2] = (Math.random() - 0.5) * 10;
+                    this.positions[i3] = (Math.random() - 0.5) * 20;
+                    this.positions[i3+1] = (Math.random() - 0.5) * 20;
+                    this.positions[i3+2] = (Math.random() - 0.5) * 20;
 
-                    let c;
-                    const rnd = Math.random();
-                    if (rnd > 0.9) c = colorGold;
-                    else if (rnd > 0.6) c = colorWhite;
-                    else c = colorBlue;
+                    let c = Math.random() > 0.5 ? colorTeal : colorGold;
+                    if (Math.random() > 0.8) c = colorWhite;
 
                     this.colors[i3] = c.r;
                     this.colors[i3+1] = c.g;
                     this.colors[i3+2] = c.b;
+                    
+                    this.originalColors[i3] = c.r;
+                    this.originalColors[i3+1] = c.g;
+                    this.originalColors[i3+2] = c.b;
                 }
 
                 this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
                 this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
 
                 this.material = new THREE.PointsMaterial({
-                    size: 0.04,
+                    size: 0.06,
                     vertexColors: true,
                     blending: THREE.AdditiveBlending,
                     depthWrite: false,
@@ -419,47 +719,112 @@
                 this.mesh = new THREE.Points(this.geometry, this.material);
                 scene.add(this.mesh);
                 
-                this.generateShape('SPHERE'); // Boshlang'ich shakl
+                this.generateShape('SPHERE');
             }
 
             generateShape(type) {
                 const arr = this.targetPositions;
-                for (let i = 0; i < this.count; i++) {
+                const count = this.count;
+                
+                for (let i = 0; i < count; i++) {
                     const i3 = i * 3;
                     let x, y, z;
+                    const idx = i / count;
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(2 * Math.random() - 1);
 
-                    if (type === 'SPHERE') {
-                        const r = 4 * Math.cbrt(Math.random());
-                        const theta = Math.random() * 2 * Math.PI;
-                        const phi = Math.acos(2 * Math.random() - 1);
-                        x = r * Math.sin(phi) * Math.cos(theta);
-                        y = r * Math.sin(phi) * Math.sin(theta);
-                        z = r * Math.cos(phi);
-                    } else if (type === 'SPIRAL') {
-                        const angle = i * 0.05;
-                        const r = 0.1 * angle;
-                        x = r * Math.cos(angle);
-                        y = (Math.random() - 0.5) * 1;
-                        z = r * Math.sin(angle);
-                    } else if (type === 'HEART') {
-                         const t = Math.random() * Math.PI * 2;
-                         const scale = 0.15;
-                         x = 16 * Math.pow(Math.sin(t), 3) * scale * (0.8 + Math.random()*0.4);
-                         y = (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * scale * (0.8 + Math.random()*0.4);
-                         z = (Math.random() - 0.5) * 2;
-                    } else if (type === 'HALO') {
-                        const angle = Math.random() * Math.PI * 2;
-                        const r = 3 + (Math.random() - 0.5) * 0.5;
-                        x = Math.cos(angle) * r;
-                        y = Math.sin(angle) * r;
-                        z = (Math.random() - 0.5) * 0.5;
-                    } else { // EXPANSION
-                        const r = Math.random() * 8;
-                        const theta = Math.random() * 2 * Math.PI;
-                        const phi = Math.acos(2 * Math.random() - 1);
-                        x = r * Math.sin(phi) * Math.cos(theta);
-                        y = r * Math.sin(phi) * Math.sin(theta);
-                        z = r * Math.cos(phi);
+                    switch(type) {
+                        case 'DNA':
+                            const h = (idx - 0.5) * 10;
+                            const rDNA = 1.5;
+                            const twist = h * 2;
+                            // Double Helix
+                            const strand = i % 2 === 0 ? 0 : Math.PI;
+                            x = rDNA * Math.cos(twist + strand);
+                            z = rDNA * Math.sin(twist + strand);
+                            y = h;
+                            // Random scatter around strand
+                            x += (Math.random()-0.5)*0.2;
+                            z += (Math.random()-0.5)*0.2;
+                            break;
+                            
+                        case 'GALAXY':
+                            const arms = 3;
+                            const spin = idx * arms * Math.PI * 2;
+                            const rGal = Math.pow(Math.random(), 0.5) * 5;
+                            x = rGal * Math.cos(spin + rGal);
+                            z = rGal * Math.sin(spin + rGal);
+                            y = (Math.random() - 0.5) * (1 - rGal/5);
+                            break;
+
+                        case 'ATOM':
+                            // Nucleus
+                            if (i < count * 0.2) {
+                                const rNuc = 0.5 * Math.cbrt(Math.random());
+                                x = rNuc * Math.sin(phi) * Math.cos(theta);
+                                y = rNuc * Math.sin(phi) * Math.sin(theta);
+                                z = rNuc * Math.cos(phi);
+                            } else {
+                                // Electrons (Orbitals)
+                                const rElec = 3 + Math.random();
+                                const orbital = (i % 3) * (Math.PI / 3); // 3 planes
+                                const ang = Math.random() * Math.PI * 2;
+                                let tx = rElec * Math.cos(ang);
+                                let ty = rElec * Math.sin(ang);
+                                let tz = 0;
+                                // Rotate orbital
+                                x = tx * Math.cos(orbital) - tz * Math.sin(orbital);
+                                y = ty;
+                                z = tx * Math.sin(orbital) + tz * Math.cos(orbital);
+                            }
+                            break;
+
+                        case 'TORUS': 
+                            const R = 3; 
+                            const rTube = 1;
+                            const u = Math.random() * Math.PI * 2;
+                            const v = Math.random() * Math.PI * 2;
+                            x = (R + rTube * Math.cos(v)) * Math.cos(u);
+                            y = (R + rTube * Math.cos(v)) * Math.sin(u);
+                            z = rTube * Math.sin(v);
+                            break;
+                        
+                        case 'CUBE':
+                            const side = 4;
+                            x = (Math.random() - 0.5) * side;
+                            y = (Math.random() - 0.5) * side;
+                            z = (Math.random() - 0.5) * side;
+                            break;
+                            
+                        case 'WAVE':
+                            x = (idx - 0.5) * 10;
+                            z = (Math.random() - 0.5) * 6;
+                            y = Math.sin(x + z) * 1.5;
+                            break;
+
+                        case 'NETWORK':
+                            // Random points but clustered
+                            if (Math.random() > 0.95) {
+                                // Hubs
+                                x = (Math.random() - 0.5) * 8;
+                                y = (Math.random() - 0.5) * 8;
+                                z = (Math.random() - 0.5) * 8;
+                            } else {
+                                // Lines/Connections (simplified as random cloud with structure)
+                                const r = 5 * Math.cbrt(Math.random());
+                                x = r * Math.sin(phi) * Math.cos(theta);
+                                y = r * Math.sin(phi) * Math.sin(theta);
+                                z = r * Math.cos(phi);
+                            }
+                            break;
+
+                        case 'EXPANSION':
+                        default: // SPHERE as default
+                             const r = type === 'EXPANSION' ? Math.random() * 8 : 4 * Math.cbrt(Math.random());
+                             x = r * Math.sin(phi) * Math.cos(theta);
+                             y = r * Math.sin(phi) * Math.sin(theta);
+                             z = r * Math.cos(phi);
+                             break;
                     }
 
                     arr[i3] = x;
@@ -468,38 +833,33 @@
                 }
             }
 
-            update(pinchStrength) {
+            update(zikrPulse) {
                 const pos = this.geometry.attributes.position.array;
                 const target = this.targetPositions;
-
-                // Morphing Speed
-                const speed = 0.05;
+                const speed = 0.04;
 
                 for (let i = 0; i < this.count; i++) {
                     const i3 = i * 3;
                     
-                    // Standart Morphing (Nishonga intilish)
+                    // Standard Movement
                     pos[i3] += (target[i3] - pos[i3]) * speed;
                     pos[i3+1] += (target[i3+1] - pos[i3+1]) * speed;
                     pos[i3+2] += (target[i3+2] - pos[i3+2]) * speed;
 
-                    // PINCH PHYSICS (Gravity Implosion)
-                    // Agar pinch bo'lsa, zarrachalar markazga (0,0,0) tortiladi
-                    if (pinchStrength > 0) {
-                        const force = pinchStrength * 0.05;
-                        pos[i3] = pos[i3] * (1 - force);
-                        pos[i3+1] = pos[i3+1] * (1 - force);
-                        pos[i3+2] = pos[i3+2] * (1 - force);
+                    // ZIKR PULSE EFFECT
+                    if (zikrPulse > 0) {
+                        // Expand outward slightly on pulse
+                        pos[i3] *= (1 + zikrPulse * 0.05);
+                        pos[i3+1] *= (1 + zikrPulse * 0.05);
+                        pos[i3+2] *= (1 + zikrPulse * 0.05);
                     }
                 }
                 this.geometry.attributes.position.needsUpdate = true;
-                
-                // Sekin aylanish (Idle)
-                this.mesh.rotation.y += 0.001;
+                this.mesh.rotation.y += 0.002; // Sokin aylanish
             }
         }
 
-        // --- 4. MAIN APP CONTROLLER ---
+        // --- 4. APP CONTROLLER ---
         class App {
             constructor() {
                 this.scene = null;
@@ -509,9 +869,15 @@
                 this.audio = new AudioEngine();
                 this.currentIndex = 0;
                 
+                // Hand Tracking Logic
                 this.handDetected = false;
                 this.isPinching = false;
+                this.wasPinching = false;
                 this.pinchDist = 1;
+                
+                // Zikr Logic
+                this.zikrCounter = 0;
+                this.zikrPulseFrame = 0;
             }
 
             start() {
@@ -527,7 +893,7 @@
 
             initThree() {
                 this.scene = new THREE.Scene();
-                this.scene.fog = new THREE.FogExp2(0x020202, 0.05);
+                this.scene.fog = new THREE.FogExp2(0x000000, 0.06);
 
                 this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
                 this.camera.position.z = 6;
@@ -541,9 +907,16 @@
 
                 const animate = () => {
                     requestAnimationFrame(animate);
-                    // Fizika yangilanishi
-                    const strength = this.isPinching ? Math.max(0, 1 - (this.pinchDist * 10)) : 0;
-                    this.particles.update(strength);
+                    
+                    // Zikr Pulse Logic
+                    let pulse = 0;
+                    if (this.zikrPulseFrame > 0) {
+                        pulse = Math.sin(this.zikrPulseFrame * 0.5); // Pulse wave
+                        this.zikrPulseFrame -= 0.2;
+                        if(this.zikrPulseFrame < 0) this.zikrPulseFrame = 0;
+                    }
+
+                    this.particles.update(pulse);
                     this.renderer.render(this.scene, this.camera);
                 };
                 animate();
@@ -558,7 +931,7 @@
             initMediaPipe() {
                 const videoElement = document.getElementById('input_video');
                 const handStatus = document.getElementById('hand-status');
-                const pinchAlert = document.getElementById('pinch-status');
+                const pinchStatus = document.getElementById('pinch-status');
 
                 const hands = new Hands({locateFile: (file) => {
                     return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
@@ -566,7 +939,7 @@
 
                 hands.setOptions({
                     maxNumHands: 1,
-                    modelComplexity: 1, // Full model for accuracy
+                    modelComplexity: 1,
                     minDetectionConfidence: 0.5,
                     minTrackingConfidence: 0.5
                 });
@@ -575,10 +948,10 @@
                     if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
                         if (!this.handDetected) {
                             this.handDetected = true;
-                            handStatus.innerText = "ALOQA O'RNATILDI";
+                            handStatus.innerText = "ULANDI";
                             handStatus.classList.remove('error');
-                            handStatus.style.borderColor = "#10b981";
                             handStatus.style.color = "#10b981";
+                            handStatus.style.borderColor = "#10b981";
                         }
 
                         const lm = results.multiHandLandmarks[0];
@@ -586,36 +959,32 @@
                         const thumb = lm[4];
                         const indexF = lm[8];
 
-                        // 1. Scene Rotation (Qo'l holati)
-                        // x va y 0-1 oralig'ida. 
-                        const rotX = (palm.y - 0.5) * 2; 
-                        const rotY = (palm.x - 0.5) * 2;
-                        
-                        // Smooth lerp rotation
-                        this.scene.rotation.x += (rotX - this.scene.rotation.x) * 0.1;
-                        this.scene.rotation.y += (rotY - this.scene.rotation.y) * 0.1;
+                        // 1. Rotation Interaction
+                        const rotX = (palm.y - 0.5) * 1.5; 
+                        const rotY = (palm.x - 0.5) * 1.5;
+                        this.scene.rotation.x += (rotX - this.scene.rotation.x) * 0.05;
+                        this.scene.rotation.y += (rotY - this.scene.rotation.y) * 0.05;
 
-                        // 2. Pinch Detection
+                        // 2. Pinch Detection (Zikr Trigger)
                         const dist = Math.hypot(thumb.x - indexF.x, thumb.y - indexF.y);
-                        this.pinchDist = dist;
-                        
-                        if (dist < 0.06) {
-                            this.isPinching = true;
-                            pinchAlert.classList.add('pinch-active');
-                        } else {
-                            this.isPinching = false;
-                            pinchAlert.classList.remove('pinch-active');
+                        this.isPinching = dist < 0.05; // Pinch threshold
+
+                        if (this.isPinching && !this.wasPinching) {
+                            // Pinch Endi boshlandi -> Zikr!
+                            this.incrementZikr();
+                            pinchStatus.style.color = "#34d399";
+                            pinchStatus.style.fontWeight = "bold";
+                            pinchStatus.innerText = "SUBHANALLOH";
+                        } else if (!this.isPinching && this.wasPinching) {
+                             pinchStatus.style.color = "#444";
+                             pinchStatus.style.fontWeight = "normal";
+                             pinchStatus.innerText = "👌 BOSIB TURING";
                         }
+                        this.wasPinching = this.isPinching;
 
-                        // 3. Audio Control
-                        const velocity = Math.abs(palm.x - 0.5); // Sodda tezlik
-                        this.audio.update(velocity, this.isPinching ? 1 : 0);
-
-                        // 4. Swipe Logic (Ayah Change)
-                        // Agar qo'l juda o'ngga borsa (palm.x > 0.9)
-                        // Debounce kerak (har doim o'zgarmasligi uchun)
-                        if (palm.x > 0.9) this.nextAyahDebounced();
-                        if (palm.x < 0.1) this.prevAyahDebounced();
+                        // 3. Audio Update
+                        const velocity = Math.abs(palm.x - 0.5); 
+                        this.audio.update(velocity);
 
                     } else {
                         if (this.handDetected) {
@@ -635,35 +1004,48 @@
                 camera.start();
             }
 
-            // Swipe Debounce
-            lastSwipe = 0;
-            nextAyahDebounced() {
-                const now = Date.now();
-                if (now - this.lastSwipe > 2000) {
-                    this.nextAyah();
-                    this.lastSwipe = now;
-                }
+            incrementZikr() {
+                this.zikrCounter++;
+                document.getElementById('zikr-display').innerText = this.zikrCounter;
+                
+                // Vizual Pulse
+                const zikrDisplay = document.getElementById('zikr-display');
+                zikrDisplay.classList.remove('pulse-text');
+                void zikrDisplay.offsetWidth; // Trigger reflow
+                zikrDisplay.classList.add('pulse-text');
+
+                // Physics Pulse Trigger
+                this.zikrPulseFrame = Math.PI; // Start half-sine wave
+
+                // Sound
+                this.audio.playZikrSound();
             }
-            prevAyahDebounced() {
-                const now = Date.now();
-                if (now - this.lastSwipe > 2000) {
-                    this.prevAyah();
-                    this.lastSwipe = now;
-                }
+
+            resetZikr() {
+                this.zikrCounter = 0;
+                document.getElementById('zikr-display').innerText = 0;
             }
 
             nextAyah() {
-                this.currentIndex = (this.currentIndex + 1) % AYAHS.length;
-                this.updateUI();
-                this.particles.generateShape(AYAHS[this.currentIndex].shape);
-                this.audio.playWhoosh();
+                this.changeAyah((this.currentIndex + 1) % AYAHS.length);
             }
 
             prevAyah() {
-                this.currentIndex = (this.currentIndex - 1 + AYAHS.length) % AYAHS.length;
-                this.updateUI();
-                this.particles.generateShape(AYAHS[this.currentIndex].shape);
-                this.audio.playWhoosh();
+                this.changeAyah((this.currentIndex - 1 + AYAHS.length) % AYAHS.length);
+            }
+
+            changeAyah(index) {
+                // Fade out effect
+                const wrapper = document.getElementById('content-box');
+                wrapper.classList.add('fade-out');
+
+                setTimeout(() => {
+                    this.currentIndex = index;
+                    this.updateUI();
+                    this.particles.generateShape(AYAHS[this.currentIndex].shape || 'SPHERE');
+                    this.audio.playWhoosh();
+                    wrapper.classList.remove('fade-out');
+                }, 500);
             }
 
             updateUI() {
@@ -684,270 +1066,3 @@
 </body>
 </html>
 
-Birinchi bergan kodimdan hechnima ozgartirilmasin
-
-Agar xatoliklar bolsa togrla
-
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>NUR & ILM | Digital Tadabbur Pro</title>
-    
-    <!-- LIBRARIES (CDN) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
-
-    <style>
-        /* --- CORE STYLING --- */
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@200;400;600&display=swap');
-
-        body {
-            margin: 0;
-            background-color: #020202; /* Deepest Black */
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-            color: #e5e7eb;
-            touch-action: none; /* Prevent scroll on mobile */
-            -webkit-font-smoothing: antialiased;
-        }
-
-        #canvas-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
-        }
-
-        /* --- UI OVERLAY --- */
-        #ui-layer {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-            box-sizing: border-box;
-            background: radial-gradient(circle at center, transparent 0%, #000000 120%);
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            opacity: 0.7;
-        }
-        .status-badge {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            padding: 5px 10px;
-            border: 1px solid #10b981;
-            color: #10b981;
-            border-radius: 4px;
-            background: rgba(16, 185, 129, 0.1);
-        }
-        .status-badge.error { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); }
-
-        /* Center Content (Ayah) */
-        .content-wrapper {
-            text-align: center;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            transition: opacity 1s ease;
-        }
-
-        .arabic-text {
-            font-family: 'Amiri', serif;
-            font-size: clamp(2rem, 5vw, 4rem);
-            color: #fffbeb; /* Antique White */
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .divider {
-            width: 50px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #10b981, transparent);
-            margin: 15px auto;
-        }
-
-        .uzbek-text {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            font-weight: 200;
-            font-style: italic;
-            color: #d1fae5;
-            letter-spacing: 0.5px;
-        }
-
-        .meta-text {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #059669;
-            margin-top: 10px;
-        }
-
-        /* Footer (Hikmah) */
-        .footer {
-            margin-bottom: 20px;
-            text-align: center;
-            opacity: 0.8;
-        }
-        .hikmah-box {
-            background: rgba(0, 20, 10, 0.6);
-            border-left: 2px solid #10b981;
-            padding: 15px;
-            backdrop-filter: blur(4px);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .hikmah-title {
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #34d399;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .hikmah-content {
-            font-size: 12px;
-            color: #9ca3af;
-            line-height: 1.4;
-        }
-
-        /* Start Screen */
-        #start-screen {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #020202;
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .start-btn {
-            margin-top: 30px;
-            padding: 15px 40px;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-size: 12px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.5s;
-        }
-        .start-btn:hover {
-            background: rgba(16, 185, 129, 0.2);
-            border-color: #10b981;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
-        }
-
-        .hidden { opacity: 0; pointer-events: none; transition: opacity 1s; }
-        .visible { opacity: 1; pointer-events: auto; }
-
-        /* Utility */
-        .pinch-alert {
-            color: #fbbf24;
-            font-weight: bold;
-            text-shadow: 0 0 10px #fbbf24;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .pinch-active { opacity: 1; }
-    </style>
-</head>
-<body>
-
-    <!-- START SCREEN -->
-    <div id="start-screen">
-        <h1 style="font-weight: 200; letter-spacing: 8px; font-size: 32px; margin-bottom: 10px;">NUR & ILM</h1>
-        <p style="font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase;">Digital Tadabbur Experience</p>
-        <button class="start-btn" id="btn-start">Bismillah • Kirish</button>
-        <p style="margin-top: 20px; font-size: 9px; color: #444;">Kamera ruxsati va Ovoz talab qilinadi.<br>Iltimos, sokin joyda foydalaning.</p>
-    </div>
-
-    <!-- MAIN UI -->
-    <div id="ui-layer" class="hidden">
-        <div class="header">
-            <div>
-                <div style="font-size: 10px; color: #333; letter-spacing: 2px;">V1.0 FINAL</div>
-            </div>
-            <div style="text-align: right;">
-                <div id="hand-status" class="status-badge error">Qo'l izlanmoqda...</div>
-                <div id="pinch-status" class="pinch-alert" style="font-size: 10px; margin-top: 5px; letter-spacing: 1px;">VAHDAT (BIRLIK)</div>
-            </div>
-        </div>
-
-        <div class="content-wrapper">
-            <div id="arabic" class="arabic-text"></div>
-            <div class="divider"></div>
-            <div id="uzbek" class="uzbek-text"></div>
-            <div id="meta" class="meta-text"></div>
-        </div>
-
-        <div class="footer">
-            <div class="hikmah-box">
-                <span id="hikmah-source" class="hikmah-title"></span>
-                <span id="hikmah-body" class="hikmah-content"></span>
-            </div>
-            <!-- Manual Navigation for Backup -->
-            <div style="margin-top: 15px; pointer-events: auto;">
-                <button onclick="app.prevAyah()" style="background:none; border:none; color:#333; font-size: 20px;">←</button>
-                <button onclick="app.nextAyah()" style="background:none; border:none; color:#333; font-size: 20px;">→</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3D CANVAS -->
-    <div id="canvas-container"></div>
-    <!-- HIDDEN VIDEO -->
-    <video id="input_video" style="display:none" playsinline webkit-playsinline></video>
-
-    <script>
-        /**
-         * NUR & ILM - Yagona Fayl Arxitekturasi
-         * Muallif: Muhammad Daler
-         * Texnologiyalar: Three.js (WebGL), Web Audio API, MediaPipe Hands
-         */
-
-        // --- 1. MA'LUMOTLAR BAZASI (DATA) ---
-        const AYAHS = [
-            {
-                id: 1,
-                surah: "An-Nur 24:35",
-                arabic: "اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ",
-                uzbek: "Alloh osmonlar va yerning nuridir.",
-                source: "Fizika va Irfon",
-                hikmah: "Koinotdagi har bir foton, har bir energiya Uning nuri tajalliysidir. Zulmat yo'q, faqat Nurning yo'qligi bor.",
-                shape: 'SPHERE'
-            },
-            {
-                id: 2,
-                surah: "Al-Alaq 96:1",
-                arabic: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
-                uzbek: "Yaratgan Robbing nomi bilan o'qi!",
-                source: "Ibn Sino Hikmati",
-                hikmah: "Inson aqli faol bo'lganda, u Koinot Aqli bilan bog'lanadi. O'qish - neyronlarning ilohiy raqsidir.",
-                shape: 'SPIRAL'
-            },
-            {
-                id: 3,
-                surah: "Al-Anbiya 21:30",
