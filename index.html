@@ -14,7 +14,7 @@
 
     <style>
         /* --- CORE STYLING --- */
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@200;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@200;400;600&display=swap');
 
         body {
             margin: 0;
@@ -182,6 +182,12 @@
             transition: opacity 0.3s;
         }
         .pinch-active { opacity: 1; }
+        
+        #zikr-counter {
+            font-size: 12px;
+            color: #10b981;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -192,6 +198,7 @@
         <p style="font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase;">Digital Tadabbur Experience</p>
         <button class="start-btn" id="btn-start">Bismillah • Kirish</button>
         <p style="margin-top: 20px; font-size: 9px; color: #444;">Kamera ruxsati va Ovoz talab qilinadi.<br>Iltimos, sokin joyda foydalaning.</p>
+        <p style="font-size: 8px; color: #333; margin-top: 10px;">Made by ©️Muhammad Daler</p>
     </div>
 
     <!-- MAIN UI -->
@@ -203,6 +210,7 @@
             <div style="text-align: right;">
                 <div id="hand-status" class="status-badge error">Qo'l izlanmoqda...</div>
                 <div id="pinch-status" class="pinch-alert" style="font-size: 10px; margin-top: 5px; letter-spacing: 1px;">VAHDAT (BIRLIK)</div>
+                <div id="zikr-counter">Zikr: 0</div>
             </div>
         </div>
 
@@ -222,8 +230,8 @@
             <div style="margin-top: 15px; pointer-events: auto;">
                 <button onclick="app.prevAyah()" style="background:none; border:none; color:#333; font-size: 20px;">←</button>
                 <button onclick="app.nextAyah()" style="background:none; border:none; color:#333; font-size: 20px;">→</button>
+                <button onclick="app.resetZikr()" style="background:none; border:none; color:#333; font-size: 12px;">Zikrni Yangilash</button>
             </div>
-            <div style="margin-top: 10px; font-size: 8px; color: #444; letter-spacing: 1px;">Made by ©️Muhammad Daler</div>
         </div>
     </div>
 
@@ -244,8 +252,8 @@
             {
                 id: 1,
                 surah: "An-Nur 24:35",
-                arabic: "اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ ۚ مَثَلُ نُورِهِ كَمِشْكَاةٍ فِيهَا مِصْبَاحٌ ۖ الْمِصْبَاحُ فِي زُجَاجَةٍ ۖ الزُّجَاجَةُ كَأَنَّهَا كَوْكَبٌ دُرِّيٌّ يُوقَدُ مِنْ شَجَرَةٍ مُبَارَكَةٍ زَيْتُونَةٍ لَا شَرْقِيَّةٍ وَلَا غَرْبِيَّةٍ يَكَادُ زَيْتُهَا يُضِيءُ وَلَوْ لَمْ تَمْسَسْهُ نَارٌ ۚ نُورٌ عَلَىٰ نُورٍ ۗ يَهْدِي اللَّهُ لِنُورِهِ مَنْ يَشَاءُ ۚ وَيَضْرِبُ اللَّهُ الْأَمْثَالَ لِلنَّاسِ ۗ وَاللَّهُ بِكُلِّ شَيْءٍ عَلِيمٌ",
-                uzbek: "Alloh osmonlar va yerning nuri. Uning nurining misoli ichida mishkot bor mishkotda chiroq, chiroq shisha ichida, shisha durday yulduzday, u muborak zaytun daraxtidan yoqiladi, na sharqiy na g'arbiy, uning yog'i yonmasa ham yoritadi, nur ustiga nur. Alloh o'z nuriga kimni xohlasa hidoyat qiladi. Alloh odamlar uchun misollar keltiradi va Alloh har narsani biluvchidir.",
+                arabic: "اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ",
+                uzbek: "Alloh osmonlar va yerning nuri dir.",
                 source: "Fizika va Irfon",
                 hikmah: "Koinotdagi har bir foton, har bir energiya Uning nuri tajalliysidir. Zulmat yo'q, faqat Nurning yo'qligi bor.",
                 shape: 'SPHERE'
@@ -253,8 +261,8 @@
             {
                 id: 2,
                 surah: "Al-Alaq 96:1",
-                arabic: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
-                uzbek: "O'qi Robbing nomi bilan, U yaratgandir.",
+                arabic: "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
+                uzbek: "Yaratgan Robbing nomi bilan o'qi!",
                 source: "Ibn Sino Hikmati",
                 hikmah: "Inson aqli faol bo'lganda, u Koinot Aqli bilan bog'lanadi. O'qish - neyronlarning ilohiy raqsidir.",
                 shape: 'SPIRAL'
@@ -262,43 +270,1247 @@
             {
                 id: 3,
                 surah: "Al-Anbiya 21:30",
-                arabic: "أَوَلَمْ يَرَ الَّذِينَ كَفَرُوا أَنَّ السَّمَاوَاتِ وَالْأَرْضَ كَانَتَا رَتْقًا فَفَتَقْنَاهُمَا ۖ وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ ۖ أَفَلَا يُؤْمِنُونَ",
-                uzbek: "Kofirlar ko'rmadilarmi, osmonlar va yer bitishgan edi, Biz ularni ajratdik va har bir tirik mavjudotni suvdan yaratdik. Hali iymon keltirmaydilarmi?",
+                arabic: "أَوَلَمْ يَرَ الَّذِينَ كَفَرُوا أَنَّ السَّمَاوَاتِ وَالْأَرْضَ كَانَتَا رَتْقًا فَفَتَقْنَاهُمَا",
+                uzbek: "Kofirlar ko'rmaslar emasmi, osmonlar va yer bitishgan edi, Biz ularni ajratdik va har bir tirik jonni suvdan yaratdik. Hali ham iymon keltirmaslar emasmi?",
                 source: "Katta Portlash (Big Bang)",
                 hikmah: "Koinot yagona o'ta zich nuqtadan kengayishni boshladi. Biz hammamiz yulduz changidan yaralganmiz.",
                 shape: 'EXPANSION'
             },
-            // Qolgan oyatlar uchun tarjimalarni to'g'rilash (haqiqiy manbalarga asosan, masalan, quran.uz va islom.uz dan olingan to'g'ri ma'nolar bilan yangilangan). Barcha 45 ta oyatni to'g'riladim, ammo masofa sababli qisqa ko'rsataman - to'liq kodda hamma to'g'ri.
-            // Misol uchun:
             {
                 id: 4,
                 surah: "Az-Zumar 39:9",
-                arabic: "قُلْ هَلْ يَسْتَوِي الَّذِينَ يَعْلَمُونَ وَالَّذِينَ لَا يَعْلَمُونَ ۗ إِنَّمَا يَتَذَكَّرُ أُولُو الْأَلْبَابِ",
-                uzbek: "Ayt: Biluvchilar bilan bilmaydiganlar tengmi? Faqat aql egalari eslaydi.",
+                arabic: "قُلْ هَلْ يَسْتَوِي الَّذِينَ يَعْلَمُونَ وَالَّذِينَ لَا يَعْلَمُونَ",
+                uzbek: "Ayt: «Biluvchilar bilan bilmaydiganlar teng bo'lurmi?!»",
                 source: "Al-Farabi",
                 hikmah: "Ilm — bu shunchaki ma'lumot emas, u qalb ko'zining ochilishidir.",
                 shape: 'HALO'
             },
-            // ... (barcha oyatlar to'g'ri ma'no bilan yangilangan, xatoliklar bartaraf)
+            {
+                id: 5,
+                surah: "Fussilat 41:53",
+                arabic: "سَنُرِيهِمْ آيَاتِنَا فِي الْآفَاقِ وَفِي أَنفُسِهِمْ",
+                uzbek: "Biz ularga ufqlarda va o'zlarida Bizning oyatlarimizni ko'rsatamiz, toki ularga haqiqat ravshan bo'lguncha.",
+                source: "Mikro va Makro Kosmos",
+                hikmah: "Atomdagi elektronlarning aylanishi bilan Galaktikalar aylanishi bir xil qonuniyatga bo'ysunadi.",
+                shape: 'HEART'
+            },
+            {
+                id: 6,
+                surah: "Ar-Ra'd 13:3",
+                arabic: "وَهُوَ الَّذِي مَدَّ الْأَرْضَ وَجَعَلَ فِيهَا رَوَاسِيَ وَأَنْهَارًا",
+                uzbek: "U yer yuzini yoyib qo'ydi va unda tog'lar va daryolar qildi.",
+                source: "Tektonika Plitalari",
+                hikmah: "Yerning kengayishi va tog'larning hosil bo'lishi ilohiy muvozanatdir.",
+                shape: 'MOUNTAIN'
+            },
+            {
+                id: 7,
+                surah: "An-Nahl 16:68-69",
+                arabic: "وَأَوْحَىٰ رَبُّكَ إِلَى النَّحْلِ أَنِ اتَّخِذِي مِنَ الْجِبَالِ بُيُوتًا",
+                uzbek: "Robbing asalariga vahi qildi: «Tog'lardan uylar qur.»",
+                source: "Biologiya va Ekologiya",
+                hikmah: "Asalning shifobaxshligi ilohiy ne'mat va tabiat muvozanatidir.",
+                shape: 'HIVE'
+            },
+            {
+                id: 8,
+                surah: "Al-Baqara 2:164",
+                arabic: "إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ",
+                uzbek: "Osmonlar va yerning yaratilishida, kecha va kunduzning almashinishida oyatlar bor.",
+                source: "Astronomiya",
+                hikmah: "Yerning aylanishi va quyosh tizimi ilohiy nizomdir.",
+                shape: 'ORBIT'
+            },
+            {
+                id: 9,
+                surah: "Ya-Sin 36:40",
+                arabic: "لَا الشَّمْسُ يَنبَغِي لَهَا أَن تُدْرِكَ الْقَمَرَ",
+                uzbek: "Quyosh oyga yetib ololmaydi.",
+                source: "Selenosentrik Model",
+                hikmah: "Sayyoralar orbitasi ilohiy hisob-kitobdir.",
+                shape: 'PLANET'
+            },
+            {
+                id: 10,
+                surah: "Adh-Dhariyat 51:47",
+                arabic: "وَالسَّمَاءَ بَنَيْنَاهَا بِأَيْدٍ وَإِنَّا لَمُوسِعُونَ",
+                uzbek: "Osmonni qudrat bilan qurdik va Biz uni kengaytiribmiz.",
+                source: "Koinot Kengayishi",
+                hikmah: "Hubble qonuni ilohiy kengayishni tasdiqlaydi.",
+                shape: 'GALAXY'
+            },
+            {
+                id: 11,
+                surah: "Al-Isra 17:44",
+                arabic: "تُسَبِّحُ لَهُ السَّمَاوَاتُ السَّبْعُ وَالْأَرْضُ وَمَن فِيهِنَّ",
+                uzbek: "Yetti osmon, yer va ulardagi hamma narsa Uni tasbih aytadi.",
+                source: "Vibratsiya va Rezonans",
+                hikmah: "Har bir atom tasbihda, bu kvant maydonlaridir.",
+                shape: 'WAVE'
+            },
+            {
+                id: 12,
+                surah: "Ar-Rum 30:22",
+                arabic: "وَمِنْ آيَاتِهِ خَلْقُ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافُ أَلْسِنَتِكُمْ وَأَلْوَانِكُمْ",
+                uzbek: "Osmonlar va yerning yaratilishi, tillaringiz va ranglaringizning farqi oyatlardir.",
+                source: "Genetika va Evolyutsiya",
+                hikmah: "Insoniyatning xilma-xilligi ilohiy ijoddir.",
+                shape: 'DNA'
+            },
+            {
+                id: 13,
+                surah: "Al-Qamar 54:49",
+                arabic: "إِنَّا كُلَّ شَيْءٍ خَلَقْنَاهُ بِقَدَرٍ",
+                uzbek: "Biz har bir narsani o'lchov bilan yaratdik.",
+                source: "Fizika Konstantalari",
+                hikmah: "Koinotdagi doimiylar ilohiy qadardir.",
+                shape: 'CONSTANT'
+            },
+            {
+                id: 14,
+                surah: "Al-Hijr 15:21",
+                arabic: "وَإِن مِّن شَيْءٍ إِلَّا عِندَنَا خَزَائِنُهُ وَمَا نُنَزِّلُهُ إِلَّا بِقَدَرٍ مَّعْلُومٍ",
+                uzbek: "Har bir narsaning xazinalari Bizda va Biz uni ma'lum o'lchovda tushuramiz.",
+                source: "Energiya va Materiya",
+                hikmah: "E=mc² ilohiy o'lchovdir.",
+                shape: 'ENERGY'
+            },
+            {
+                id: 15,
+                surah: "An-Naba 78:6-7",
+                arabic: "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا وَالْجِبَالَ أَوْتَادًا",
+                uzbek: "Yerni beshik va tog'larni qoziq qilmadikmi?",
+                source: "Geologiya",
+                hikmah: "Tog'lar yer po'stini muvozanatlashtiradi.",
+                shape: 'PEAK'
+            },
+            {
+                id: 16,
+                surah: "Al-Mulk 67:3",
+                arabic: "الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا",
+                uzbek: "Yetti osmonni qatlam-qatlam yaratgan.",
+                source: "Atmosfera Qatlamlari",
+                hikmah: "Yer atmosferasi qatlamlari ilohiy himoyadir.",
+                shape: 'LAYER'
+            },
+            {
+                id: 17,
+                surah: "Al-An'am 6:99",
+                arabic: "وَهُوَ الَّذِي أَنزَلَ مِنَ السَّمَاءِ مَاءً فَأَخْرَجْنَا بِهِ نَبَاتَ كُلِّ شَيْءٍ",
+                uzbek: "Osmonidan suv tushirdi va u bilan har turdagi o'simliklarni chiqardik.",
+                source: "Hidrologiya Tsikli",
+                hikmah: "Suv aylanishi ilohiy rahmaddir.",
+                shape: 'CYCLE'
+            },
+            {
+                id: 18,
+                surah: "Az-Zukhruf 43:11",
+                arabic: "الَّذِي أَنزَلَ مِنَ السَّمَاءِ مَاءً بِقَدَرٍ فَأَنشَرْنَا بِهِ بَلْدَةً مَّيْتًا",
+                uzbek: "Osmonidan o'lchov bilan suv tushirdi va u bilan o'lik shaharni tiriltirdik.",
+                source: "Yomg'ir va O'sish",
+                hikmah: "Fotosintez ilohiy jarayondir.",
+                shape: 'LEAF'
+            },
+            {
+                id: 19,
+                surah: "Al-Furqan 25:53",
+                arabic: "وَهُوَ الَّذِي مَرَجَ الْبَحْرَيْنِ هَٰذَا عَذْبٌ فُرَاتٌ وَهَٰذَا مِلْحٌ أُجَاجٌ",
+                uzbek: "Ikki dengizni aralashtirdi: biri shirin, ikkinchisi sho'r.",
+                source: "Okeanografiya",
+                hikmah: "Dengiz oqimlari ilohiy to'siqdir.",
+                shape: 'WAVEFORM'
+            },
+            {
+                id: 20,
+                surah: "Ar-Rahman 55:19-20",
+                arabic: "مَرَجَ الْبَحْرَيْنِ يَلْتَقِيَانِ بَيْنَهُمَا بَرْزَخٌ لَّا يَبْغِيَانِ",
+                uzbek: "Ikki dengizni uchrashuvchi qildi, oralarida to'siq bor.",
+                source: "Halogena va Termoklina",
+                hikmah: "Suv zichligi farqlari ilohiy muvozanatdir.",
+                shape: 'BARRIER'
+            },
+            {
+                id: 21,
+                surah: "Al-Hadid 57:25",
+                arabic: "وَأَنزَلْنَا الْحَدِيدَ فِيهِ بَأْسٌ شَدِيدٌ وَمَنَافِعُ لِلنَّاسِ",
+                uzbek: "Temirni tushirdik, unda kuchli quvvat va odamlar uchun foydalar bor.",
+                source: "Metallurgiya",
+                hikmah: "Temirning yulduzlarda hosil bo'lishi ilohiy yaratilishdir.",
+                shape: 'IRON'
+            },
+            {
+                id: 22,
+                surah: "An-Nur 24:40",
+                arabic: "أَوْ كَظُلُمَاتٍ فِي بَحْرٍ لُّجِّيٍّ يَغْشَاهُ مَوْجٌ مِّن فَوْقِهِ مَوْجٌ",
+                uzbek: "Yoki chuqur dengizdagi zulmatlar kabi, ustida to'lqin ustiga to'lqin.",
+                source: "Dengiz Chuqurliklari",
+                hikmah: "Okean tubi bosimlari ilohiy sinovdir.",
+                shape: 'DEPTH'
+            },
+            {
+                id: 23,
+                surah: "Al-Baqara 2:22",
+                arabic: "الَّذِي جَعَلَ لَكُمُ الْأَرْضَ فِرَاشًا وَالسَّمَاءَ بِنَاءً",
+                uzbek: "Sizlarga yerni to'shak va osmonni bina qildi.",
+                source: "Gravitatsiya",
+                hikmah: "Yer gravitatsiyasi ilohiy jozibadir.",
+                shape: 'GRAVITY'
+            },
+            {
+                id: 24,
+                surah: "Al-Jathiya 45:13",
+                arabic: "وَسَخَّرَ لَكُم مَّا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ جَمِيعًا مِّنْهُ",
+                uzbek: "Osmonlar va yerdagi hamma narsani sizga bo'ysundirdi.",
+                source: "Tabiiy Resurslar",
+                hikmah: "Energiya manbalari ilohiy ne'matdir.",
+                shape: 'RESOURCE'
+            },
+            {
+                id: 25,
+                surah: "Al-Anfal 8:11",
+                arabic: "يُنَزِّلُ عَلَيْكُم مِّنَ السَّمَاءِ مَاءً لِّيُطَهِّرَكُم بِهِ",
+                uzbek: "Osmonidan sizlarga tozalovchi suv tushiradi.",
+                source: "Yomg'ir va Tozalik",
+                hikmah: "Atmosfera tozalanishi ilohiy jarayondir.",
+                shape: 'RAIN'
+            },
+            {
+                id: 26,
+                surah: "Az-Zariyat 51:22",
+                arabic: "وَفِي السَّمَاءِ رِزْقُكُمْ وَمَا تُوعَدُونَ",
+                uzbek: "Osmonida rizqingiz va va'da qilingan narsalar bor.",
+                source: "Meteorologiya",
+                hikmah: "Bulutlar va yomg'ir ilohiy rizqdir.",
+                shape: 'CLOUD'
+            },
+            {
+                id: 27,
+                surah: "Al-A'raf 7:57",
+                arabic: "وَهُوَ الَّذِي يُرْسِلُ الرِّيَاحَ بُشْرًا بَيْنَ يَدَيْ رَحْمَتِهِ",
+                uzbek: "U shamollarni rahmatidan oldin xushxabar qilib yuboradi.",
+                source: "Shamol va Iqlim",
+                hikmah: "Shamol oqimlari ilohiy harakatdir.",
+                shape: 'WIND'
+            },
+            {
+                id: 28,
+                surah: "Fatir 35:12",
+                arabic: "وَمَا يَسْتَوِي الْبَحْرَانِ هَٰذَا عَذْبٌ فُرَاتٌ سَائِغٌ شَرَابُهُ وَهَٰذَا مِلْحٌ أُجَاجٌ",
+                uzbek: "Ikki dengiz teng emas: biri shirin, ikkinchisi sho'r.",
+                source: "Dengiz Ekosistemasi",
+                hikmah: "Dengiz hayoti ilohiy xilma-xillikdir.",
+                shape: 'OCEAN'
+            },
+            {
+                id: 29,
+                surah: "Al-Qiyamah 75:3-4",
+                arabic: "أَيَحْسَبُ الْإِنسَانُ أَلَّن نَّجْمَعَ عِظَامَهُ بَلَىٰ قَادِرِينَ عَلَىٰ أَن نُّسَوِّيَ بَنَانَهُ",
+                uzbek: "Inson suyaklarini jamlab bo'lmas deb o'ylaydimi? Ha, Biz barmoq uchlarini ham to'g'rilay olamiz.",
+                source: "DNK va Biometriya",
+                hikmah: "Barmoq izlari ilohiy noyoblikdir.",
+                shape: 'FINGERPRINT'
+            },
+            {
+                id: 30,
+                surah: "Al-Infitar 82:6-8",
+                arabic: "يَا أَيُّهَا الْإِنسَانُ مَا غَرَّكَ بِرَبِّكَ الْكَرِيمِ الَّذِي خَلَقَكَ فَسَوَّاكَ فَعَدَلَكَ",
+                uzbek: "Ey inson, seni karim Robbingdan nima aldadi? U seni yaratdi, to'g'riladi, muvozanatlashtirdi.",
+                source: "Inson Anatomiyasi",
+                hikmah: "Inson tanasi muvozanati ilohiy san'atdir.",
+                shape: 'HUMAN'
+            },
+            {
+                id: 31,
+                surah: "At-Tariq 86:5-7",
+                arabic: "فَلْيَنظُرِ الْإِنسَانُ مِمَّ خُلِقَ خُلِقَ مِن مَّاءٍ دَافِقٍ يَخْرُجُ مِن بَيْنِ الصُّلْبِ وَالتَّرَائِبِ",
+                uzbek: "Inson nimadan yaratilganiga qarasin: Otiluvchi suvdan, orqa va ko'krak orasidan chiqadigan.",
+                source: "Embriologiya",
+                hikmah: "Inson rivojlanishi ilohiy jarayondir.",
+                shape: 'EMBRYO'
+            },
+            {
+                id: 32,
+                surah: "Al-Mu'minun 23:12-14",
+                arabic: "وَلَقَدْ خَلَقْنَا الْإِنسَانَ مِن سُلَالَةٍ مِّن طِينٍ",
+                uzbek: "Insonni loydan sara qismdan yaratdik.",
+                source: "Evolyutsiya va Yaratilish",
+                hikmah: "Insonning loydan chiqishi mineral elementlardir.",
+                shape: 'CLAY'
+            },
+            {
+                id: 33,
+                surah: "Al-Insan 76:2",
+                arabic: "إِنَّا خَلَقْنَا الْإِنسَانَ مِن نُّطْفَةٍ أَمْشَاجٍ",
+                uzbek: "Insonni aralash nutfadan yaratdik.",
+                source: "Genetika",
+                hikmah: "DNK aralashishi ilohiydir.",
+                shape: 'HELIX'
+            },
+            {
+                id: 34,
+                surah: "Al-Hujurat 49:13",
+                arabic: "يَا أَيُّهَا النَّاسُ إِنَّا خَلَقْنَاكُم مِّن ذَكَرٍ وَأُنثَىٰ وَجَعَلْنَاكُمْ شُعُوبًا وَقَبَائِلَ لِتَعَارَفُوا",
+                uzbek: "Ey odamlar, Biz sizlarni erkak va ayoldan yaratdik va sizlarni xalqlar va qabilalarga qildik, bir-biringizni tanishingiz uchun.",
+                source: "Antropologiya",
+                hikmah: "Insoniyat xilma-xilligi tafakkur uchundir.",
+                shape: 'TRIBE'
+            },
+            {
+                id: 35,
+                surah: "Al-A'raf 7:54",
+                arabic: "إِنَّ رَبَّكُمُ اللَّهُ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ فِي سِتَّةِ أَيَّامٍ",
+                uzbek: "Robbingiz Alloh osmonlar va yerni olti kunda yaratdi.",
+                source: "Vaqt va Koinot",
+                hikmah: "Olti kun ilohiy bosqichlardir, Big Bangdan beri.",
+                shape: 'TIME'
+            },
+            {
+                id: 36,
+                surah: "Al-Fatihah 1:1-2",
+                arabic: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+                uzbek: "Hamd olamlar Robbisiga bo'lsin.",
+                source: "Multikoinot Nazariyasi",
+                hikmah: "Olamlar ko'plikda, kvant ko'p olamlar ilohiy kenglikdir.",
+                shape: 'MULTIVERSE'
+            },
+            {
+                id: 37,
+                surah: "Al-Baqara 2:29",
+                arabic: "هُوَ الَّذِي خَلَقَ لَكُم مَّا فِي الْأَرْضِ جَمِيعًا ثُمَّ اسْتَوَىٰ إِلَى السَّمَاءِ فَسَوَّاهُنَّ سَبْعَ سَمَاوَاتٍ",
+                uzbek: "U sizlarga yerdagi hamma narsani yaratdi, keyin osmonlarga yuzlandi va ularni yetti osmon qildi.",
+                source: "Koinot Qatlamlari",
+                hikmah: "Osmon qatlamlari ilohiy tuzilishdir.",
+                shape: 'SEVEN'
+            },
+            {
+                id: 38,
+                surah: "An-Nisa 4:1",
+                arabic: "يَا أَيُّهَا النَّاسُ اتَّقُوا رَبَّكُمُ الَّذِي خَلَقَكُم مِّن نَّفْسٍ وَاحِدَةٍ",
+                uzbek: "Ey odamlar, sizlarni bitta nafsdan yaratgan Robbingizdan qo'rqing.",
+                source: "Insoniyat Birligi",
+                hikmah: "Barcha insonlar bitta ildizdan, genetika tasdiqlaydi.",
+                shape: 'UNITY'
+            },
+            {
+                id: 39,
+                surah: "Al-Ma'ida 5:18",
+                arabic: "وَاللَّهُ خَلَقَكُمْ وَمَا تَعْمَلُونَ",
+                uzbek: "Alloh sizlarni va qilayotgan amallaringizni yaratdi.",
+                source: "Kvant Vaqt",
+                hikmah: "Har bir harakat ilohiy yaratilishdir.",
+                shape: 'ACTION'
+            },
+            {
+                id: 40,
+                surah: "Al-An'am 6:1",
+                arabic: "الْحَمْدُ لِلَّهِ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ وَجَعَلَ الظُّلُمَاتِ وَالنُّورَ",
+                uzbek: "Hamd osmonlar va yerni yaratgan, zulmatlar va nurni qilgan Allohgadir.",
+                source: "Dualizm",
+                hikmah: "Nur va zulmat ilohiy muvozanatdir.",
+                shape: 'DUAL'
+            },
+            {
+                id: 41,
+                surah: "Al-A'raf 7:189",
+                arabic: "هُوَ الَّذِي خَلَقَكُم مِّن نَّفْسٍ وَاحِدَةٍ وَجَعَلَ مِنْهَا زَوْجَهَا",
+                uzbek: "U sizlarni bitta nafsdan yaratdi va undan uning juftini qildi.",
+                source: "Juftlik",
+                hikmah: "Juftlik ilohiy jozibadir.",
+                shape: 'PAIR'
+            },
+            {
+                id: 42,
+                surah: "Hud 11:7",
+                arabic: "وَهُوَ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ فِي سِتَّةِ أَيَّامٍ وَكَانَ عَرْشُهُ عَلَى الْمَاءِ",
+                uzbek: "U osmonlar va yerni olti kunda yaratdi va Arshi suv ustida edi.",
+                source: "Suv va Yaratilish",
+                hikmah: "Suv koinotning asosidir.",
+                shape: 'WATER'
+            },
+            {
+                id: 43,
+                surah: "Yunus 10:3",
+                arabic: "إِنَّ رَبَّكُمُ اللَّهُ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ فِي سِتَّةِ أَيَّامٍ",
+                uzbek: "Robbingiz Alloh osmonlar va yerni olti kunda yaratdi.",
+                source: "Vaqt Bosqichlari",
+                hikmah: "Olti kun evolyutsiya bosqichlaridir.",
+                shape: 'STAGE'
+            },
+            {
+                id: 44,
+                surah: "Al-Furqan 25:59",
+                arabic: "الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ وَمَا بَيْنَهُمَا فِي سِتَّةِ أَيَّامٍ",
+                uzbek: "Osmonlar, yer va ular orasidagini olti kunda yaratdi.",
+                source: "Kosmologiya",
+                hikmah: "Koinot rivoji ilohiy vaqtdir.",
+                shape: 'COSMOS'
+            },
             {
                 id: 45,
-                surah: "Al-Hajj 22:18",
-                arabic: "أَلَمْ تَرَ أَنَّ اللَّهَ يَسْجُدُ لَهُ مَنْ فِي السَّمَاوَاتِ وَمَنْ فِي الْأَرْضِ وَالشَّمْسُ وَالْقَمَرُ وَالنُّجُومُ وَالْجِبَالُ وَالشَّجَرُ وَالدَّوَابُّ وَكَثِيرٌ مِنَ النَّاسِ ۖ وَكَثِيرٌ حَقَّ عَلَيْهِ الْعَذَابُ ۗ وَمَنْ يُهِنِ اللَّهُ فَمَا لَهُ مِنْ مُكْرِمٍ ۚ إِنَّ اللَّهَ يَفْعَلُ مَا يَشَاءُ ۩",
-                uzbek: "Ko'rmadingmi, Allohga osmonlardagi va yerdagilar, quyosh, oy, yulduzlar, tog'lar, daraxtlar va hayvonlar sajda qiladi, va ko'p odamlar. Ko'plariga azob haq bo'ldi. Alloh kimni xor qilsa, unga hurmat qiluvchi yo'q. Alloh xohlaganini qiladi.",
-                source: "Universal Sajda va Vibratsiya",
-                hikmah: "Hamma narsa zikrda - ilohiy harmoniya.",
-                shape: 'SAJDA'
+                surah: "As-Sajda 32:4",
+                arabic: "اللَّهُ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ وَمَا بَيْنَهُمَا فِي سِتَّةِ أَيَّامٍ",
+                uzbek: "Alloh osmonlar, yer va ular orasidagini olti kunda yaratdi.",
+                source: "Ilmiy Yaratilish",
+                hikmah: "Ilm va iymon birlashadi.",
+                shape: 'UNION'
             }
         ];
 
-        // --- 2. AUDIO ENGINE (yangi, sokin ovozlar, xatoliklar to'g'rilangan) ---
-        // ... (avvalgi kod saqlangan, ammo xatoliklar to'g'rilangan, ovozlar keskin emas, past va mos)
+        // --- 2. AUDIO ENGINE (Generative Sound) ---
+        class AudioEngine {
+            constructor() {
+                this.ctx = null;
+                this.osc = null;
+                this.gain = null;
+                this.filter = null;
+                this.noise = null;
+                this.noiseGain = null;
+                this.gestureSounds = {};
+            }
 
-        // --- 3. PHYSICS & PARTICLES (fizika yaxshilangan, formula qo'shilgan, planetalar real gravitatsiya bilan) ---
-        // ... (avvalgi kod saqlangan, ammo fizika kuchaytirilgan, xatoliklar to'g'rilangan, har oyatda yangi hodisa)
+            init() {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                this.ctx = new AudioContext();
+                
+                // 1. Drone (55Hz Hum) - Asosiy sokinlik ovozi
+                this.osc = this.ctx.createOscillator();
+                this.osc.type = 'sine';
+                this.osc.frequency.value = 55; // A1 (Juda past)
+                
+                this.gain = this.ctx.createGain();
+                this.gain.gain.value = 0.15;
 
-        // --- 4. MAIN APP CONTROLLER (gestures to'g'ri aniqlash, zikr restart, swipe yozuvsiz) ---
-        // ... (avvalgi kod saqlangan, talablar to'liq, xatoliklar to'g'rilangan, iPhone uchun optimallashtirilgan)
+                this.filter = this.ctx.createBiquadFilter();
+                this.filter.type = 'lowpass';
+                this.filter.frequency.value = 200;
+
+                this.osc.connect(this.filter);
+                this.filter.connect(this.gain);
+                this.gain.connect(this.ctx.destination);
+                this.osc.start();
+
+                // 2. White Noise (Atmosphere/Breath)
+                const bufferSize = this.ctx.sampleRate * 2;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                this.noise = this.ctx.createBufferSource();
+                this.noise.buffer = buffer;
+                this.noise.loop = true;
+
+                this.noiseGain = this.ctx.createGain();
+                this.noiseGain.gain.value = 0.03;
+
+                const noiseFilter = this.ctx.createBiquadFilter();
+                noiseFilter.type = 'lowpass';
+                noiseFilter.frequency.value = 400;
+
+                this.noise.connect(noiseFilter);
+                noiseFilter.connect(this.noiseGain);
+                this.noiseGain.connect(this.ctx.destination);
+                this.noise.start();
+
+                // Gesture-specific sounds (calm, low volume)
+                this.gestureSounds['fist'] = this.createSound(80, 'sine', 0.1); // Gravity low hum
+                this.gestureSounds['open'] = this.createSound(200, 'triangle', 0.08); // Explosion soft burst
+                this.gestureSounds['point'] = this.createSound(120, 'sawtooth', 0.09); // Magnetic pull
+                this.gestureSounds['ok'] = this.createSound(100, 'sine', 0.07); // Zikr calm tone
+                this.gestureSounds['thumbsup'] = this.createSound(150, 'sine', 0.1); // Positive affirmation
+                this.gestureSounds['thumbsdown'] = this.createSound(60, 'sine', 0.1); // Reflection tone
+                this.gestureSounds['rock'] = this.createSound(90, 'triangle', 0.08); // Strength
+                this.gestureSounds['victory'] = this.createSound(180, 'sine', 0.09); // Victory calm
+                this.gestureSounds['pinch'] = this.createSound(110, 'sawtooth', 0.07); // Pinch unity
+                this.gestureSounds['wave'] = this.createSound(140, 'sine', 0.1); // Greeting
+            }
+
+            createSound(freq, type, vol) {
+                return {freq, type, vol};
+            }
+
+            playGestureSound(gesture) {
+                if (!this.ctx || !this.gestureSounds[gesture]) return;
+                const sound = this.gestureSounds[gesture];
+                const osc = this.ctx.createOscillator();
+                osc.type = sound.type;
+                osc.frequency.value = sound.freq;
+                const g = this.ctx.createGain();
+                g.gain.value = sound.vol;
+                g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
+                osc.connect(g);
+                g.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.6);
+            }
+
+            // Qo'l harakatiga qarab ovozni o'zgartirish
+            update(velocity, pinchStrength) {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime;
+                
+                // Harakat tez bo'lsa, filtr ochiladi (shovqin ko'payadi)
+                const targetFreq = 200 + (velocity * 1000);
+                this.filter.frequency.setTargetAtTime(targetFreq, t, 0.1);
+
+                // Pinch (Vahdat) bo'lsa, ovoz pasayadi (Sokinlik)
+                const targetVol = 0.15 + (velocity * 0.1) - (pinchStrength * 0.1);
+                this.gain.gain.setTargetAtTime(Math.max(0, targetVol), t, 0.1);
+            }
+
+            playWhoosh() {
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const g = this.ctx.createGain();
+                osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.4);
+                g.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
+                osc.connect(g);
+                g.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.5);
+            }
+        }
+
+        // --- 3. PHYSICS & PARTICLES (High-End Logic) ---
+        class ParticleSystem {
+            constructor(scene) {
+                this.count = 12000; // 12k zarracha (optimal for iPhone)
+                this.geometry = new THREE.BufferGeometry();
+                this.positions = new Float32Array(this.count * 3);
+                this.targetPositions = new Float32Array(this.count * 3);
+                this.colors = new Float32Array(this.count * 3);
+                this.velocities = new Float32Array(this.count * 3); // New: velocities for physics
+                
+                // Ranglar palitrasi (Nur va Ilm)
+                const colorGold = new THREE.Color(0xFFD700);
+                const colorWhite = new THREE.Color(0xFFFFFF);
+                const colorBlue = new THREE.Color(0x004466);
+
+                for (let i = 0; i < this.count; i++) {
+                    const i3 = i * 3;
+                    this.positions[i3] = (Math.random() - 0.5) * 10;
+                    this.positions[i3+1] = (Math.random() - 0.5) * 10;
+                    this.positions[i3+2] = (Math.random() - 0.5) * 10;
+
+                    this.velocities[i3] = 0;
+                    this.velocities[i3+1] = 0;
+                    this.velocities[i3+2] = 0;
+
+                    let c;
+                    const rnd = Math.random();
+                    if (rnd > 0.9) c = colorGold;
+                    else if (rnd > 0.6) c = colorWhite;
+                    else c = colorBlue;
+
+                    this.colors[i3] = c.r;
+                    this.colors[i3+1] = c.g;
+                    this.colors[i3+2] = c.b;
+                }
+
+                this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+                this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
+
+                this.material = new THREE.PointsMaterial({
+                    size: 0.04,
+                    vertexColors: true,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                this.mesh = new THREE.Points(this.geometry, this.material);
+                scene.add(this.mesh);
+                
+                this.generateShape('SPHERE'); // Boshlang'ich shakl
+            }
+
+            generateShape(type) {
+                const arr = this.targetPositions;
+                for (let i = 0; i < this.count; i++) {
+                    const i3 = i * 3;
+                    let x, y, z;
+
+                    if (type === 'SPHERE') {
+                        const r = 4 * Math.cbrt(Math.random());
+                        const theta = Math.random() * 2 * Math.PI;
+                        const phi = Math.acos(2 * Math.random() - 1);
+                        x = r * Math.sin(phi) * Math.cos(theta);
+                        y = r * Math.sin(phi) * Math.sin(theta);
+                        z = r * Math.cos(phi);
+                    } else if (type === 'SPIRAL') {
+                        const angle = i * 0.05;
+                        const r = 0.1 * angle;
+                        x = r * Math.cos(angle);
+                        y = (Math.random() - 0.5) * 1;
+                        z = r * Math.sin(angle);
+                    } else if (type === 'EXPANSION') {
+                        const r = Math.random() * 8;
+                        const theta = Math.random() * 2 * Math.PI;
+                        const phi = Math.acos(2 * Math.random() - 1);
+                        x = r * Math.sin(phi) * Math.cos(theta);
+                        y = r * Math.sin(phi) * Math.sin(theta);
+                        z = r * Math.cos(phi);
+                    } else if (type === 'HALO') {
+                        const angle = Math.random() * Math.PI * 2;
+                        const r = 3 + (Math.random() - 0.5) * 0.5;
+                        x = Math.cos(angle) * r;
+                        y = Math.sin(angle) * r;
+                        z = (Math.random() - 0.5) * 0.5;
+                    } else if (type === 'HEART') {
+                        const t = Math.random() * Math.PI * 2;
+                        const scale = 0.15;
+                        x = 16 * Math.pow(Math.sin(t), 3) * scale * (0.8 + Math.random()*0.4);
+                        y = (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * scale * (0.8 + Math.random()*0.4);
+                        z = (Math.random() - 0.5) * 2;
+                    } else if (type === 'MOUNTAIN') {
+                        x = (Math.random() - 0.5) * 5;
+                        y = Math.abs(Math.sin(x * Math.PI)) * 3 + (Math.random() - 0.5);
+                        z = (Math.random() - 0.5) * 5;
+                    } else if (type === 'HIVE') {
+                        const angle = Math.random() * 2 * Math.PI;
+                        x = Math.cos(angle) * 2 + Math.random() * 0.5;
+                        y = Math.sin(angle) * 2 + Math.random() * 0.5;
+                        z = Math.random() * 3;
+                    } else if (type === 'ORBIT') {
+                        const r = 3 + Math.random();
+                        const theta = Math.random() * 2 * Math.PI;
+                        x = r * Math.cos(theta);
+                        y = r * Math.sin(theta);
+                        z = 0;
+                    } else if (type === 'PLANET') {
+                        const r = 2 * Math.cbrt(Math.random());
+                        const theta = Math.random() * 2 * Math.PI;
+                        const phi = Math.acos(2 * Math.random() - 1);
+                        x = r * Math.sin(phi) * Math.cos(theta);
+                        y = r * Math.sin(phi) * Math.sin(theta);
+                        z = r * Math.cos(phi);
+                    } else if (type === 'GALAXY') {
+                        const angle = i * 0.1;
+                        const r = 0.05 * angle;
+                        x = r * Math.cos(angle) + (Math.random() - 0.5) * 0.2;
+                        y = (Math.random() - 0.5) * 0.5;
+                        z = r * Math.sin(angle) + (Math.random() - 0.5) * 0.2;
+                    } else if (type === 'WAVE') {
+                        x = (Math.random() - 0.5) * 10;
+                        y = Math.sin(x * Math.PI * 0.5) * 2;
+                        z = (Math.random() - 0.5) * 10;
+                    } else if (type === 'DNA') {
+                        const t = i / this.count * 10 * Math.PI;
+                        x = Math.cos(t) * 1.5;
+                        y = t * 0.1;
+                        z = Math.sin(t) * 1.5;
+                    } else if (type === 'CONSTANT') {
+                        x = (Math.random() - 0.5) * 5;
+                        y = (Math.random() - 0.5) * 5;
+                        z = (Math.random() - 0.5) * 5;
+                    } else if (type === 'ENERGY') {
+                        const r = Math.random() * 5;
+                        x = r * (Math.random() - 0.5);
+                        y = r * (Math.random() - 0.5);
+                        z = r * (Math.random() - 0.5);
+                    } else if (type === 'PEAK') {
+                        x = (Math.random() - 0.5) * 4;
+                        y = Math.exp(-x*x) * 4;
+                        z = (Math.random() - 0.5) * 4;
+                    } else if (type === 'LAYER') {
+                        x = (Math.random() - 0.5) * 6;
+                        y = Math.floor(Math.random() * 7) - 3;
+                        z = (Math.random() - 0.5) * 6;
+                    } else if (type === 'CYCLE') {
+                        const angle = Math.random() * 2 * Math.PI;
+                        x = 3 * Math.cos(angle);
+                        y = 3 * Math.sin(angle);
+                        z = Math.random() * 0.5;
+                    } else if (type === 'LEAF') {
+                        const t = Math.random() * Math.PI;
+                        x = Math.sin(t) * 2;
+                        y = Math.cos(t) * 3 + Math.sin(t) * 0.5;
+                        z = 0;
+                    } else if (type === 'WAVEFORM') {
+                        x = (Math.random() - 0.5) * 8;
+                        y = Math.sin(x * 2) * 2;
+                        z = Math.cos(x * 2) * 2;
+                    } else if (type === 'BARRIER') {
+                        x = (Math.random() - 0.5) * 10;
+                        y = x > 0 ? Math.random() : -Math.random();
+                        z = (Math.random() - 0.5) * 10;
+                    } else if (type === 'IRON') {
+                        x = (Math.random() - 0.5) * 3;
+                        y = (Math.random() - 0.5) * 3;
+                        z = (Math.random() - 0.5) * 3;
+                    } else if (type === 'DEPTH') {
+                        x = (Math.random() - 0.5) * 5;
+                        y = -Math.random() * 10;
+                        z = (Math.random() - 0.5) * 5;
+                    } else if (type === 'GRAVITY') {
+                        const r = Math.random() * 4;
+                        const theta = Math.random() * 2 * Math.PI;
+                        x = r * Math.cos(theta);
+                        y = -r; // Downward pull
+                        z = r * Math.sin(theta);
+                    } else if (type === 'RESOURCE') {
+                        x = Math.random() * 6 - 3;
+                        y = Math.random() * 6 - 3;
+                        z = Math.random() * 6 - 3;
+                    } else if (type === 'RAIN') {
+                        x = (Math.random() - 0.5) * 10;
+                        y = Math.random() * -10;
+                        z = (Math.random() - 0.5) * 10;
+                    } else if (type === 'CLOUD') {
+                        x = (Math.random() - 0.5) * 8;
+                        y = 4 + Math.random() * 2;
+                        z = (Math.random() - 0.5) * 8;
+                    } else if (type === 'WIND') {
+                        x = Math.random() * 10;
+                        y = (Math.random() - 0.5) * 2;
+                        z = (Math.random() - 0.5) * 2;
+                    } else if (type === 'OCEAN') {
+                        x = (Math.random() - 0.5) * 12;
+                        y = Math.sin(x * 0.5) * 0.5;
+                        z = (Math.random() - 0.5) * 12;
+                    } else if (type === 'FINGERPRINT') {
+                        const angle = Math.random() * 2 * Math.PI;
+                        const r = Math.random() * 3;
+                        x = r * Math.cos(angle) + Math.sin(angle * 5) * 0.2;
+                        y = r * Math.sin(angle) + Math.cos(angle * 5) * 0.2;
+                        z = 0;
+                    } else if (type === 'HUMAN') {
+                        x = (Math.random() - 0.5) * 2;
+                        y = Math.random() * 4 - 2;
+                        z = (Math.random() - 0.5) * 1;
+                    } else if (type === 'EMBRYO') {
+                        const r = Math.random() * 1.5;
+                        x = r * (Math.random() - 0.5);
+                        y = r * (Math.random() - 0.5);
+                        z = r * (Math.random() - 0.5);
+                    } else if (type === 'CLAY') {
+                        x = (Math.random() - 0.5) * 4;
+                        y = (Math.random() - 0.5) * 1;
+                        z = (Math.random() - 0.5) * 4;
+                    } else if (type === 'HELIX') {
+                        const t = i / this.count * 20 * Math.PI;
+                        x = Math.cos(t);
+                        y = t * 0.05;
+                        z = Math.sin(t);
+                    } else if (type === 'TRIBE') {
+                        x = Math.random() * 5;
+                        y = Math.random() * 5;
+                        z = Math.random() * 5;
+                    } else if (type === 'TIME') {
+                        const angle = Math.random() * 2 * Math.PI;
+                        x = 4 * Math.cos(angle);
+                        y = 4 * Math.sin(angle);
+                        z = Math.random() * 1;
+                    } else if (type === 'MULTIVERSE') {
+                        x = (Math.random() - 0.5) * 10;
+                        y = (Math.random() - 0.5) * 10;
+                        z = Math.floor(Math.random() * 5) * 2;
+                    } else if (type === 'SEVEN') {
+                        y = Math.floor(Math.random() * 7) * 0.5;
+                        x = (Math.random() - 0.5) * 5;
+                        z = (Math.random() - 0.5) * 5;
+                    } else if (type === 'UNITY') {
+                        const r = Math.random() * 3;
+                        const theta = Math.random() * 2 * Math.PI;
+                        x = r * Math.cos(theta);
+                        y = r * Math.sin(theta);
+                        z = 0;
+                    } else if (type === 'ACTION') {
+                        x = Math.random() * 6 - 3;
+                        y = Math.sin(x) * 2;
+                        z = Math.cos(x) * 2;
+                    } else if (type === 'DUAL') {
+                        x = Math.random() > 0.5 ? 2 : -2;
+                        y = (Math.random() - 0.5) * 4;
+                        z = (Math.random() - 0.5) * 4;
+                    } else if (type === 'PAIR') {
+                        x = Math.random() > 0.5 ? 1 : -1;
+                        y = (Math.random() - 0.5) * 3;
+                        z = (Math.random() - 0.5) * 3;
+                    } else if (type === 'WATER') {
+                        x = (Math.random() - 0.5) * 8;
+                        y = Math.sin(x * 0.3) * 1;
+                        z = Math.cos(x * 0.3) * 1;
+                    } else if (type === 'STAGE') {
+                        y = Math.floor(Math.random() * 6) * 0.8;
+                        x = (Math.random() - 0.5) * 4;
+                        z = (Math.random() - 0.5) * 4;
+                    } else if (type === 'COSMOS') {
+                        const r = Math.random() * 10;
+                        const theta = Math.random() * 2 * Math.PI;
+                        const phi = Math.acos(2 * Math.random() - 1);
+                        x = r * Math.sin(phi) * Math.cos(theta);
+                        y = r * Math.sin(phi) * Math.sin(theta);
+                        z = r * Math.cos(phi);
+                    } else if (type === 'UNION') {
+                        x = (Math.random() - 0.5) * 5;
+                        y = (Math.random() - 0.5) * 5;
+                        z = 0;
+                    } else {
+                        x = (Math.random() - 0.5) * 10;
+                        y = (Math.random() - 0.5) * 10;
+                        z = (Math.random() - 0.5) * 10;
+                    }
+
+                    arr[i3] = x;
+                    arr[i3+1] = y;
+                    arr[i3+2] = z;
+                }
+            }
+
+            update(pinchStrength, gesture, handPos) {
+                const pos = this.geometry.attributes.position.array;
+                const vel = this.velocities;
+                const target = this.targetPositions;
+
+                // Morphing Speed
+                const speed = 0.05;
+                const gravity = 0.001; // Base gravity
+                const friction = 0.98; // Velocity dampening
+
+                for (let i = 0; i < this.count; i++) {
+                    const i3 = i * 3;
+                    
+                    // Standart Morphing (Nishonga intilish)
+                    let dx = (target[i3] - pos[i3]) * speed;
+                    let dy = (target[i3+1] - pos[i3+1]) * speed;
+                    let dz = (target[i3+2] - pos[i3+2]) * speed;
+
+                    // Enhanced Physics: Add velocity
+                    vel[i3] += dx;
+                    vel[i3+1] += dy;
+                    vel[i3+2] += dz;
+
+                    // Friction
+                    vel[i3] *= friction;
+                    vel[i3+1] *= friction;
+                    vel[i3+2] *= friction;
+
+                    // Apply velocity to position
+                    pos[i3] += vel[i3];
+                    pos[i3+1] += vel[i3+1];
+                    pos[i3+2] += vel[i3+2];
+
+                    // Gesture-based physics
+                    if (gesture === 'fist') {
+                        // Gravity to center (Black hole)
+                        const force = 0.02;
+                        pos[i3] -= pos[i3] * force;
+                        pos[i3+1] -= pos[i3+1] * force;
+                        pos[i3+2] -= pos[i3+2] * force;
+                    } else if (gesture === 'open') {
+                        // Explosion: Repel from center
+                        const force = 0.01;
+                        pos[i3] += (Math.random() - 0.5) * force * 10;
+                        pos[i3+1] += (Math.random() - 0.5) * force * 10;
+                        pos[i3+2] += (Math.random() - 0.5) * force * 10;
+                    } else if (gesture === 'point') {
+                        // Magnetic: Attract to hand position (projected)
+                        if (handPos) {
+                            const fx = handPos.x - pos[i3];
+                            const fy = handPos.y - pos[i3+1];
+                            const fz = handPos.z - pos[i3+2];
+                            const dist = Math.sqrt(fx*fx + fy*fy + fz*fz) + 0.001;
+                            const force = 0.05 / dist;
+                            vel[i3] += fx * force;
+                            vel[i3+1] += fy * force;
+                            vel[i3+2] += fz * force;
+                        }
+                    } else if (gesture === 'thumbsup') {
+                        // Upward lift
+                        vel[i3+1] += 0.01;
+                    } else if (gesture === 'thumbsdown') {
+                        // Downward pull
+                        vel[i3+1] -= 0.01;
+                    } else if (gesture === 'rock') {
+                        // Compress
+                        pos[i3] *= 0.99;
+                        pos[i3+1] *= 0.99;
+                        pos[i3+2] *= 0.99;
+                    } else if (gesture === 'victory') {
+                        // Spin increase
+                        this.mesh.rotation.y += 0.005;
+                    } else if (gesture === 'pinch_gesture') {
+                        // Small implosion
+                        pos[i3] *= 0.98;
+                        pos[i3+1] *= 0.98;
+                        pos[i3+2] *= 0.98;
+                    } else if (gesture === 'wave') {
+                        // Wave propagation
+                        vel[i3] += Math.sin(i / 100) * 0.005;
+                    } else if (gesture === 'point_at') {
+                        // Directional push
+                        vel[i3] += 0.01 * (Math.random() - 0.5);
+                        vel[i3+2] += 0.01 * (Math.random() - 0.5);
+                    }
+
+                    // Base gravity (Newton's law simulation)
+                    vel[i3+1] -= gravity;
+
+                    // PINCH PHYSICS (Gravity Implosion)
+                    if (pinchStrength > 0) {
+                        const force = pinchStrength * 0.05;
+                        pos[i3] = pos[i3] * (1 - force);
+                        pos[i3+1] = pos[i3+1] * (1 - force);
+                        pos[i3+2] = pos[i3+2] * (1 - force);
+                    }
+                }
+                this.geometry.attributes.position.needsUpdate = true;
+                
+                // Sekin aylanish (Idle)
+                this.mesh.rotation.y += 0.001;
+            }
+        }
+
+        // --- 4. MAIN APP CONTROLLER ---
+        class App {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.particles = null;
+                this.audio = new AudioEngine();
+                this.currentIndex = 0;
+                
+                this.handDetected = false;
+                this.isPinching = false;
+                this.pinchDist = 1;
+                this.currentGesture = null;
+                this.handPos3D = null;
+                this.zikrCount = 0;
+                this.planets = [];
+                this.galaxies = [];
+            }
+
+            start() {
+                document.getElementById('start-screen').classList.add('hidden');
+                document.getElementById('ui-layer').classList.remove('hidden');
+                document.getElementById('ui-layer').classList.add('visible');
+
+                this.initThree();
+                this.initMediaPipe();
+                this.audio.init();
+                this.updateUI();
+                this.addPlanetsAndGalaxies();
+            }
+
+            addPlanetsAndGalaxies() {
+                // Add planets
+                for (let i = 0; i < 5; i++) {
+                    const geometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 32, 32);
+                    const material = new THREE.MeshBasicMaterial({color: new THREE.Color(Math.random() * 0xffffff)});
+                    const planet = new THREE.Mesh(geometry, material);
+                    planet.position.set((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20);
+                    this.scene.add(planet);
+                    this.planets.push(planet);
+                }
+
+                // Add galaxy arms (simple lines)
+                for (let i = 0; i < 3; i++) {
+                    const points = [];
+                    for (let j = 0; j < 20; j++) {
+                        const angle = j * 0.3 + i * 2;
+                        const r = j * 0.2;
+                        points.push(new THREE.Vector3(r * Math.cos(angle), 0, r * Math.sin(angle)));
+                    }
+                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                    const material = new THREE.LineBasicMaterial({color: 0xaaaaaa});
+                    const galaxy = new THREE.Line(geometry, material);
+                    galaxy.position.set((Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15);
+                    this.scene.add(galaxy);
+                    this.galaxies.push(galaxy);
+                }
+            }
+
+            initThree() {
+                this.scene = new THREE.Scene();
+                this.scene.fog = new THREE.FogExp2(0x020202, 0.05);
+
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+                this.camera.position.z = 6;
+
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+
+                this.particles = new ParticleSystem(this.scene);
+
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    // Fizika yangilanishi
+                    const strength = this.isPinching ? Math.max(0, 1 - (this.pinchDist * 10)) : 0;
+                    this.particles.update(strength, this.currentGesture, this.handPos3D);
+
+                    // Update planets with physics (simple orbit)
+                    this.planets.forEach((planet, i) => {
+                        planet.rotation.y += 0.01;
+                        planet.position.x += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                        planet.position.z += Math.cos(Date.now() * 0.001 + i) * 0.01;
+                    });
+
+                    // Update galaxies
+                    this.galaxies.forEach(galaxy => {
+                        galaxy.rotation.y += 0.002;
+                    });
+
+                    this.renderer.render(this.scene, this.camera);
+                };
+                animate();
+
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            detectGesture(landmarks) {
+                if (!landmarks) return null;
+
+                // Helper to check if finger is curled
+                const isCurled = (tip, pip, mcp) => landmarks[tip].y > landmarks[pip].y && landmarks[pip].y > landmarks[mcp].y;
+
+                const thumbTip = landmarks[4];
+                const indexTip = landmarks[8];
+                const middleTip = landmarks[12];
+                const ringTip = landmarks[16];
+                const pinkyTip = landmarks[20];
+                const indexPip = landmarks[6];
+                const middlePip = landmarks[10];
+                const ringPip = landmarks[14];
+                const pinkyPip = landmarks[18];
+                const wrist = landmarks[0];
+
+                // Fist ✊
+                if (isCurled(8, 6, 5) && isCurled(12, 10, 9) && isCurled(16, 14, 13) && isCurled(20, 18, 17) && thumbTip.x > landmarks[3].x) {
+                    return 'fist';
+                }
+
+                // Open hand ✋
+                if (!isCurled(8, 6, 5) && !isCurled(12, 10, 9) && !isCurled(16, 14, 13) && !isCurled(20, 18, 17) && Math.abs(thumbTip.x - indexTip.x) > 0.1) {
+                    return 'open';
+                }
+
+                // Pointing ☝
+                if (!isCurled(8, 6, 5) && isCurled(12, 10, 9) && isCurled(16, 14, 13) && isCurled(20, 18, 17)) {
+                    return 'point';
+                }
+
+                // OK 👌
+                const thumbIndexDist = Math.hypot(thumbTip.x - indexTip.x, thumbTip.y - indexTip.y);
+                if (thumbIndexDist < 0.05 && !isCurled(12, 10, 9) && !isCurled(16, 14, 13) && !isCurled(20, 18, 17)) {
+                    return 'ok';
+                }
+
+                // Thumbs up 👍
+                if (thumbTip.y < landmarks[3].y && isCurled(8, 6, 5) && isCurled(12, 10, 9) && isCurled(16, 14, 13) && isCurled(20, 18, 17)) {
+                    return 'thumbsup';
+                }
+
+                // Thumbs down 👎
+                if (thumbTip.y > landmarks[3].y && isCurled(8, 6, 5) && isCurled(12, 10, 9) && isCurled(16, 14, 13) && isCurled(20, 18, 17)) {
+                    return 'thumbsdown';
+                }
+
+                // Rock 👊
+                if (!isCurled(8, 6, 5) && isCurled(12, 10, 9) && isCurled(16, 14, 13) && !isCurled(20, 18, 17)) {
+                    return 'rock';
+                }
+
+                // Victory ✌
+                if (!isCurled(8, 6, 5) && !isCurled(12, 10, 9) && isCurled(16, 14, 13) && isCurled(20, 18, 17)) {
+                    return 'victory';
+                }
+
+                // Pinch 🤏
+                const thumbMiddleDist = Math.hypot(thumbTip.x - middleTip.x, thumbTip.y - middleTip.y);
+                if (thumbIndexDist < 0.05 && thumbMiddleDist > 0.1) {
+                    return 'pinch_gesture';
+                }
+
+                // Wave 👋
+                if (Math.abs(wrist.x - landmarks[9].x) > 0.2 && !isCurled(8, 6, 5)) {
+                    return 'wave';
+                }
+
+                // Point at 🫵
+                if (!isCurled(8, 6, 5) && isCurled(12, 10, 9) && !isCurled(16, 14, 13) && isCurled(20, 18, 17)) {
+                    return 'point_at';
+                }
+
+                // Love 🤟
+                if (!isCurled(8, 6, 5) && isCurled(12, 10, 9) && isCurled(16, 14, 13) && !isCurled(20, 18, 17) && !isCurled(4, 3, 2)) {
+                    return 'love';
+                }
+
+                // Crossed fingers 🫰
+                if (Math.hypot(indexTip.x - middleTip.x, indexTip.y - middleTip.y) < 0.05 && isCurled(16, 14, 13)) {
+                    return 'crossed';
+                }
+
+                // Raised fist ✊
+                if (thumbTip.x < landmarks[3].x && isCurled(8, 6, 5)) {
+                    return 'raisedfist';
+                }
+
+                return null;
+            }
+
+            initMediaPipe() {
+                const videoElement = document.getElementById('input_video');
+                const handStatus = document.getElementById('hand-status');
+                const pinchAlert = document.getElementById('pinch-status');
+                const zikrCounter = document.getElementById('zikr-counter');
+
+                const hands = new Hands({locateFile: (file) => {
+                    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`;
+                }});
+
+                hands.setOptions({
+                    maxNumHands: 1,
+                    modelComplexity: 1, // Full model for accuracy
+                    minDetectionConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+
+                let lastGesture = null;
+                let lastOkTime = 0;
+
+                hands.onResults((results) => {
+                    if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                        if (!this.handDetected) {
+                            this.handDetected = true;
+                            handStatus.innerText = "ALOQA O'RNATILDI";
+                            handStatus.classList.remove('error');
+                            handStatus.style.borderColor = "#10b981";
+                            handStatus.style.color = "#10b981";
+                        }
+
+                        const lm = results.multiHandLandmarks[0];
+                        const palm = lm[9];
+                        const thumb = lm[4];
+                        const indexF = lm[8];
+
+                        // 1. Scene Rotation (Qo'l holati)
+                        const rotX = (palm.y - 0.5) * 2; 
+                        const rotY = (palm.x - 0.5) * 2;
+                        
+                        // Smooth lerp rotation
+                        this.scene.rotation.x += (rotX - this.scene.rotation.x) * 0.1;
+                        this.scene.rotation.y += (rotY - this.scene.rotation.y) * 0.1;
+
+                        // 2. Pinch Detection
+                        const dist = Math.hypot(thumb.x - indexF.x, thumb.y - indexF.y);
+                        this.pinchDist = dist;
+                        
+                        if (dist < 0.06) {
+                            this.isPinching = true;
+                            pinchAlert.classList.add('pinch-active');
+                        } else {
+                            this.isPinching = false;
+                            pinchAlert.classList.remove('pinch-active');
+                        }
+
+                        // 3. Gesture Detection
+                        this.currentGesture = this.detectGesture(lm);
+                        if (this.currentGesture && this.currentGesture !== lastGesture) {
+                            this.audio.playGestureSound(this.currentGesture);
+                            lastGesture = this.currentGesture;
+                        }
+
+                        // Zikr for OK gesture
+                        if (this.currentGesture === 'ok' && Date.now() - lastOkTime > 1000) {
+                            this.zikrCount++;
+                            zikrCounter.innerText = `Zikr: ${this.zikrCount}`;
+                            lastOkTime = Date.now();
+                        }
+
+                        // Hand position in 3D (simple projection, assume depth)
+                        this.handPos3D = {
+                            x: (palm.x - 0.5) * 10,
+                            y: (0.5 - palm.y) * 10,
+                            z: -5 // Fixed depth
+                        };
+
+                        // 4. Audio Control
+                        const velocity = Math.abs(palm.x - 0.5); // Sodda tezlik
+                        this.audio.update(velocity, this.isPinching ? 1 : 0);
+
+                        // 5. Swipe Logic (Ayah Change)
+                        // Right swipe for next (higher right)
+                        if (palm.x > 0.8 && palm.y < 0.4) this.nextAyahDebounced(); // teparoqda ongroq
+                        // Left swipe for prev (higher left)
+                        if (palm.x < 0.2 && palm.y < 0.4) this.prevAyahDebounced(); // teparoqda chaproq
+
+                    } else {
+                        if (this.handDetected) {
+                            this.handDetected = false;
+                            handStatus.innerText = "QO'L IZLANMOQDA...";
+                            handStatus.classList.add('error');
+                            this.currentGesture = null;
+                        }
+                    }
+                });
+
+                const camera = new Camera(videoElement, {
+                    onFrame: async () => {
+                        await hands.send({image: videoElement});
+                    },
+                    width: 640, height: 480, facingMode: "user"
+                });
+                camera.start();
+            }
+
+            // Swipe Debounce
+            lastSwipe = 0;
+            nextAyahDebounced() {
+                const now = Date.now();
+                if (now - this.lastSwipe > 2000) {
+                    this.nextAyah();
+                    this.lastSwipe = now;
+                }
+            }
+            prevAyahDebounced() {
+                const now = Date.now();
+                if (now - this.lastSwipe > 2000) {
+                    this.prevAyah();
+                    this.lastSwipe = now;
+                }
+            }
+
+            nextAyah() {
+                this.currentIndex = (this.currentIndex + 1) % AYAHS.length;
+                this.updateUI();
+                this.particles.generateShape(AYAHS[this.currentIndex].shape);
+                this.audio.playWhoosh();
+            }
+
+            prevAyah() {
+                this.currentIndex = (this.currentIndex - 1 + AYAHS.length) % AYAHS.length;
+                this.updateUI();
+                this.particles.generateShape(AYAHS[this.currentIndex].shape);
+                this.audio.playWhoosh();
+            }
+
+            updateUI() {
+                const data = AYAHS[this.currentIndex];
+                document.getElementById('arabic').innerText = data.arabic;
+                document.getElementById('uzbek').innerText = `"${data.uzbek}"`;
+                document.getElementById('meta').innerText = data.surah;
+                document.getElementById('hikmah-source').innerText = `— ${data.source}`;
+                document.getElementById('hikmah-body').innerText = data.hikmah;
+            }
+
+            resetZikr() {
+                this.zikrCount = 0;
+                document.getElementById('zikr-counter').innerText = `Zikr: 0`;
+            }
+        }
 
         // --- INIT ---
         const app = new App();
@@ -307,3 +1519,4 @@
     </script>
 </body>
 </html>
+```13 *
