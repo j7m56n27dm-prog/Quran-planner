@@ -666,6 +666,8 @@
                 this.noise = null;
                 this.noiseGain = null;
                 this.gestureSounds = {};
+                this.lowpass = null;
+                this.highpass = null;
             }
 
             init() {
@@ -684,7 +686,17 @@
                 this.filter.type = 'lowpass';
                 this.filter.frequency.value = 200;
 
-                this.osc.connect(this.filter);
+                this.lowpass = this.ctx.createBiquadFilter();
+                this.lowpass.type = 'lowpass';
+                this.lowpass.frequency.value = 500;
+
+                this.highpass = this.ctx.createBiquadFilter();
+                this.highpass.type = 'highpass';
+                this.highpass.frequency.value = 50;
+
+                this.osc.connect(this.highpass);
+                this.highpass.connect(this.lowpass);
+                this.lowpass.connect(this.filter);
                 this.filter.connect(this.gain);
                 this.gain.connect(this.ctx.destination);
                 this.osc.start();
@@ -777,12 +789,12 @@
         // --- 3. PHYSICS & PARTICLES (High-End Logic) ---
         class ParticleSystem {
             constructor(scene) {
-                this.count = 12000; // 12k zarracha (optimal for iPhone)
+                this.count = 8000; // Reduced for mobile performance
                 this.geometry = new THREE.BufferGeometry();
                 this.positions = new Float32Array(this.count * 3);
                 this.targetPositions = new Float32Array(this.count * 3);
                 this.colors = new Float32Array(this.count * 3);
-                this.velocities = new Float32Array(this.count * 3); // New: velocities for physics
+                this.velocities = new Float32Array(this.count * 3); // Velocities for physics
                 
                 // Ranglar palitrasi (Nur va Ilm)
                 const colorGold = new THREE.Color(0xFFD700);
@@ -814,7 +826,7 @@
                 this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
 
                 this.material = new THREE.PointsMaterial({
-                    size: 0.04,
+                    size: 0.03, // Smaller size for performance
                     vertexColors: true,
                     blending: THREE.AdditiveBlending,
                     depthWrite: false,
@@ -834,6 +846,7 @@
                     const i3 = i * 3;
                     let x, y, z;
 
+                    // ... (all shape generations as before, no changes to shorten)
                     if (type === 'SPHERE') {
                         const r = 4 * Math.cbrt(Math.random());
                         const theta = Math.random() * 2 * Math.PI;
@@ -1071,6 +1084,8 @@
                 const speed = 0.05;
                 const gravity = 0.001; // Base gravity
                 const friction = 0.98; // Velocity dampening
+                const damping = 0.99; // Additional damping for realism
+                const attractionForce = 0.01; // For more advanced physics
 
                 for (let i = 0; i < this.count; i++) {
                     const i3 = i * 3;
@@ -1085,15 +1100,24 @@
                     vel[i3+1] += dy;
                     vel[i3+2] += dz;
 
-                    // Friction
-                    vel[i3] *= friction;
-                    vel[i3+1] *= friction;
-                    vel[i3+2] *= friction;
+                    // Friction and damping
+                    vel[i3] *= friction * damping;
+                    vel[i3+1] *= friction * damping;
+                    vel[i3+2] *= friction * damping;
 
                     // Apply velocity to position
                     pos[i3] += vel[i3];
                     pos[i3+1] += vel[i3+1];
                     pos[i3+2] += vel[i3+2];
+
+                    // Add attraction to center for stability
+                    const centerX = 0 - pos[i3];
+                    const centerY = 0 - pos[i3+1];
+                    const centerZ = 0 - pos[i3+2];
+                    const centerDist = Math.sqrt(centerX*centerX + centerY*centerY + centerZ*centerZ) + 0.001;
+                    vel[i3] += (centerX / centerDist) * attractionForce;
+                    vel[i3+1] += (centerY / centerDist) * attractionForce;
+                    vel[i3+2] += (centerZ / centerDist) * attractionForce;
 
                     // Gesture-based physics
                     if (gesture === 'fist') {
@@ -1204,27 +1228,44 @@
             }
 
             addPlanetsAndGalaxies() {
-                // Add planets with physics
+                // Add realistic planets with textures and lighting
+                const planetTextures = [
+                    'https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg', // Mars
+                    'https://upload.wikimedia.org/wikipedia/commons/6/6f/Earth_Eastern_Hemisphere.jpg', // Earth
+                    'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg', // Earth variant
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/640px-The_Blue_Marble_%28remastered%29.jpg', // Earth
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Earth_Moon_System.jpg/640px-Earth_Moon_System.jpg' // Earth Moon
+                ];
+
                 for (let i = 0; i < 5; i++) {
-                    const geometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 32, 32);
-                    const material = new THREE.MeshBasicMaterial({color: new THREE.Color(Math.random() * 0xffffff)});
-                    const planet = new THREE.Mesh(geometry, material);
-                    planet.position.set((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20);
-                    planet.userData = { velocity: new THREE.Vector3(Math.random() * 0.02 - 0.01, Math.random() * 0.02 - 0.01, Math.random() * 0.02 - 0.01) };
-                    this.scene.add(planet);
-                    this.planets.push(planet);
+                    const loader = new THREE.TextureLoader();
+                    loader.load(planetTextures[i % planetTextures.length], (texture) => {
+                        const geometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 32, 32);
+                        const material = new THREE.MeshPhongMaterial({
+                            map: texture,
+                            bumpMap: texture, // For realism
+                            bumpScale: 0.05,
+                            specular: new THREE.Color(0x333333),
+                            shininess: 10
+                        });
+                        const planet = new THREE.Mesh(geometry, material);
+                        planet.position.set((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20);
+                        planet.userData = { velocity: new THREE.Vector3(Math.random() * 0.02 - 0.01, Math.random() * 0.02 - 0.01, Math.random() * 0.02 - 0.01) };
+                        this.scene.add(planet);
+                        this.planets.push(planet);
+                    });
                 }
 
-                // Add galaxy arms (simple lines with rotation)
+                // Add galaxy arms with more realism (spiral arms with particles)
                 for (let i = 0; i < 3; i++) {
                     const points = [];
                     for (let j = 0; j < 20; j++) {
                         const angle = j * 0.3 + i * 2;
-                        const r = j * 0.2;
-                        points.push(new THREE.Vector3(r * Math.cos(angle), 0, r * Math.sin(angle)));
+                        const r = j * 0.2 + Math.sin(angle) * 0.1; // For spiral realism
+                        points.push(new THREE.Vector3(r * Math.cos(angle), Math.random() * 0.1, r * Math.sin(angle)));
                     }
                     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                    const material = new THREE.LineBasicMaterial({color: 0xaaaaaa});
+                    const material = new THREE.LineBasicMaterial({color: 0xaaaaaa, linewidth: 2});
                     const galaxy = new THREE.Line(geometry, material);
                     galaxy.position.set((Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15);
                     galaxy.userData = { rotationSpeed: 0.002 + Math.random() * 0.001 };
@@ -1242,8 +1283,15 @@
 
                 this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
-                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Optimize for mobile
                 document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+
+                // Add ambient and point light for realism
+                const ambientLight = new THREE.AmbientLight(0x404040);
+                this.scene.add(ambientLight);
+                const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+                pointLight.position.set(5, 5, 5);
+                this.scene.add(pointLight);
 
                 this.particles = new ParticleSystem(this.scene);
 
@@ -1388,8 +1436,8 @@
                 hands.setOptions({
                     maxNumHands: 1,
                     modelComplexity: 1, // Full model for accuracy
-                    minDetectionConfidence: 0.5,
-                    minTrackingConfidence: 0.5
+                    minDetectionConfidence: 0.6, // Increased for better accuracy
+                    minTrackingConfidence: 0.6 // Increased for better tracking
                 });
 
                 let lastGesture = null;
@@ -1419,10 +1467,10 @@
                         this.scene.rotation.y += (rotY - this.scene.rotation.y) * 0.1;
 
                         // 2. Pinch Detection
-                        const dist = Math.hypot(thumb.x - indexF.x, thumb.y - indexF.y);
+                        const dist = Math.hypot(thumb.x - indexF.x, thumb.y - indexF.y, thumb.z - indexF.z); // Use 3D dist for accuracy
                         this.pinchDist = dist;
                         
-                        if (dist < 0.06) {
+                        if (dist < 0.04) { // Tightened threshold for better detection
                             this.isPinching = true;
                             pinchAlert.classList.add('pinch-active');
                         } else {
@@ -1444,11 +1492,11 @@
                             lastOkTime = Date.now();
                         }
 
-                        // Hand position in 3D (simple projection, assume depth)
+                        // Hand position in 3D (use normalized landmarks)
                         this.handPos3D = {
                             x: (palm.x - 0.5) * 10,
                             y: (0.5 - palm.y) * 10,
-                            z: -5 // Fixed depth
+                            z: palm.z * 5 // Use actual z for depth
                         };
 
                         // 4. Audio Control
