@@ -307,7 +307,7 @@
                 id: 7,
                 surah: "An-Nahl 16:68-69",
                 arabic: "وَأَوْحَىٰ رَبُّكَ إِلَى النَّحْلِ أَنِ اتَّخِذِي مِنَ الْجِبَالِ بُيُوتًا",
-                uzbek: "Robbing asalariga vahi qildi: «Tog'lardan uylar qur.»",
+                uzbek: "Robbing asalariga vahi qildi: «Tog'lardan uylar qur.» Ularning qorinlaridan turli rangdagi sharob chiqar.",
                 source: "Biologiya va Ekologiya",
                 hikmah: "Asalning shifobaxshligi ilohiy ne'mat va tabiat muvozanatidir.",
                 shape: 'HIVE'
@@ -325,7 +325,7 @@
                 id: 9,
                 surah: "Ya-Sin 36:40",
                 arabic: "لَا الشَّمْسُ يَنبَغِي لَهَا أَن تُدْرِكَ الْقَمَرَ",
-                uzbek: "Quyosh oyga yetib ololmaydi.",
+                uzbek: "Na quyoshning oyga yetib olmog'i durust bo'lar",
                 source: "Selenosentrik Model",
                 hikmah: "Sayyoralar orbitasi ilohiy hisob-kitobdir.",
                 shape: 'PLANET'
@@ -343,7 +343,7 @@
                 id: 11,
                 surah: "Al-Isra 17:44",
                 arabic: "تُسَبِّحُ لَهُ السَّمَاوَاتُ السَّبْعُ وَالْأَرْضُ وَمَن فِيهِنَّ",
-                uzbek: "Yetti osmon, yer va ulardagi hamma narsa Uni tasbih aytadi.",
+                uzbek: "Unga yetti osmon, yer va ulardagi hamma narsa Uni tasbih aytadi.",
                 source: "Vibratsiya va Rezonans",
                 hikmah: "Har bir atom tasbihda, bu kvant maydonlaridir.",
                 shape: 'WAVE'
@@ -577,7 +577,7 @@
                 id: 37,
                 surah: "Al-Baqara 2:29",
                 arabic: "هُوَ الَّذِي خَلَقَ لَكُم مَّا فِي الْأَرْضِ جَمِيعًا ثُمَّ اسْتَوَىٰ إِلَى السَّمَاءِ فَسَوَّاهُنَّ سَبْعَ سَمَاوَاتٍ",
-                uzbek: "U sizlarga yerdagi hamma narsani yaratdi, keyin osmonlarga yuzlandi va ularni yetti osmon qildi.",
+                uzbek: "U sizlarga yer yuzidagi hamma narsani yaratdi, keyin osmonlarga yuzlandi va ularni yetti osmon qildi.",
                 source: "Koinot Qatlamlari",
                 hikmah: "Osmon qatlamlari ilohiy tuzilishdir.",
                 shape: 'SEVEN'
@@ -722,7 +722,7 @@
                 this.gestureSounds['thumbsdown'] = this.createSound(60, 'sine', 0.1); // Reflection tone
                 this.gestureSounds['rock'] = this.createSound(90, 'triangle', 0.08); // Strength
                 this.gestureSounds['victory'] = this.createSound(180, 'sine', 0.09); // Victory calm
-                this.gestureSounds['pinch'] = this.createSound(110, 'sawtooth', 0.07); // Pinch unity
+                this.gestureSounds['pinch_gesture'] = this.createSound(110, 'sawtooth', 0.07); // Pinch unity
                 this.gestureSounds['wave'] = this.createSound(140, 'sine', 0.1); // Greeting
             }
 
@@ -1120,6 +1120,11 @@
                             vel[i3+1] += fy * force;
                             vel[i3+2] += fz * force;
                         }
+                    } else if (gesture === 'ok') {
+                        // Small implosion
+                        pos[i3] *= 0.98;
+                        pos[i3+1] *= 0.98;
+                        pos[i3+2] *= 0.98;
                     } else if (gesture === 'thumbsup') {
                         // Upward lift
                         vel[i3+1] += 0.01;
@@ -1199,17 +1204,18 @@
             }
 
             addPlanetsAndGalaxies() {
-                // Add planets
-                for (let i = 0; i < 5; i++) {
+                // Add planets with physics
+                for (let i = 0; i = 5; i++) {
                     const geometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 32, 32);
                     const material = new THREE.MeshBasicMaterial({color: new THREE.Color(Math.random() * 0xffffff)});
                     const planet = new THREE.Mesh(geometry, material);
                     planet.position.set((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20);
+                    planet.userData = { velocity: new THREE.Vector3(Math.random() * 0.02 - 0.01, Math.random() * 0.02 - 0.01, Math.random() * 0.02 - 0.01) };
                     this.scene.add(planet);
                     this.planets.push(planet);
                 }
 
-                // Add galaxy arms (simple lines)
+                // Add galaxy arms (simple lines with rotation)
                 for (let i = 0; i < 3; i++) {
                     const points = [];
                     for (let j = 0; j < 20; j++) {
@@ -1221,6 +1227,7 @@
                     const material = new THREE.LineBasicMaterial({color: 0xaaaaaa});
                     const galaxy = new THREE.Line(geometry, material);
                     galaxy.position.set((Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15);
+                    galaxy.userData = { rotationSpeed: 0.002 + Math.random() * 0.001 };
                     this.scene.add(galaxy);
                     this.galaxies.push(galaxy);
                 }
@@ -1246,16 +1253,23 @@
                     const strength = this.isPinching ? Math.max(0, 1 - (this.pinchDist * 10)) : 0;
                     this.particles.update(strength, this.currentGesture, this.handPos3D);
 
-                    // Update planets with physics (simple orbit)
-                    this.planets.forEach((planet, i) => {
+                    // Update planets with physics (simple orbit and velocity)
+                    this.planets.forEach((planet) => {
+                        planet.position.add(planet.userData.velocity);
                         planet.rotation.y += 0.01;
-                        planet.position.x += Math.sin(Date.now() * 0.001 + i) * 0.01;
-                        planet.position.z += Math.cos(Date.now() * 0.001 + i) * 0.01;
+                        // Gravity simulation towards center
+                        const center = new THREE.Vector3(0, 0, 0);
+                        const dir = center.clone().sub(planet.position).normalize();
+                        planet.userData.velocity.add(dir.multiplyScalar(0.0005));
+                        // Boundary bounce
+                        if (planet.position.length() > 20) {
+                            planet.userData.velocity.multiplyScalar(-0.5);
+                        }
                     });
 
                     // Update galaxies
                     this.galaxies.forEach(galaxy => {
-                        galaxy.rotation.y += 0.002;
+                        galaxy.rotation.y += galaxy.userData.rotationSpeed;
                     });
 
                     this.renderer.render(this.scene, this.camera);
