@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
     <style>
         /* --- CORE STYLING --- */
@@ -325,7 +325,7 @@
                 id: 9,
                 surah: "Ya-Sin 36:40",
                 arabic: "لَا الشَّمْسُ يَنبَغِي لَهَا أَن تُدْرِكَ الْقَمَرَ",
-                uzbek: "Na quyoshning oyga yetib olmog'i durust bo'lar",
+                uzbek: "Quyosh oyga yetib ololmaydi, kecha kunduzdan o'zib ketmaydi, har biri o'z orbitasida suzib yuradi.",
                 source: "Selenosentrik Model",
                 hikmah: "Sayyoralar orbitasi ilohiy hisob-kitobdir.",
                 shape: 'PLANET'
@@ -1205,7 +1205,7 @@
 
             addPlanetsAndGalaxies() {
                 // Add planets with physics
-                for (let i = 0; i = 5; i++) {
+                for (let i = 0; i < 5; i++) {
                     const geometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 32, 32);
                     const material = new THREE.MeshBasicMaterial({color: new THREE.Color(Math.random() * 0xffffff)});
                     const planet = new THREE.Mesh(geometry, material);
@@ -1382,7 +1382,7 @@
                 const zikrCounter = document.getElementById('zikr-counter');
 
                 const hands = new Hands({locateFile: (file) => {
-                    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`;
+                    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
                 }});
 
                 hands.setOptions({
